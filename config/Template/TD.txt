@@ -1,0 +1,51 @@
+// 不可编辑，此文件代码自动生成
+using System.Collections.Generic;
+using System.Text;
+
+namespace #NAMESPACE#
+{
+    public partial class #CLASSNAME#
+    {
+#PRIVATEMEMBER#
+
+#PUBLICMEMBER#
+
+        public void ReadRow(IDataStreamReader dataR, int[] filedIndex)
+        {
+            var schemeNames = dataR.GetSchemeName();
+            int col = 0;
+            while (true)
+            {
+                col = dataR.MoreFieldOnRow();
+                if (col == -1)
+                {
+                    break;
+                }
+                switch (filedIndex[col])
+                {
+#CASEMEMBER#
+                    default:
+                        dataR.ReadString();
+                        break;
+                }
+            }
+
+        }
+
+        public static Dictionary<string, int> GetFieldHeadIndex()
+        {
+            Dictionary<string, int> ret = new Dictionary<string, int>(9);
+#HEADINDEX#
+            return ret;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+
+#STRINGBUILDER#
+
+            return sb.ToString();
+        }
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "name": "LetsPiu.CommonUtil",
+    "rootNamespace": "LetsPiu.CommonUtil",
+    "references": ["GUID:04defb6cf654e44f9823e364a651087d","GUID:c28a7b528464c4e01a30794f24f6decb"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

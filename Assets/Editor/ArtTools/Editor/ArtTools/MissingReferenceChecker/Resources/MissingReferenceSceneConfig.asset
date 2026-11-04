@@ -1,0 +1,94 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9fa5e8b536f5994ebea79bd55924fde, type: 3}
+  m_Name: MissingReferenceSceneConfig
+  m_EditorClassIdentifier: 
+  ScenesToCheckWithoutPrompt:
+  - Assets/Bakery/_tempScene.unity
+  - Assets/Editor/ArtTools/Editor/FTP_AutoColliderSetUp/sampleScene.unity
+  - Assets/GameData/Scene/Homeland.unity
+  - Assets/GameData/Scene/S_maze_01.unity
+  - Assets/GameData/Scene/S_maze_02.unity
+  - Assets/GameData/Scene/S_minigame_01.unity
+  - Assets/GameData/Scene/S_skill_show_common_01.unity
+  - Assets/GameData/Scene/S_skill_show_common_01_xingyun.unity
+  - Assets/GameData/Scene/S_skill_show_common_02.unity
+  - Assets/GameData/Scene/S_skill_show_common_03.unity
+  - Assets/GameData/Scene/S_skill_show_common_04.unity
+  - Assets/GameData/Scene/S_skill_show_common_05.unity
+  - Assets/GameData/Scene/S_skill_show_common_06.unity
+  - Assets/GameData/Scene/s01_OpenWorld_01.unity
+  - Assets/GameData/Scene/s01_OpenWorld_02.unity
+  - Assets/GameData/Scene/s02_scene_battle_01.unity
+  - Assets/GameData/Scene/s02_scene_battle_02.unity
+  - Assets/GameData/Scene/s02_scene_battle_03.unity
+  - Assets/GameData/Scene/s02_scene_battle_03_1.unity
+  - Assets/GameData/Scene/s02_scene_battle_04.unity
+  - Assets/GameData/Scene/s02_scene_battle_04_1.unity
+  - Assets/GameData/Scene/s02_scene_battle_05.unity
+  - Assets/GameData/Scene/s02_scene_battle_06.unity
+  - Assets/GameData/Scene/s02_scene_battle_06_1.unity
+  - Assets/GameData/Scene/s02_scene_battle_07.unity
+  - Assets/GameData/Scene/s02_scene_battle_08.unity
+  - Assets/GameData/Scene/s02_scene_battle_08_1.unity
+  - Assets/GameData/Scene/s02_scene_battle_10.unity
+  - Assets/GameData/Scene/s02_scene_battle_10_1.unity
+  - Assets/GameData/Scene/s02_scene_battle_11.unity
+  - Assets/GameData/Scene/s02_scene_battle_11_1.unity
+  - Assets/GameData/Scene/s02_scene_battle_dongbai_01.unity
+  - Assets/GameData/Scene/s02_scene_battle_dongbai_02.unity
+  - Assets/GameData/Scene/s02_scene_battle_Dongzhuo.unity
+  - Assets/GameData/Scene/s02_scene_battle_Taotie.unity
+  - Assets/GameData/Scene/s02_scene_battle_Zhaoyun.unity
+  - Assets/GameData/Scene/s02_ui_01.unity
+  - Assets/GameData/Scene/s02_ui_02.unity
+  - Assets/GameData/Scene/s02_ui_02_test.unity
+  - Assets/GameData/Scene/s02_ui_03.unity
+  - Assets/GameData/Scene/s02_ui_04.unity
+  - Assets/GameData/Scene/s02_ui_05.unity
+  - Assets/GameData/Scene/s02_ui_06.unity
+  - Assets/GameData/Scene/s02_ui_07.unity
+  - Assets/GameData/Scene/s02_ui_08.unity
+  - Assets/GameData/Scene/s02_ui_09.unity
+  - Assets/GameData/Scene/s02_ui_10.unity
+  - Assets/GameData/Scene/s02_ui_10_1.unity
+  - Assets/GameData/Scene/s02_ui_11.unity
+  - Assets/GameData/Scene/s02_ui_12.unity
+  - Assets/GameData/Scene/s02_ui_13.unity
+  - Assets/GameData/Scene/s02_ui_14.unity
+  - Assets/GameData/Scene/s02_ui_15.unity
+  - Assets/GameData/Scene/s02_ui_16.unity
+  - Assets/GameData/Scene/s02_ui_17.unity
+  - Assets/GameData/Scene/s03_story_01.unity
+  - Assets/GameData/Scene/s03_story_02.unity
+  - Assets/GameData/Scene/s03_story_04.unity
+  - Assets/Package_Initial/PanleUI/WebCam/Scenes/WebCamSamples.unity
+  - Assets/Package_Initial/PanleUI/WebView/Samples/MarkerWebViewTest.unity
+  - Assets/Package_Initial/PanleUI/WebView/Samples/RevivePointsWebViewTest.unity
+  - Assets/Package_Initial/PanleUI/WebView/Samples/SafeZoneWebViewTest.unity
+  - Assets/Package_Initial/PanleUI/WebView/Samples/TitelWebViewSamples.unity
+  - Assets/Package_Initial/PanleUI/WebView/Scenes/WebViewSamples.unity
+  - Assets/Package_Initial/Scene/LoginScene.unity
+  - Assets/Package_Offline/Scene/MainScene.unity
+  - Assets/Package_Offline/Scene/OfflineScene.unity
+  - Assets/Package_Offline/Scene/Scene_Beginner.unity
+  - Assets/Scenes/BluetoothDeviceTest.unity
+  - Assets/Scenes/GameScene_1.unity
+  - Assets/Scenes/Homepage_v1.unity
+  - Assets/Scenes/SampleScene.unity
+  - Assets/Scenes/TestUIScene.unity
+  - Assets/Scenes/UIGridView.unity
+  - Assets/Scenes/UISampleScene.unity
+  - Assets/Scenes/UITextScene.unity
+  - Assets/UniWebView/Demo/UniWebViewDemo.unity
+  EnableAutoCheck: 1
+  OnlyCheckListedScenes: 0

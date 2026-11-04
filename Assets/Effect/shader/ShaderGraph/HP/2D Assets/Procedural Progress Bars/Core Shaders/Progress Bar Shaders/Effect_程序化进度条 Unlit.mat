@@ -1,0 +1,198 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: "Effect_\u7A0B\u5E8F\u5316\u8FDB\u5EA6\u6761 Unlit"
+  m_Shader: {fileID: 4800000, guid: 4e7e8c5cf6539d7418e6d3f8169539bc, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _FILL_OVERLAY_USE_GUIDES
+  m_InvalidKeywords:
+  - _CUSTOM_OUTLINE_USE_NOISE_GUIDES_ON
+  - _CUSTOM_SHAPE_USE_SECOND_TEXTURE_ON
+  - _END_LINE_MULTIPLY_WITH_FILL_SHADOW_ON
+  - _FILL_SEGMENTS_USE_EDGE_STEP_ON
+  - _FILL_SHADOW_USE_ON_BACKGROUND_ON
+  - _FILL_USE_HORIZONTAL_GRADIENT_ON
+  - _GENERAL_SHAPE_SKEW_RIGHT_INVERT_ON
+  - _SHADOW_ENABLE_ON
+  - _SIMPLE_OUTLINE_USE_COLOR_ALPHA_FOR_COLOR_BLENDING_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _Custom_Outline_Noise_Guide_1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Custom_Outline_Noise_Guide_2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Custom_Shape_Noise_Guide_1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Custom_Shape_Noise_Guide_2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Fill_Overlay_Noise_Guide_1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Fill_Overlay_Noise_Guide_2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Fill_Shadow_Texture_Guide:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Fill_Texture_Guide:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _CUSTOM_OUTLINE_ENABLE: 0
+    - _CUSTOM_SHAPE_ENABLE: 0
+    - _Custom_Outline_Depends_On_Fill_Amount: 0
+    - _Custom_Outline_Noise_Guide_1_Strength: 0.5
+    - _Custom_Outline_Noise_Guide_2_Strength: 0.1
+    - _Custom_Outline_Offset: 0
+    - _Custom_Outline_Power: 2
+    - _Custom_Outline_Size: 0.99
+    - _Custom_Outline_Smoothness: 0.02
+    - _Custom_Outline_Strength: 1
+    - _Custom_Outline_Use_Noise_Guides: 1
+    - _Custom_Shape_Noise_Guide_1_Strength: 0.2
+    - _Custom_Shape_Noise_Guide_2_Strength: 0.1
+    - _Custom_Shape_Use_Second_Texture: 1
+    - _Desaturate: 0
+    - _END_LINE_ENABLE: 0
+    - _End_Line_Multiplier: 2
+    - _End_Line_Multiply_With_Fill_Shadow: 1
+    - _End_Line_Offset: 0
+    - _End_Line_Power: 2
+    - _End_Line_Smoothness_Left: 0.03
+    - _End_Line_Smoothness_Right: 0.1
+    - _End_Line_Visibility: 1
+    - _End_Line_Width_Left: 0.025
+    - _End_Line_Width_Right: 0
+    - _FILL_OVERLAY_ENABLE: 0
+    - _FILL_OVERLAY_USE_GUIDES: 1
+    - _FILL_SEGMENTS_ENABLE: 0
+    - _Fill_Amount: 0.8
+    - _Fill_Enable_Edge_Guide: 0
+    - _Fill_Enable_Smooth_Edge: 0
+    - _Fill_Flip_Guide_Texture_90_degrees_rotation: 0
+    - _Fill_Flip_Guide_Texture_Value: 0
+    - _Fill_Guide_Strength: 0.2
+    - _Fill_Overlay_Background_Alpha_Impact: 1
+    - _Fill_Overlay_Background_Color_Impact: 0
+    - _Fill_Overlay_Fill_Alpha_Impact: 1
+    - _Fill_Overlay_Fill_Color_Impact: 1
+    - _Fill_Overlay_Guide_Rotation: 0
+    - _Fill_Overlay_Inverse_Overlay: 0
+    - _Fill_Overlay_Noise_Guide_1_Strength: 1
+    - _Fill_Overlay_Noise_Guide_2_Strength: 1
+    - _Fill_Overlay_Step_Offset: 0.08
+    - _Fill_Overlay_Step_Smoothness: 0.2
+    - _Fill_Overlay_Strength: 0.5
+    - _Fill_Second_Bar_Enable: 0
+    - _Fill_Segments_Add_Alpha_To_1: 1
+    - _Fill_Segments_Custom_Shape_Strength: 0
+    - _Fill_Segments_Edge_Smoothness: 0
+    - _Fill_Segments_Multiply_Alpha_To_0: 0
+    - _Fill_Segments_Segments_Number: 5
+    - _Fill_Segments_Skew: 0
+    - _Fill_Segments_Strength_On_Color: 1
+    - _Fill_Segments_Top_Offset: 0.01
+    - _Fill_Segments_Top_Smoothness: 0.02
+    - _Fill_Segments_Top_Strength: -0.3
+    - _Fill_Segments_Use_Edge_Step: 1
+    - _Fill_Segments_Width: 0.025
+    - _Fill_Shadow_Enable: 0
+    - _Fill_Shadow_Flip_Guide_Texture: 0
+    - _Fill_Shadow_Guide_Strength: 2
+    - _Fill_Shadow_Multiplier_Shadow_Amount: 3
+    - _Fill_Shadow_Power_Hardness: 1
+    - _Fill_Shadow_Use_Hard_Step: 0
+    - _Fill_Shadow_Use_On_Background: 1
+    - _Fill_Shadow_Use_Only_Background_Color_Alpha: 0
+    - _Fill_Shadow_Use_Only_Color_Alpha: 0
+    - _Fill_Shadow_Use_Texture_Guide: 0
+    - _Fill_Skew: -0.25
+    - _Fill_Smooth_Edge_Value: 0.01
+    - _Fill_Use_Horizontal_Gradient: 1
+    - _Fill_Use_Only_Background_Alpha: 0
+    - _Fill_Vertical_Darken_Amount: 0.3
+    - _Fill_Vertical_Darken_Enable: 0
+    - _Fill_Vertical_Darken_Flip: 0
+    - _Fill_Vertical_Darken_Power: 7
+    - _Fill_Vertical_Darken_Use_Flat: 0
+    - _General_Shape_Height: 0.1
+    - _General_Shape_Roudness_Bottom_Left: 0
+    - _General_Shape_Roudness_Bottom_Right: 0
+    - _General_Shape_Roudness_Top_Left: 0
+    - _General_Shape_Roudness_Top_Right: 0
+    - _General_Shape_Roundness: 0
+    - _General_Shape_Skew_Left_Bottom: 0
+    - _General_Shape_Skew_Left_Edge_Place: 0.5
+    - _General_Shape_Skew_Left_Invert: 0
+    - _General_Shape_Skew_Left_Top: 0
+    - _General_Shape_Skew_Right_Bottom: 0
+    - _General_Shape_Skew_Right_Edge_Place: 0.5
+    - _General_Shape_Skew_Right_Invert: 1
+    - _General_Shape_Skew_Right_Top: 0
+    - _MainAlpha: 1
+    - _Main_Bar_Fill_Amount: 0.5
+    - _Second_Bar_Invisible_Blend: 0
+    - _Second_Bar_Main_Blend: 0
+    - _Shadow_Enable: 1
+    - _Shadow_Power: 2
+    - _Shadow_Size: 1
+    - _Shadow_Smoothness: 0.03
+    - _Shadow_Strength: 1
+    - _Simple_Outline_Thickness: 0.01
+    - _Simple_Outline_Use_Color_Alpha_For_Color_Blending: 1
+    m_Colors:
+    - _Custom_Outline_Color: {r: 0, g: 0, b: 0, a: 1}
+    - _Custom_Outline_Noise_Guide_1_Scroll_Speed: {r: -0.03, g: -0.03, b: 0, a: 0}
+    - _Custom_Outline_Noise_Guide_2_Scroll_Speed: {r: -0.02, g: -0.02, b: 0, a: 0}
+    - _Custom_Shape_Noise_Guide_1_Scroll_Speed: {r: 0, g: 0, b: 0, a: 0}
+    - _Custom_Shape_Noise_Guide_2_Scroll_Speed: {r: 0, g: 0, b: 0, a: 0}
+    - _End_Line_Color: {r: 0.9473069, g: 0.12743773, b: 0.12743773, a: 1}
+    - _Fill_Background_color: {r: 0.07036011, g: 0.008568125, b: 0.0047769533, a: 0.8}
+    - _Fill_Color_No_Gradient: {r: 0.6795426, g: 0.07618539, b: 0.048171833, a: 1}
+    - _Fill_Gradient_Color_Left: {r: 0.07618539, g: 0.020288562, b: 0.020288562, a: 1}
+    - _Fill_Gradient_Color_Right: {r: 0.6795426, g: 0.07618539, b: 0.048171833, a: 1}
+    - _Fill_Overlay_Background_Color: {r: 0, g: 0, b: 0, a: 0.9019608}
+    - _Fill_Overlay_Fill_Color: {r: 0, g: 0, b: 0, a: 1}
+    - _Fill_Overlay_Noise_Guide_1_Scroll_Speed: {r: 0, g: 0, b: 0, a: 0}
+    - _Fill_Overlay_Noise_Guide_2_Scroll_Speed: {r: 0, g: 0, b: 0, a: 0}
+    - _Fill_Scroll_speed_XY: {r: 0, g: 0, b: 0, a: 0}
+    - _Fill_Second_Bar_Color: {r: 0.62396055, g: 0.14126332, b: 0.14126332, a: 1}
+    - _Fill_Segments_Color: {r: 0, g: 0, b: 0, a: 1}
+    - _Fill_Shadow_Background_Color: {r: 0.07036011, g: 0.008568125, b: 0.0047769533,
+        a: 1}
+    - _Fill_Shadow_Color: {r: 0, g: 0, b: 0, a: 1}
+    - _Fill_Shadow_Scroll_Speed_XY: {r: 0, g: 0, b: 0, a: 0}
+    - _Fill_Vertical_Darken_Color: {r: 0, g: 0, b: 0, a: 1}
+    - _General_Shape_Size_Offset: {r: 0.05, g: 0.025, b: 0, a: 0}
+    - _Shadow_Color: {r: 0, g: 0, b: 0, a: 1}
+    - _Simple_Outline_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []

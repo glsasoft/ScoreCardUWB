@@ -1,0 +1,26 @@
+﻿ID	zh-CN	en-US	Remarks
+200001	荣耀积分	Glory Score	S2 房间屏顶部标题（EntryPage / TeamPage 共用）
+200002	玩家进入	Player Entry	S2-1 EntryPage 副标题
+200003	胜利条件	Victory Condition	S2-2 TeamPage 胜利条件标题
+200004	命中与击杀可获取积分。游戏结束时，团队积分较高的一方胜利。若双方积分相同，则判定平局。	Hits and kills earn points. When the game ends, the team with the higher score wins. If scores are tied, the game is a draw.	S2-2 TeamPage 胜利条件描述（荣耀积分/攻防积分）
+200005	TIPS:完成连杀可帮助队伍获取更多积分	TIPS: Multi-kills bring extra score.	S2-2 TeamPage 底部提示
+200006	积分	Score	S2-2 TeamPage 红/蓝队比分上方
+200007	模式	Mode	S2-2 TeamPage 模式标签
+200008	参赛人数	Players	S2-2 TeamPage 红/蓝两侧人数标签
+200009	红方成员	Red Team	S2-2 TeamPage 红队列表标题
+200010	蓝方成员	Blue Team	S2-2 TeamPage 蓝队列表标题
+200011	红方复活点	Red Respawn	S2-2 TeamPage 小地图
+200012	蓝方复活点	Blue Respawn	S2-2 TeamPage 小地图
+200013	玩家{0}	Player {0}	S2 通用：ScoreCardRoomPlayerItem.Bind 兜底昵称，{0} = player.id
+200014	游戏结束时，队长击杀数较多的队伍将胜利。若击杀数相同则队长伤害较高的队伍胜利。	When the game ends, the team whose captain has more kills wins. If kills are tied, the team whose captain dealt more damage wins.	超级队长房间屏胜利条件
+200015	命中与击杀可获取积分。任一方团灭即结束比赛，最终按团队积分判定胜负。积分较高者胜，积分相同则平局。	Hits and kills earn points. The match ends when either team is wiped out, and the winner is decided by team score. The higher score wins; equal scores are a draw.	S2-2 TeamPage 胜利条件描述（火力积分）
+200016	率先淘汰敌方全部成员的一方胜利。时间结束双方均未团灭时，比较双方存活人数，存活人数多的队伍获胜。	The first team to eliminate every enemy member wins. If neither team is wiped out when time runs out, the team with more survivors wins.	S2-2 TeamPage 胜利条件描述（歼灭模式）
+200017	任务目标	Objective	S2-2 TeamPage 任务目标标题
+200018	积极战斗得分，为团队扩大积分优势。	Fight actively to score and widen your team's lead.	S2-2 TeamPage 任务目标描述（荣耀积分）
+200019	尽量得分并保存战力，避免过早减员。	Score as much as you can and preserve your strength. Avoid losing members early.	S2-2 TeamPage 任务目标描述（火力积分）
+200020	持续交战积累积分，争取团队领先。	Keep fighting to build up points and take the team lead.	S2-2 TeamPage 任务目标描述（攻防积分）
+200021	消灭敌方成员，尽可能保住己方战力。	Eliminate enemy members while keeping as many of your own as possible.	S2-2 TeamPage 任务目标描述（歼灭模式）
+200022	人类需要尽力坚持存活到最后；丧尸需要追击并感染人类。	Humans must survive until the end. Zombies must hunt down and infect humans.	任务目标描述（生化模式）
+200023	快速搜寻目标，尽快击灭全部靶灯。	Find the targets quickly and take out every target light as fast as you can.	任务目标描述（竞速模式）
+200024	保存队伍战力，尽可能击杀其他队伍成员。	Preserve your team's strength and eliminate as many members of other teams as possible.	任务目标描述（联盟对战）
+200025	队长需要争取更多击杀，队员需要保护己方队长并协助其进攻。	Captains must secure more kills. Teammates must protect their captain and support the attack.	任务目标描述（超级队长）

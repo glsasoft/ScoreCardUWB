@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4be9481916d90194ebfa8b213fe3eef7
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - Turblance: {fileID: 2800000, guid: 909fd21a1a9596842911588efc2b96ca, type: 3}
+  - _T_ElectricalBolt_3: {fileID: 2800000, guid: 1b9844a09feaaa944904ae974dc5d41d,
+      type: 3}
+  - Wenli: {fileID: 2800000, guid: eb2516b2fa143e843905188ab80d48b2, type: 3}
+  - _Mask01: {fileID: 2800000, guid: dd12495fe67637541a1b8810d09e86e9, type: 3}
+  - _Mask02: {fileID: 2800000, guid: 1b9844a09feaaa944904ae974dc5d41d, type: 3}
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

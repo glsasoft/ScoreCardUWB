@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b62eec4874dd55a4fa3e7db32eee075e, type: 3}
+  m_Name: Solaris ShaderGUI Data
+  m_EditorClassIdentifier: 
+  title: SOLARIS - 火焰、能量与烟雾
+  description: 程序化火焰/能量/烟雾着色器，支持实时光照、动画、曲面细分、几何编辑、粒子与拖尾效果。
+  tooltips:
+  - name: 光照
+    text: 光照相关效果设置。
+  - name: 基础 UV
+    text: 着色器基础 UV 映射的控制。
+  - name: 粒子设置
+    text: 粒子随机化与行为的设置。
+  - name: 颜色
+    text: 颜色混合与调整的控制。
+  - name: 垂直颜色
+    text: 垂直渐变颜色的设置。
+  - name: 噪波
+    text: 程序化效果的噪波配置。
+  - name: 噪波扭曲
+    text: 噪波效果的扭曲设置。
+  - name: 径向遮罩
+    text: 径向遮罩效果的控制。
+  - name: 径向遮罩扭曲
+    text: 径向遮罩的扭曲设置。
+  - name: 垂直遮罩
+    text: 垂直遮罩效果的设置。
+  - name: 球形化噪波
+    text: 球形噪波变形的设置。
+  - name: 菲涅尔遮罩
+    text: 菲涅尔遮罩效果控制。
+  - name: 深度淡出
+    text: 基于深度的淡出效果。
+  - name: 交叉高光
+    text: 基于深度交叉的高光效果。
+  - name: 顶点 UV 偏移
+    text: 顶点 UV 坐标的偏移。
+  - name: 顶点法线偏移
+    text: 顶点法线的偏移。
+  - name: 顶点扭曲
+    text: 应用于顶点的扭曲效果。
+  - name: 顶点波动
+    text: 顶点波动效果的设置。
+  - name: 顶点噪波
+    text: 基于噪波的顶点位移。
+  - name: 顶点波动-噪波垂直遮罩
+    text: 顶点波动与噪波共用的垂直遮罩。
+  - name: 顶点 Y 向偏移
+    text: 沿网格 UV 长度（2D Y 轴）的 3D 偏移。
+  - name: 曲面细分
+    text: 曲面细分与 Phong 细分强度设置。

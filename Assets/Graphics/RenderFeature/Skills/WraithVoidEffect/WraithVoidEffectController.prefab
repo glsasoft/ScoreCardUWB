@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3371038421550068050
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3527540548809015100}
+  - component: {fileID: 1334377778600111974}
+  m_Layer: 0
+  m_Name: WraithVoidEffectController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3527540548809015100
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3371038421550068050}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1334377778600111974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3371038421550068050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f3eb84b7f601bc45aa22a72eb7cd5b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  materialInstance: {fileID: 2100000, guid: 561287afcb848204ea866214ef93e59b, type: 2}
+  distortion: 0
+  scale: 1
+  brightness: 0
+  saturation: 1
+  contrast: 1
+  colorReverse: 0.5
+  tint: {r: 1, g: 0.73333335, b: 0.40000004, a: 1}
+  edgeStart: 0.5
+  edgeFade: 0.5
+  edgeStrength: 0.8
+  edgeColor: {r: 1, g: 0.73402196, b: 0.4009434, a: 1}
+  voidRange: 100
+  voidFade: 20
+  gridDensity: 0.5
+  gridLineWidth: 0.01
+  gridColor: {r: 1, g: 0.77073187, b: 0.4575472, a: 1}
+  gridRange: 5
+  gridFade: 15

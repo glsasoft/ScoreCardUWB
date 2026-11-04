@@ -1,0 +1,6 @@
+模式ID	列数	行数	初始化靶子数量	最小速度	最大速度	个人及格分
+int	int	int	int	int	int	int
+id	ColumnCount	RowCount	InitTargetCount	MinSpeed	MaxSpeed	PassingScore
+1	7	5	3	0	0	6000
+2	8	6	2	0	0	6000
+3	0	0	1	0	0	6000

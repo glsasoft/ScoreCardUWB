@@ -1,0 +1,19 @@
+{
+    "name": "LetsPiu.Component",
+    "rootNamespace": "LetsPiu.Component",
+    "references": [
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:458b1092fe9042e4cac78cbe0ead4baf",
+        "GUID:3ab49f17680ca09408425926d3c86130",
+        "GUID:8b5f9125caf5e274ab58f3863a77a2a6"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

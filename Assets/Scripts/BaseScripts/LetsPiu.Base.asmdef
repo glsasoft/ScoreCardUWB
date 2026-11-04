@@ -1,0 +1,28 @@
+{
+    "name": "LetsPiu.Base",
+    "rootNamespace": "LetsPiu.Base",
+    "references": [
+        "GUID:e34a5702dd353724aa315fb8011f08c3",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:6e5063adab271564ba0098a06a8cebda",
+        "GUID:62bcfb21c2a5b474182007d84f75d30a",
+        "GUID:4ca033ee547ec451c8a2d3c33d7620ad",
+        "GUID:1a1d11345c9c40842bf58cc2f504d0a8",
+        "GUID:a5da9e6d2a6d36548b5dfcb90680160d",
+        "GUID:3ab49f17680ca09408425926d3c86130",
+        "GUID:ea7150a5c2e8daa43b5b6219f3362677",
+        "GUID:15fc0a57446b3144c949da3e2b9737a9",
+        "GUID:df380645f10b7bc4b97d4f5eb6303d95",
+        "GUID:4307f53044263cf4b835bd812fc161a4",
+        "GUID:5990a2f72d6d9ba4983f39664c7b8576"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

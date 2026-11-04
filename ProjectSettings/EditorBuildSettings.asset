@@ -1,0 +1,14 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Package_Initial/Scene/LoginScene.unity
+    guid: dcba4587c242a194282f55c2763bc730
+  m_configObjects:
+    EasyAR.Settings: {fileID: 11400000, guid: 011c38a442af49b40b2f1acad22a0cd3, type: 2}
+    com.unity.addressableassets: {fileID: 11400000, guid: 3791c60d9de8677448bb07bb07147c76,
+      type: 2}

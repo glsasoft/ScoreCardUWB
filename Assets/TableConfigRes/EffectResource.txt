@@ -1,0 +1,8 @@
+序号	特效名称	持续时间(毫秒)	延时销毁时间(毫秒)	特效类型	挂点
+int	string	int	int	int	string
+ID	ResName	Duration	DelayDestroyTime	EffectType	BindingPointName
+1207	ui_click	800	null	1	ui点击空白	1
+1301	VFX_StartScreen_Start	-1	null	1
+1302	VFX_StartScreen_Loop	-1	null	1
+1303	VFX_StartScreen_Lizi_Loop	-1	null	4
+1304	VFX_StartScreen_Loop02	-1	null	1

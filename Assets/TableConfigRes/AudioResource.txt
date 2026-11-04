@@ -1,0 +1,157 @@
+序号	随机组	音效资源名称	是否循环播放(0否1是)	是否3D播放(0否1是)	音效种类
+int	int	string	int	int	int
+ID	GroupId	ResName	IsLoop	Type	Kind
+1001	1	se_ui_click	0	0	4	点击	无特殊音效的其他点击动作	
+1002	2	se_ui_popup	0	0	4	弹窗	弹窗开启	
+1003	3	se_ui_exitpopup	0	0	4	退出弹窗	弹窗界面关闭（点击关闭或者点击取消及类似功能）	
+1004	4	se_ui_open	0	0	4	打开界面	进行任何打开新界面的操作	
+1005	5	se_ui_close	0	0	4	关闭界面	点击页面的返回	
+1006	6	se_ui_menuswitch	0	0	4	菜单切换	大类的菜单切换，比如设置房间页面切换上方设置大类，个人中心界面切换左侧大类	
+1007	7	se_ui_match	0	0	4	匹配提示	进入匹配页面时播放	
+1008	8	se_ui_select	0	0	4	选中	当有多个选项时需要选择其中一个，比如设置页面的多选一和房间内设置页面的多选一	
+1009	9	se_ui_ok	0	0	4	确认按钮	所有弹窗的“确认”icon、角色锁定、匹配页面的确认准备，房间页面的开始游戏	
+1010	10	se_ui_buy	0	0	4	购买		
+1011	11	se_ui_sale	0	0	4	售出		
+1012	12	se_ui_switch	0	0	4	线上线下切换		
+1013	13	se_ui_delete	0	0	4	销毁背包物件		
+1014	14	se_ui_maildelete	0	0	4	信件撕毁		
+1015	15	se_ui_taskcolle	0	0	4	任务领取		
+1016	16	se_ui_get	0	0	4	获取奖励		
+1017	17	se_ui_listexpan	0	0	4	列表展开		
+1018	18	se_ui_listwithdr	0	0	4	列表收回		
+1019	19	se_ui_hero	0	0	4	英雄出场		
+1020	20	se_ui_bind	0	0	4	装备绑定		
+1021	21	se_ui_card	0	0	4	卡牌生效		
+1022	22	se_ui_carduse	0	0	4	卡牌使用		
+1023	23	se_ui_cardwithdr	0	0	4	卡牌撤回		
+1024	24	se_ui_unlocking	0	0	4	密码解锁		
+1025	25	se_ui_unlock	0	0	4	开箱		
+1026	26	se_ui_skillswitch	0	0	4	切换成大招		
+1027	27	se_ui_skillready	0	0	2	小技能CD回复完成	null	
+2001	28	se_gun_singleshot_1	0	1	2	基础射击声随机播放		
+2002	29	se_gun_singleshot_2	0	1	2	基础射击声随机播放		
+2003	30	se_gun_reload	0	0	2	更换弹匣		
+2004	31	ae_gun_pullbolt		0	2	拉栓上膛		
+2005	32	se_gun_nobullet	0	0	2	弹匣清空		
+2006	33	se_gun_takegun	0	0	2	拿起枪声		
+2007	34	se_gun_putdown	0	0	2	放下枪声		
+2008	35	se_gun_putinbag	0	0	2	收回物品	null	
+2009	36	se_gun_aim	0	0	2	机瞄切换	null	
+2010	37	se_gun_hipfire	0	0	2	切回腰射	null	
+2011	38	se_gun_inspection	0	0	2	子弹退出枪膛塞回枪膛	null	
+2012	39	se_gun_grenadeinstall		0	2	安装榴弹发射器	null	
+2013	40	se_gun_grenadeshoot	0	0	2	榴弹发射+发射头落地	null	
+2014	41	se_gun_grenadedisassemble	0	0	2	拆卸榴弹发射器	null	
+2015	42	se_bullet_kill	0	1	2	击杀	null	
+2016	43	se_bullet_perfectkill	0	1	2	爆头击杀	null	
+2017	44	se_bullet_shieldheadshoot	0	1	2	子弹击中头部带护甲/护盾	null	
+2018	45	se_bullet_bodyshoot_1	0	1	2	击中本体随机播放	null	
+2019	46	se_bullet_bodyshoot_2	0	1	2	击中本体随机播放	null	
+2020	47	se_bullet_headshoot	0	1	2	击中头部	null	
+2021	48	se_bullet_wallshoot_1	0	1	2	击中场景随机播放	null	
+2022	49	se_bullet_wallshoot_2	0	1	2	击中场景随机播放	null	
+2023	50	se_bullet_shieldshoot_1	0	1	2	击中护盾/护甲随机播放	null	
+2024	51	se_bullet_shieldshoot_2	0	1	2	击中护盾/护甲随机播放	null	
+2025	52	se_bullet_shieldbreak	0	1	2	破盾声音	null	
+2026	53	se_bullet_breakair_1	0	1	2	子弹破空声随机播放	null	
+2027	54	se_bullet_breakair_2	0	1	2	子弹破空声随机播放	null	
+2028	55	se_shield_broken	0	1	2	护盾破碎声	null	
+2029	56	se_armor_gethit_1	0	0	2	护甲受击声随机播放	null	
+2030	57	se_armor_gethit_2	0	0	2	护甲受击声随机播放	null	
+2031	58	se_people_bodygethit_1	0	0	2	本体受击声随机播放	null	
+2032	59	se_people_bodygethit_2	0	0	2	本体受击声随机播放	null	
+2033	60	se_people_walk_1	0	1	2	这几个走路随机播放	null	
+2034	61	se_people_walk_2	0	1	2	这几个走路随机播放	null	
+2035	62	se_people_walk_3	0	1	2	这几个走路随机播放	null	
+2036	63	se_people_walk_4	0	1	2	这几个走路随机播放	null	
+2037	64	se_people_run_1	0	1	2	这几个跑步随机播放	null	
+2038	65	se_people_run_2	0	1	2	这几个跑步随机播放	null	
+2039	66	se_people_run_3	0	1	2	这几个跑步随机播放	null	
+2040	67	se_people_run_4	0	1	2	这几个跑步随机播放	null	
+2041	68	se_people_jump	0	1	2	跳	null	
+2042	69	se_people_drop	0	1	2	落地	null	
+2043	70	se_people_getheald	0	0	2	血量回复音效	null	
+3001	71	se_armor_charging	0	0	2	护甲充能音效	null	
+3002	72	se_armor_chargingcomplete	0	0	2	护甲充能完成	null	
+3003	73	se_prop_inject	0	0	2	试用注射器	null	
+3004	74	se_prop_c4place		1	2	布置雷包	null	
+3005	75	se_prop_c4expand		1	2	雷包展开音效	null	
+3006	76	se_grenade_bump		1	2	道具场景碰撞	null	
+3007	77	se_grenade_flashbombexplode	0	1	2	道具爆炸-闪光	null	
+3008	78	se_grenade_flashmaintain	0	1	2	闪光/烟雾持续	null	
+3009	79	se_grenade_HEbombexplode	0	1	2	道具爆炸-高爆	null	
+3010	80	se_grenade_smokebombexplode	0	1	2	道具爆炸-烟雾	null	
+3011	81	se_grenade_molotovexplode	0	1	2	道具爆炸-燃烧	null	
+3012	82	se_grenade_molotovmaintain	0	1	2	燃烧持续	null	
+4001	83	se_beekpr_box		1	2	盒子出现	null	
+4002	84	se_beekpr_release		1	2	蜂群释放	null	
+4003	85	se_beekpr_remain		1	2	蜂群停留	null	
+4004	86	se_beekpr_explode		1	2	蜂群爆炸	null	
+4005	87	se_beekpr_take		1	2	拿出装置	null	
+4006	88	se_beekpr_keep		1	2	工程-装置在手中的声音	null	
+4007	89	se_beekpr_throw		1	2	投掷声音	null	
+4008	90	se_beekpr_fly		1	2	飞行声音	null	
+4009	91	se_beekpr_unfold		1	2	落地展开声音	null	
+4010	92	se_beekpr_attack		1	2	受到攻击声音	null	
+4011	93	se_beekpr_broken		1	2	破碎声音	null	
+4012	94	se_beekpr_takeout		1	2	拿出弹匣声音	null	
+4013	95	se_beekpr_intensify		1	2	强化备弹声音	null	
+4014	96	se_beekpr_hit		1	2	强化子弹击中声音	null	
+4015	97	se_beekpr_UAVfly		1	2	无人机飞行声音	null	
+4016	98	se_beekpr_UAVshoot		1	2	无人机射击声音	null	
+4017	99	se_prism_takesmoke	0	1	2	拿出烟雾弹	null	
+4018	100	se_prism_smokeloop	0	1	2	烟雾维持	null	
+4019	101	se_prism_throwsmoke	0	1	2	烟雾弹投掷	null	
+4020	102	se_prism_smokeexplode	0	1	2	烟雾弹炸开	null	
+4021	103	se_prism_energyrelease	0	0	2	能量释放	null	
+4022	104	se_prism_energyloop	0	0	2	能量维持	null	
+4023	105	se_prism_dimchange	0	0	2	从空间出来	null	
+4024	106	se_servant_take	0	1	2	拿出装置	null	
+4025	107	se_servant_throw	0	1	2	投掷装置	null	
+4026	108	se_servant_devicefly		1	2	装置飞行	null	
+4027	109	se_servant_devicehit		1	2	装置碰撞破碎	null	
+4028	110	se_servant_healfield		1	2	治疗场生效	null	
+4029	111	se_servant_upgradegun	0	0	2	强化枪械	null	
+4030	112	se_servant_healshot	0	1	2	射击声音	null	
+4031	113	se_servant_healhit	0	1	2	击中声音	null	
+4032	114	se_servant_device		1	2	装置脱落	null	
+4033	115	se_servant_fill		1	2	释放能量	null	
+4034	116	se_servant_chargeup		1	2	蓄能	null	
+4035	117	se_servant_shoot		1	2	射击声音	null	
+4036	118	se_servant_hit		1	2	击中声音	null	
+4037	119	se_servant_relive		1	2	复活声音	null	
+4038	120	se_warden_trigger		0	2	触发声	null	
+4039	121	se_warden_open		0	2	开启声音		
+4040	122	se_warden_superposition		0	2	烙印叠加声	null	
+4041	123	se_warden_invitrigger		1	2	无敌触发声	null	
+4042	124	se_warden_invihit		1	2	无敌受击效果	null	
+4043	125	se_warden_release		1	2	领域释放声音	null	
+4044	126	se_warden_sustain		1	2	领域持续效果声	null	
+4045	127	se_warden_relive		0	2	复活声	null	
+4046	128	se_warden_deterrent		1	2	对敌震慑声	null	
+5001	129	se_player_heartbeat	1	0	2	心跳声：血量低于10%	null	
+5002	130	se_player_earringing	1	0	2	耳鸣声：受到闪光弹影响期间	null	
+5003	131	se_player_dot		0	2	DOT扣血音效	null	
+5004	132	se_env_whitenoise_1	1	1	1	场景白噪声（暂时没用到但是先留着	null	
+5005	133	se_env_whitenoise_2	1	1	1	循环播放：团竞模式地图场景白噪音	null	
+5006	134	se_env_whitenoise_3	1	1	1	循环播放：团竞模式地图场景白噪音	null	
+6001	135	dub_xt_kill1	0	0	2	一杀	null	
+6002	136	dub_xt_kill2	0	0	2	二杀	null	
+6003	137	dub_xt_kill3	0	0	2	三杀	null	
+6004	138	dub_xt_kill4	0	0	2	四杀	null	
+6005	139	dub_xt_kill5	0	0	2	五杀
+6006	140	dub_xt_win	0	0	2	比赛胜利
+6007	141	dub_xt_defeat	0	0	2	比赛失败
+6008	142	dub_xt_5	0	0	2	倒数5
+6009	143	dub_xt_4	0	0	2	倒数4
+6010	144	dub_xt_3	0	0	2	倒数3	null	
+6011	145	dub_xt_2	0	0	2	倒数2	null	
+6012	146	dub_xt_1	0	0	2	倒数1		
+6013	147	dub_xt_begin	0	0	2	比赛开始		
+6014	148	dub_xt_notconnected	0	0	2	网不好/蓝牙断了		
+6015	149	dub_xt_end	0	0	2	连杀被终止		
+6016	150	dub_xt_dead	0	0	2	您已经阵亡		
+6017	151	dub_xt_ace	0	0	2	团灭		
+6018	152	dub_xt_firstblood	0	0	2	全局游戏第一次击杀		
+6019	153	dub_xt_reconnected	0	0	2	网好起来了/蓝牙重新连上枪了		
+6020	154	dub_xt_domanating	0	0	2	主宰比赛（五杀以上）		

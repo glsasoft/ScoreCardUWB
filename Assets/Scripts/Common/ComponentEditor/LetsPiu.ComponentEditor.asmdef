@@ -1,0 +1,18 @@
+{
+    "name": "LetsPiu.ComponentEditor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:90c8fb14233fda74d83e70ff026feac2"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

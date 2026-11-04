@@ -1,0 +1,362 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Laser
+  m_Shader: {fileID: 4800000, guid: 35b95f80d573dd54f8ef5e8cd1d2611f, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _ADDITIONALLIGHTSFLATENABLED_ON
+  - _MAINLIGHTFLATENABLED_ON
+  - _NOISEDILATIONENABLED_ON
+  - _RADIALMASKSUBTRACTIVE_ON
+  - _VERTICALMASKSOBJECTSPACE_ON
+  - _WORLDSPACEUVS_ON
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpecGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AdditionalLights: 1
+    - _AdditionalLightsEnabled: 0
+    - _AdditionalLightsFlatEnabled: 1
+    - _AdditionalLightsFlatLambertBlend: 0.5
+    - _AdditionalLightsLambertEnabled: 0
+    - _AdditionalLightsLambertTranslucency: 1
+    - _AdditionalLightsLambertTranslucencyMask: 0
+    - _AdditionalLightsNormalfromHeight: 1
+    - _AdditionalLightsShadow: 1
+    - _AdditionalLightsShadowDirectionalAlignmentNoise: 0
+    - _AdditionalLightsShadowDirectionalNoise: 0
+    - _AdditionalLightsShadowOrthogonalAlignmentWorldNoise: 0
+    - _AdditionalLightsShadowWorldNoise: 0
+    - _AdditionalLightsTranslucency: 1
+    - _AdditionalLightsTranslucencyEnabled: 0
+    - _AdditionalLightsTransparencyShadow: 1
+    - _AdditionalLightsTransparencyShadowEnabled: 0
+    - _Alpha: 1
+    - _AlphaClip: 0
+    - _AlphaCutoff: 0.5
+    - _AlphaToMask: 0
+    - _Blend: 0
+    - _BlendModePreserveSpecular: 1
+    - _BumpScale: 1
+    - _CameraDepthFadeLength: 0
+    - _CameraDepthFadeOffset: 0
+    - _CameraDepthFadePower: 1
+    - _ClearCoatMask: 0
+    - _ClearCoatSmoothness: 0
+    - _ColourHueShift: 0
+    - _ColourPower: 1
+    - _ColourSaturationShift: 0
+    - _ColourValueMultiplier: 9.48
+    - _Cull: 2
+    - _Cutoff: 0.5
+    - _DepthFade: 0
+    - _DepthFadePower: 1
+    - _DetailAlbedoMapScale: 1
+    - _DetailNormalMapScale: 1
+    - _DstBlend: 0
+    - _DstBlendAlpha: 0
+    - _EndFoldoutBaseUVs: 0
+    - _EndFoldoutColour: 0
+    - _EndFoldoutDepthFade: 0
+    - _EndFoldoutFresnelMask: 0
+    - _EndFoldoutIntersectionHighlight: 0
+    - _EndFoldoutLighting: 0
+    - _EndFoldoutNoise: 0
+    - _EndFoldoutNoiseDistortion: 0
+    - _EndFoldoutParticleSettings: 0
+    - _EndFoldoutRadialMask: 0
+    - _EndFoldoutRadialMaskDistortion: 0
+    - _EndFoldoutSpherizeNoise: 0
+    - _EndFoldoutVertexNoise: 0
+    - _EndFoldoutVertexNormalOffset: 0
+    - _EndFoldoutVertexOffsetoverY: 0
+    - _EndFoldoutVertexUVOffset: 0
+    - _EndFoldoutVertexWave: 0
+    - _EndFoldoutVertexWaveNoiseVerticalMask: 0
+    - _EndFoldoutVerticalColour: 0
+    - _EndFoldoutVerticalMasks: 0
+    - _EnvironmentReflections: 1
+    - _FresnelMask: 0
+    - _FresnelMaskPower: 2
+    - _FresnelMaskRemapMax: 1
+    - _FresnelMaskRemapMin: 0
+    - _GlossMapScale: 0
+    - _Glossiness: 0
+    - _GlossyReflections: 0
+    - _IntersectionHighlight: 0
+    - _IntersectionHighlightColourHueShift: 0
+    - _IntersectionHighlightColourSaturationShift: 0
+    - _IntersectionHighlightColourValueMultiplier: 5
+    - _IntersectionHighlightPower: 1
+    - _IntersectionHighlightRemapMax: 1
+    - _IntersectionHighlightRemapMin: 0
+    - _IntersectionHighlightShadowMaskPower: 1
+    - _InvertDepthFade: 0
+    - _LambertLightingNormalfromHeight: 1
+    - _LightingEnabled: 0
+    - _MainLight: 1
+    - _MainLightAnisotropy: 0.8
+    - _MainLightAnisotropyBlend: 0
+    - _MainLightEnabled: 0
+    - _MainLightFlatEnabled: 1
+    - _MainLightFlatLambertBlend: 0.5
+    - _MainLightLambertEnabled: 0
+    - _MainLightLambertTranslucency: 1
+    - _MainLightLambertTranslucencyMask: 0
+    - _MainLightShadow: 1
+    - _MainLightShadowDirectionalAlignmentNoise: 0
+    - _MainLightShadowDirectionalNoise: 0
+    - _MainLightShadowOrthogonalAlignmentWorldNoise: 0
+    - _MainLightShadowWorldNoise: 0
+    - _MainLightTransparencyShadow: 1
+    - _MainLightTransparencyShadowEnabled: 0
+    - _Metallic: 0
+    - _Noise: 1
+    - _NoiseDilation: 0.004
+    - _NoiseDilationEnabled: 1
+    - _NoiseDistortion: 0.05
+    - _NoiseDistortionDilation: 0.004
+    - _NoiseDistortionDilationEnabled: 0
+    - _NoiseDistortionEnabled: 0
+    - _NoiseDistortionOctaves: 1
+    - _NoiseDistortionPower: 1
+    - _NoiseDistortionScale: 1
+    - _NoiseOctaves: 4
+    - _NoiseParallaxOffset: 0
+    - _NoisePower: 1.12
+    - _NoiseRemapMax: 1
+    - _NoiseRemapMin: 0
+    - _NoiseScale: 3.5
+    - _NoiseUVYPreOffset: 0
+    - _NoiseUVYPrePower: 1
+    - _NoiseUVYPreScale: 1
+    - _NoiseXZTwist: 0
+    - _NoiseXZTwistEnabled: 0
+    - _ObjectSpaceUVs: 0
+    - _OcclusionStrength: 1
+    - _Parallax: 0.005
+    - _ParticleRandomization: 1
+    - _ParticleSubtractNoiseoverLifetime: 0
+    - _QueueControl: -1
+    - _QueueOffset: 0
+    - _RadialMask: 0
+    - _RadialMaskDistortion: 0.05
+    - _RadialMaskDistortionDilation: 0.004
+    - _RadialMaskDistortionDilationEnabled: 0
+    - _RadialMaskDistortionEnabled: 0
+    - _RadialMaskDistortionOctaves: 1
+    - _RadialMaskDistortionPower: 1
+    - _RadialMaskDistortionScale: 2
+    - _RadialMaskFeather: 1
+    - _RadialMaskPower: 1
+    - _RadialMaskRadius: 1
+    - _RadialMaskRadiusOverParticleLifetime: 0
+    - _RadialMaskSubtractive: 1
+    - _ReceiveShadows: 1
+    - _Smoothness: 0.5
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _SpherizeNoise: 0
+    - _SpherizeNoiseRadius: 0.5
+    - _SpherizeNoiseStrength: 1
+    - _SrcBlend: 1
+    - _SrcBlendAlpha: 1
+    - _StartFoldoutBaseUVs: 0
+    - _StartFoldoutColour: 0
+    - _StartFoldoutDepthFade: 0
+    - _StartFoldoutFresnelMask: 0
+    - _StartFoldoutIntersectionHighlight: 0
+    - _StartFoldoutLighting: 0
+    - _StartFoldoutNoise: 0
+    - _StartFoldoutNoiseDistortion: 0
+    - _StartFoldoutParticleSettings: 0
+    - _StartFoldoutRadialMask: 0
+    - _StartFoldoutRadialMaskDistortion: 0
+    - _StartFoldoutSpherizeNoise: 0
+    - _StartFoldoutVertexNoise: 0
+    - _StartFoldoutVertexNormalOffset: 0
+    - _StartFoldoutVertexOffsetoverY: 0
+    - _StartFoldoutVertexUVOffset: 0
+    - _StartFoldoutVertexWave: 0
+    - _StartFoldoutVertexWaveNoiseVerticalMask: 0
+    - _StartFoldoutVerticalColour: 0
+    - _StartFoldoutVerticalMasks: 0
+    - _SubtractiveDepthFade: 0
+    - _SubtractiveDepthFadePower: 1
+    - _Surface: 0
+    - _SwapUVXY: 0
+    - _TessPhongStrength: 0.5
+    - _Tessellation: 1
+    - _UVSampleNoise: 0
+    - _VertexNoise: 0.02
+    - _VertexNoiseDilation: 0
+    - _VertexNoiseDilationEnabled: 0
+    - _VertexNoiseEnabled: 0
+    - _VertexNoiseOctaves: 1
+    - _VertexNoiseScale: 2
+    - _VertexNoiseTwist: 0
+    - _VertexNormalOffset: 0
+    - _VertexNormalOffsetBottom: 0
+    - _VertexNormalOffsetBottomPower: 1
+    - _VertexNormalOffsetTop: 0
+    - _VertexNormalOffsetTopPower: 1
+    - _VertexOffsetOverCircularYPower: 1
+    - _VertexOffsetOverY1Power: 2
+    - _VertexOffsetOverY2Power: 2
+    - _VertexTwist: 0
+    - _VertexUVOffsetBottom: 0
+    - _VertexUVOffsetBottomPower: 1
+    - _VertexUVOffsetTop: 0
+    - _VertexUVOffsetTopPower: 1
+    - _VertexWave: 0.1
+    - _VertexWaveAnimation: 4
+    - _VertexWaveEnabled: 0
+    - _VertexWaveNoiseVerticalMaskPower: 1
+    - _VertexWaveNoiseVerticalMaskRemapMax: 1
+    - _VertexWaveNoiseVerticalMaskRemapMin: 0
+    - _VertexWaveOffset: 0
+    - _VertexWaveScale: 2
+    - _VerticalColour: 0
+    - _VerticalColourHueShift: 0
+    - _VerticalColourMaskPower: 1
+    - _VerticalColourMaskRemapMax: 0.1
+    - _VerticalColourMaskRemapMin: 0.5
+    - _VerticalColourSaturationShift: 0
+    - _VerticalColourValueMultiplier: 27.61
+    - _VerticalMask1: 0
+    - _VerticalMask1ObjectSpaceOffset: -1
+    - _VerticalMask1ObjectSpaceScale: 2
+    - _VerticalMask1Power: 1
+    - _VerticalMask1RemapMax: 1
+    - _VerticalMask1RemapMin: 0
+    - _VerticalMask1Subtractive: 0
+    - _VerticalMask2: 0
+    - _VerticalMask2ObjectSpaceOffset: -1
+    - _VerticalMask2ObjectSpaceScale: 2
+    - _VerticalMask2Power: 1
+    - _VerticalMask2RemapMax: 1
+    - _VerticalMask2RemapMin: 0
+    - _VerticalMask2Subtractive: 0
+    - _VerticalMasksObjectSpace: 1
+    - _WorkflowMode: 1
+    - _WorldSpaceUVs: 1
+    - _ZWrite: 1
+    m_Colors:
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _ColourA: {r: 1, g: 0.1254902, b: 0, a: 1}
+    - _ColourB: {r: 1, g: 0.02745098, b: 0, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _IntersectionHighlightColour: {r: 1, g: 1, b: 1, a: 1}
+    - _NoiseAnimation: {r: 0, g: 0.2, b: 0, a: 0}
+    - _NoiseDistortionAnimation: {r: 0, g: 1, b: 0, a: 0}
+    - _NoiseDistortionOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _NoiseDistortionParticleAnimation: {r: 0, g: 0, b: 0, a: 0}
+    - _NoiseDistortionTiling: {r: 1.5, g: 1, b: 1, a: 0}
+    - _NoiseOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _NoiseParticleAnimation: {r: 0, g: 0, b: 0, a: 0}
+    - _NoiseTiling: {r: 1, g: 1, b: 1, a: 0}
+    - _RadialMaskDistortionAnimation: {r: 0, g: 2, b: 0, a: 0}
+    - _RadialMaskDistortionOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _RadialMaskDistortionParticleAnimation: {r: 0, g: 0, b: 0, a: 0}
+    - _RadialMaskDistortionTiling: {r: 1.5, g: 1, b: 1, a: 0}
+    - _RadialMaskOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _RadialMaskTiling: {r: 1.5, g: 1, b: 0, a: 0}
+    - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _SpherizeNoiseOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _VertexNoiseAnimation: {r: 0, g: 2, b: 0, a: 0}
+    - _VertexNoiseOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _VertexNoiseParticleAnimation: {r: 0, g: 0, b: 0, a: 0}
+    - _VertexNoiseTiling: {r: 1, g: 1, b: 1, a: 0}
+    - _VertexOffsetOverCircularY: {r: 0, g: 0, b: 0, a: 0}
+    - _VertexOffsetOverY1: {r: 0, g: 0, b: 0, a: 0}
+    - _VertexOffsetOverY2: {r: 0, g: 0, b: 0, a: 0}
+    - _VerticalColourA: {r: 0, g: 0.5019608, b: 1, a: 1}
+    - _VerticalColourB: {r: 0, g: 0, b: 1, a: 1}
+  m_BuildTextureStacks: []
+--- !u!114 &5698903853166877009
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7

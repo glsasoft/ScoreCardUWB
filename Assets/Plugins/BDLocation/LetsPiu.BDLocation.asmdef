@@ -1,0 +1,14 @@
+{
+    "name": "LetsPiu.BDLocation",
+    "rootNamespace": "",
+    "references": ["LetsPiu.BlueTooth"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

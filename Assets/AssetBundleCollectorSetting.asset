@@ -1,0 +1,185 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 185f6993d5150494d98da50e26cb1c25, type: 3}
+  m_Name: AssetBundleCollectorSetting
+  m_EditorClassIdentifier: 
+  ShowPackageView: 0
+  ShowEditorAlias: 0
+  UniqueBundleName: 1
+  Packages:
+  - PackageName: DefaultPackage
+    PackageDesc: 
+    EnableAddressable: 1
+    LocationToLower: 0
+    IncludeAssetGUID: 0
+    AutoCollectShaders: 1
+    IgnoreRuleName: NormalIgnoreRule
+    Groups:
+    - GroupName: Offline_Base
+      GroupDesc: 
+      AssetTags: Offline
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Graphics/ShaderVariantsCollect
+        CollectorGUID: 5e66c6d291cafb14095369355b7cb08a
+        CollectorType: 1
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectShaderVariants
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Config
+        CollectorGUID: 419cf44ca9237e448a31258d471c4e0e
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/UpdateDlls
+        CollectorGUID: 76eaa91c980b0d143b4b8530c10ad849
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Offline
+      GroupDesc: 
+      AssetTags: Offline
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/TableConfigRes
+        CollectorGUID: c27d85bcedc661f49a71affd919aa19d
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Package_Initial/Texture
+        CollectorGUID: 6f67cfd83aaa1a44e96d6c42dd2b5363
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Package_Offline/Material
+        CollectorGUID: 32ba50cdc12f46f4b8ee2b0d80390df6
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Package_Offline/Shader
+        CollectorGUID: ff9faecd1eb7d5448ad5555ec8cd23b5
+        CollectorType: 2
+        AddressRuleName: AddressDisable
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Package_Offline/Audio
+        CollectorGUID: f3b093cc986b68f43916516e200670bd
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Effect/shader
+        CollectorGUID: 
+        CollectorType: 2
+        AddressRuleName: AddressDisable
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Graphics/Shader
+        CollectorGUID: 
+        CollectorType: 2
+        AddressRuleName: AddressDisable
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Art
+      GroupDesc: "\u6240\u6709\u7F8E\u672F\u8D44\u6E90"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Art/Animations
+        CollectorGUID: 6ee789e77cfac1045ad66dc91429d7dc
+        CollectorType: 2
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Art/Audio
+        CollectorGUID: 07a376e9cc4ee6945bcc93c4a2ce48f9
+        CollectorType: 2
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Art/Materials
+        CollectorGUID: 052f94c64a42ecd46a98a4ee6ac9aacd
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Art/Models
+        CollectorGUID: 3792fe48c64c251448d6c338e8a016ae
+        CollectorType: 2
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Art/Shaders
+        CollectorGUID: 9981d05e6bc6991429a364edb87ca340
+        CollectorType: 2
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Art/Textures
+        CollectorGUID: 7917ff335808b44418a10a25822d0215
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Art/UIAtlas
+        CollectorGUID: ae9417ea2ccc47a448c70a34c2968d3d
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectSpriteAtlas
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Art/Character
+        CollectorGUID: a0938dc76dd9b3340b472379763156e6
+        CollectorType: 2
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 

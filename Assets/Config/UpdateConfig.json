@@ -1,0 +1,10 @@
+{
+    "updateDll": [
+        "LetsPiu.Base.dll",
+        "LetsPiu.Main.dll",
+        "LetsPiu.Component.dll",
+        "LetsPiu.GameLogic.dll",
+        "LetsPiu.UI.dll"
+    ],
+    "preloadDll": []
+}

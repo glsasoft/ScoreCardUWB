@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: e9b1ab280727062439a897e6f710fa15
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 625f186215c104763be7675aa2d941aa, type: 3}
+AssetOrigin:
+  serializedVersion: 1
+  productId: 318761
+  packageName: Chain AOE spell effect
+  packageVersion: 1.1
+  assetPath: Assets/Hovl Studio/HSFiles/Shaders/Shader Graph/HS_Blend_CG.shadergraph
+  uploadId: 832178

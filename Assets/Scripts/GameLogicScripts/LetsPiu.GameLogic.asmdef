@@ -1,0 +1,33 @@
+{
+    "name": "LetsPiu.GameLogic",
+    "rootNamespace": "LetsPiu.GameLogic",
+    "references": [
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:8b5f9125caf5e274ab58f3863a77a2a6",
+        "GUID:90c8fb14233fda74d83e70ff026feac2",
+        "GUID:e34a5702dd353724aa315fb8011f08c3",
+        "GUID:458b1092fe9042e4cac78cbe0ead4baf",
+        "GUID:5c01796d064528144a599661eaab93a6",
+        "GUID:ffc610c6cd357ab4288380adb7145b52",
+        "GUID:b8628891c9bbf0d41a65b9ac1f294895",
+        "GUID:3ab49f17680ca09408425926d3c86130",
+        "GUID:b9c70a4d1a404489ba23add8c952d8f5",
+        "GUID:ea7150a5c2e8daa43b5b6219f3362677",
+        "GUID:1a1d11345c9c40842bf58cc2f504d0a8",
+        "GUID:a5da9e6d2a6d36548b5dfcb90680160d",
+        "GUID:62bcfb21c2a5b474182007d84f75d30a",
+        "GUID:6e5063adab271564ba0098a06a8cebda",
+        "GUID:6cf4843e521148140b4801c10193054b",
+        "GUID:4ca033ee547ec451c8a2d3c33d7620ad",
+        "GUID:4307f53044263cf4b835bd812fc161a4"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

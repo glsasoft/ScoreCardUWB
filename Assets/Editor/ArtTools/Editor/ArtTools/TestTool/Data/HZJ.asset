@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e439f1c2a065443eba4717ad1545d140, type: 3}
+  m_Name: HZJ
+  m_EditorClassIdentifier: 
+  tabs:
+  - name: "\u5DE5\u5177"
+    toolItems:
+    - rid: 726387228621144064
+    - rid: 726387228621144065
+    - rid: 726387228621144066
+    - rid: 726387228621144067
+    - rid: 726387228621144068
+    - rid: 726387228621144069
+  - name: EFF
+    toolItems: []
+  logLimit: 30
+  screenshotDirectory: Screenshots/Capture/
+  onlineStartScene: {fileID: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: 726387228621144064
+      type: {class: FindObjectAsset, ns: ArtTools, asm: ArtTools}
+      data:
+        labelName: "\u7BA1\u7EBF"
+        objectRef:
+          label: Piu_URP_Forward+_Renderer
+          targetObject: {fileID: 11400000, guid: e0b613ed20f5b364290d6b49863f2fa9,
+            type: 2}
+    - rid: 726387228621144065
+      type: {class: SeparatorAsset, ns: ArtTools, asm: ArtTools}
+      data:
+        title: "\u5206\u7EC4\u6807\u9898"
+        displayStyle: 0
+    - rid: 726387228621144066
+      type: {class: OpenSceneAsset, ns: ArtTools, asm: ArtTools}
+      data:
+        labelName: "\u5DE5\u4F5C\u73AF\u5883"
+        buttonLabel: WorkScence
+        scene: {fileID: 102900000, guid: 0f8ecb0011f6b384aa38f256d8505b91, type: 3}
+    - rid: 726387228621144067
+      type: {class: SeparatorAsset, ns: ArtTools, asm: ArtTools}
+      data:
+        title: "\u5206\u7EC4\u6807\u9898"
+        displayStyle: 0
+    - rid: 726387228621144068
+      type: {class: OpenWebAsset, ns: ArtTools, asm: ArtTools}
+      data:
+        labelName: "\u9B54\u6CD5\u76D2"
+        buttonLabel: "\u6253\u5F00\u7F51\u9875"
+        webUrl: https://www.magesbox.com/
+        useInternalBrowser: 0
+    - rid: 726387228621144069
+      type: {class: TextAsset, ns: ArtTools, asm: ArtTools}
+      data:
+        textContent: "\u4ECA\u5929\u4E03\u70B9\u4E0B\u73ED"
+        isLocked: 1

@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-2406267794615961640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a70fdcfcaba61d34b8dcf53440851319, type: 3}
+  m_Name: MaterialCollection_TotalMaterial
+  m_EditorClassIdentifier: 
+  pathMode: 1
+  mIncludePath:
+  - Assets
+  - Packages
+  mFolders: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da946e45f28e07946a3dd80c64b88b51, type: 3}
+  m_Name: Default ShaderVariantCollection Tool Config
+  m_EditorClassIdentifier: 
+  mKeys:
+  - Soco.ShaderVariantsCollection.IMaterialCollector, Assembly-CSharp-Editor, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null
+  - Soco.ShaderVariantsCollection.IMaterialFilter, Assembly-CSharp-Editor, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null
+  - Soco.ShaderVariantsCollection.IVariantFilter, Assembly-CSharp-Editor, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null
+  mValues:
+  - list:
+    - obj: {fileID: -2406267794615961640}
+      use: 1
+  - list: []
+  - list: []

@@ -1,0 +1,934 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!200 &20000000
+ShaderVariantCollection:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AllShaderVariants
+  m_Shaders:
+  - first: {fileID: 66, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 106, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: _SUNDISK_SIMPLE
+        passType: 0
+  - first: {fileID: 211, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: _ALPHABLEND_ON _COLOROVERLAY_ON _REQUIRE_UV2
+        passType: 0
+      - keywords: PROCEDURAL_INSTANCING_ON _ALPHABLEND_ON _REQUIRE_UV2
+        passType: 8
+      - keywords: _ALPHABLEND_ON _REQUIRE_UV2
+        passType: 8
+  - first: {fileID: 9000, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 9001, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 9002, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 9003, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 9004, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 9007, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 9101, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 9103, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 10720, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 10721, guid: 0000000000000000f000000000000000, type: 0}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: d6dae50ee9e1bfa4db75f19f99355220, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: _OUTPUT_DEPTH
+        passType: 0
+  - first: {fileID: 4800000, guid: 65df88701913c224d95fc554db28381a, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: e7857e9d0c934dc4f83f270f8447b006, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: e6e9a19c3678ded42a3bc431ebef7dbd, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: 93446b5c5339d4f00b85c159e1159b7c, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: 768c658fc1bc78741a9b0742469eec07, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 8
+      - keywords: 
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _ALPHAPREMULTIPLY_ON _EMISSION
+          _MAIN_LIGHT_SHADOWS _NORMALMAP _SHADOWS_SOFT _SURFACE_TYPE_TRANSPARENT
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _ALPHAPREMULTIPLY_ON _EMISSION
+          _MAIN_LIGHT_SHADOWS _NORMALMAP _SURFACE_TYPE_TRANSPARENT
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _ALPHAPREMULTIPLY_ON _MAIN_LIGHT_SHADOWS
+          _METALLICSPECGLOSSMAP _NORMALMAP _SHADOWS_SOFT _SURFACE_TYPE_TRANSPARENT
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _ALPHAPREMULTIPLY_ON _MAIN_LIGHT_SHADOWS
+          _METALLICSPECGLOSSMAP _NORMALMAP _SURFACE_TYPE_TRANSPARENT
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _ALPHAPREMULTIPLY_ON _MAIN_LIGHT_SHADOWS
+          _NORMALMAP _SHADOWS_SOFT _SURFACE_TYPE_TRANSPARENT
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _ALPHAPREMULTIPLY_ON _MAIN_LIGHT_SHADOWS
+          _NORMALMAP _SURFACE_TYPE_TRANSPARENT
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _EMISSION _MAIN_LIGHT_SHADOWS
+          _METALLICSPECGLOSSMAP _NORMALMAP _OCCLUSIONMAP
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _EMISSION _MAIN_LIGHT_SHADOWS
+          _METALLICSPECGLOSSMAP _NORMALMAP _OCCLUSIONMAP _SHADOWS_SOFT
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _ENVIRONMENTREFLECTIONS_OFF
+          _MAIN_LIGHT_SHADOWS _SHADOWS_SOFT _SURFACE_TYPE_TRANSPARENT
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _ENVIRONMENTREFLECTIONS_OFF
+          _MAIN_LIGHT_SHADOWS _SURFACE_TYPE_TRANSPARENT
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _MAIN_LIGHT_SHADOWS
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _MAIN_LIGHT_SHADOWS _METALLICSPECGLOSSMAP
+          _NORMALMAP _OCCLUSIONMAP
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _MAIN_LIGHT_SHADOWS _METALLICSPECGLOSSMAP
+          _NORMALMAP _OCCLUSIONMAP _SHADOWS_SOFT
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _MAIN_LIGHT_SHADOWS _NORMALMAP
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _MAIN_LIGHT_SHADOWS _NORMALMAP
+          _SHADOWS_SOFT
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _MAIN_LIGHT_SHADOWS _SHADOWS_SOFT
+        passType: 13
+  - first: {fileID: 4800000, guid: d01e24d74d7b6864aa58ddb5c1ed71c9, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 13
+      - keywords: _DISSOLVE_ON
+        passType: 13
+      - keywords: _DISSOLVE_ON _MASK_TEX_ON_2 _MASK_TEX_POLAR_ON_2
+        passType: 13
+      - keywords: _MASK_TEX_ON_1
+        passType: 13
+      - keywords: _MASK_TEX_ON_1 _MASK_TEX_ON_2
+        passType: 13
+      - keywords: _MASK_TEX_ON_1 _MASK_TEX_ON_2 _MASK_TEX_POLAR_ON_1 _MASK_TEX_POLAR_ON_2
+        passType: 13
+      - keywords: _MASK_TEX_ON_1 _MASK_TEX_ON_2 _MASK_TEX_POLAR_ON_2
+        passType: 13
+      - keywords: _MASK_TEX_ON_1 _MASK_TEX_POLAR_ON_1
+        passType: 13
+      - keywords: _MASK_TEX_ON_2
+        passType: 13
+      - keywords: _MASK_TEX_ON_2 _MASK_TEX_POLAR_ON_2
+        passType: 13
+      - keywords: _POLAR_ON
+        passType: 13
+  - first: {fileID: 4800000, guid: f45207aa8f9b2f349a63470c9b6ecf0c, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 13
+      - keywords: _FDEPTH_ON _FDISSOLVETEX_ON _FDISTORTTEX_ON _FMASKTEX_ON
+        passType: 13
+      - keywords: _FDISSOLVETEX_ON
+        passType: 13
+      - keywords: _FDISSOLVETEX_ON _FDISTORTTEX_ON
+        passType: 13
+      - keywords: _FDISSOLVETEX_ON _FDISTORTTEX_ON _FMASKTEX_ON
+        passType: 13
+      - keywords: _FDISSOLVETEX_ON _FDISTORTTEX_ON _FMASKTEX_ON _IFVTO_ON
+        passType: 13
+      - keywords: _FDISSOLVETEX_ON _FMASKTEX_ON
+        passType: 13
+      - keywords: _FDISTORTTEX_ON
+        passType: 13
+      - keywords: _FDISTORTTEX_ON _FFNL_ON _IFVTO_ON
+        passType: 13
+      - keywords: _FDISTORTTEX_ON _FMASKTEX_ON
+        passType: 13
+      - keywords: _FFNL_ON _IFVTO_ON
+        passType: 13
+      - keywords: _FMASKTEX_ON
+        passType: 13
+  - first: {fileID: 4800000, guid: 4af179224a0253e429dbed5d26024f1e, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 8
+      - keywords: 
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _MAIN_LIGHT_SHADOWS
+        passType: 13
+  - first: {fileID: 4800000, guid: e0bf1cef55ce60845b54b9ef23ce3b6f, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: 895ef99e2e3d8884eaad6e54bf647f8f, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 13
+  - first: {fileID: 4800000, guid: 63b4f439c516efb4ba4cc946918dda85, type: 3}
+    second:
+      variants:
+      - keywords: _MASK_TEX_ON_1
+        passType: 13
+  - first: {fileID: 4800000, guid: 68e6db2ebdc24f95958faec2be5558d6, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: UNDERLAY_ON
+        passType: 0
+  - first: {fileID: 4800000, guid: 650dd9526735d5b46b79224bc6e94025, type: 3}
+    second:
+      variants:
+      - keywords: _SURFACE_TYPE_TRANSPARENT
+        passType: 13
+  - first: {fileID: 4800000, guid: 85eb729dcb6e2cb45a1f58085cf975b8, type: 3}
+    second:
+      variants:
+      - keywords: _RGB_GB
+        passType: 8
+      - keywords: _RGB_GB _USETIME_ON
+        passType: 8
+      - keywords: _RGB_RG _USETIME_ON
+        passType: 8
+      - keywords: _RGB_GB
+        passType: 13
+      - keywords: _RGB_GB _USETIME_ON
+        passType: 13
+      - keywords: _RGB_RG _USETIME_ON
+        passType: 13
+  - first: {fileID: 4800000, guid: 3afef89dd133d934e88ef4f95a188856, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 8
+      - keywords: _DISSOLVE_RADIAL3_ON _TURBULENCE_RADIAL_ON _USEDISSOLVE_ON _USETURBULENCE_ON
+        passType: 8
+      - keywords: _DISSOLVE_RADIAL3_ON _USEDISSOLVE_ON _USETURBULENCE_ON
+        passType: 8
+      - keywords: _TURBULENCE_RADIAL_ON _USETURBULENCE_ON
+        passType: 8
+      - keywords: _USEDISSOLVE_ON
+        passType: 8
+      - keywords: _USEDISSOLVE_ON _USETURBULENCE_ON
+        passType: 8
+      - keywords: _USEDISSOLVE_ON _USETURBULENCE_ON _USE_DISSOLVEMASK_ON _USE_MASK02_ON
+          _USE_TURBULENCEMASK_ON
+        passType: 8
+      - keywords: _USEDISSOLVE_ON _USETURBULENCE_ON _USE_MASK02_ON
+        passType: 8
+      - keywords: _USEDISSOLVE_ON _USE_MASK02_ON
+        passType: 8
+      - keywords: _USETURBULENCE_ON
+        passType: 8
+      - keywords: _USETURBULENCE_ON _USE_MASK02_ON
+        passType: 8
+      - keywords: _USE_MASK02_ON
+        passType: 8
+      - keywords: _USE_MASK02_ON _USE_TURBULENCEMASK_ON
+        passType: 8
+      - keywords: 
+        passType: 13
+      - keywords: _DISSOLVE_RADIAL3_ON _TURBULENCE_RADIAL_ON _USEDISSOLVE_ON _USETURBULENCE_ON
+        passType: 13
+      - keywords: _DISSOLVE_RADIAL3_ON _USEDISSOLVE_ON _USETURBULENCE_ON
+        passType: 13
+      - keywords: _MT_USER_ON
+        passType: 13
+      - keywords: _MT_USER_ON _USERAMP_ON _USE_MASK02_ON
+        passType: 13
+      - keywords: _TURBULENCE_RADIAL_ON _USETURBULENCE_ON
+        passType: 13
+      - keywords: _USEDISSOLVE_ON
+        passType: 13
+      - keywords: _USEDISSOLVE_ON _USERAMP_ON _USETURBULENCE_ON
+        passType: 13
+      - keywords: _USEDISSOLVE_ON _USERAMP_ON _USETURBULENCE_ON _USE_MASK02_ON
+        passType: 13
+      - keywords: _USEDISSOLVE_ON _USERAMP_ON _USE_MASK02_ON
+        passType: 13
+      - keywords: _USEDISSOLVE_ON _USETURBULENCE_ON
+        passType: 13
+      - keywords: _USEDISSOLVE_ON _USETURBULENCE_ON _USE_DISSOLVEMASK_ON _USE_MASK02_ON
+          _USE_TURBULENCEMASK_ON
+        passType: 13
+      - keywords: _USEDISSOLVE_ON _USETURBULENCE_ON _USE_MASK02_ON
+        passType: 13
+      - keywords: _USEDISSOLVE_ON _USE_MASK02_ON
+        passType: 13
+      - keywords: _USERAMP_ON
+        passType: 13
+      - keywords: _USERAMP_ON _USETURBULENCE_ON _USE_MASK02_ON
+        passType: 13
+      - keywords: _USERAMP_ON _USE_MASK02_ON
+        passType: 13
+      - keywords: _USETURBULENCE_ON
+        passType: 13
+      - keywords: _USETURBULENCE_ON _USE_MASK02_ON
+        passType: 13
+      - keywords: _USE_MASK02_ON
+        passType: 13
+      - keywords: _USE_MASK02_ON _USE_TURBULENCEMASK_ON
+        passType: 13
+  - first: {fileID: 4800000, guid: eafb798cb53368e4592ef44db5e4e700, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 8
+      - keywords: 
+        passType: 13
+  - first: {fileID: 4800000, guid: f7fdd595a84da8a4f986d93e57f83c19, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 13
+  - first: {fileID: 4800000, guid: 10355e3cb473f594dac973653d90f227, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: 4800000, guid: ef9e09b362152fb46801aca95b424f19, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: 
+        passType: 8
+      - keywords: 
+        passType: 13
+  - first: {fileID: 4800000, guid: e39e2c788036e5244880e561d3f4366d, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: 
+        passType: 8
+  - first: {fileID: 4800000, guid: 9aded349bc62d2f48b747dd6b5faa660, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: _EMISSION _NORMALMAP
+        passType: 0
+      - keywords: _NORMALMAP
+        passType: 0
+      - keywords: 
+        passType: 8
+      - keywords: 
+        passType: 13
+  - first: {fileID: 4800000, guid: 5d6e6e66debd08d48a9e938866041158, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 8
+      - keywords: _USE_CUSTOM1_X_DISSOLVE_ON
+        passType: 8
+      - keywords: 
+        passType: 13
+      - keywords: _USE_CUSTOM1_X_DISSOLVE_ON
+        passType: 13
+  - first: {fileID: 4800000, guid: 423bf4f06cd846f42a4901c29862d84a, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 8
+      - keywords: _USE_CUSTOM1_X_DISSOLVE_ON _USE_CUSTOM1_Y_DISTORT_ON _USE_FRENSEL_ON
+        passType: 8
+      - keywords: _USE_CUSTOM1_X_DISSOLVE_ON _USE_FRENSEL_ON
+        passType: 8
+      - keywords: _USE_CUSTOM1_Y_DISTORT_ON _USE_FRENSEL_ON
+        passType: 8
+      - keywords: _USE_CUSTOM1_ZW_MOVE_ON _USE_FRENSEL_ON
+        passType: 8
+      - keywords: _USE_FRENSEL_ON
+        passType: 8
+      - keywords: 
+        passType: 13
+      - keywords: _USE_CUSTOM1_X_DISSOLVE_ON _USE_CUSTOM1_Y_DISTORT_ON _USE_FRENSEL_ON
+        passType: 13
+      - keywords: _USE_CUSTOM1_X_DISSOLVE_ON _USE_FRENSEL_ON
+        passType: 13
+      - keywords: _USE_CUSTOM1_Y_DISTORT_ON _USE_FRENSEL_ON
+        passType: 13
+      - keywords: _USE_CUSTOM1_ZW_MOVE_ON _USE_FRENSEL_ON
+        passType: 13
+      - keywords: _USE_FRENSEL_ON
+        passType: 13
+  - first: {fileID: 4800000, guid: 36fac321d600f9749ba979ecfc5dd71f, type: 3}
+    second:
+      variants:
+      - keywords: _USE_FRENSEL_ON
+        passType: 8
+      - keywords: _USE_FRENSEL_ON
+        passType: 13
+  - first: {fileID: -6465566751694194690, guid: 29c4798100bc7654d95191789568fd20,
+      type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: 
+        passType: 8
+  - first: {fileID: -6465566751694194690, guid: 1a2a78951f90d6345a818229ec534919,
+      type: 3}
+    second:
+      variants:
+      - keywords: _SURFACE_TYPE_TRANSPARENT
+        passType: 0
+      - keywords: 
+        passType: 8
+  - first: {fileID: -6465566751694194690, guid: 5a480fa36de7b2041a042222341f74a7,
+      type: 3}
+    second:
+      variants:
+      - keywords: _SURFACE_TYPE_TRANSPARENT
+        passType: 0
+      - keywords: 
+        passType: 8
+  - first: {fileID: -6465566751694194690, guid: 614f255195ef23948a395fe9a915199d,
+      type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: _SURFACE_TYPE_TRANSPARENT
+        passType: 0
+      - keywords: 
+        passType: 8
+      - keywords: 
+        passType: 13
+  - first: {fileID: -6465566751694194690, guid: 69b6840bf321c2e43bcff85ee845b227,
+      type: 3}
+    second:
+      variants:
+      - keywords: _SURFACE_TYPE_TRANSPARENT
+        passType: 0
+      - keywords: 
+        passType: 8
+  - first: {fileID: -6465566751694194690, guid: 4b5e22c7347272747be7687d1afca001,
+      type: 3}
+    second:
+      variants:
+      - keywords: _SURFACE_TYPE_TRANSPARENT
+        passType: 0
+      - keywords: 
+        passType: 8
+  - first: {fileID: -6465566751694194690, guid: 81a925152c3a1724286eb724c3ab0f15,
+      type: 3}
+    second:
+      variants:
+      - keywords: _SURFACE_TYPE_TRANSPARENT
+        passType: 0
+      - keywords: 
+        passType: 8
+  - first: {fileID: -6465566751694194690, guid: e4c314a5c99ab7845b9f7057f076ddf4,
+      type: 3}
+    second:
+      variants:
+      - keywords: _SURFACE_TYPE_TRANSPARENT
+        passType: 0
+      - keywords: 
+        passType: 8
+  - first: {fileID: 4800000, guid: 273f9e8addc6c0b4ca7d47063da53f8e, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 8
+      - keywords: 
+        passType: 13
+  - first: {fileID: -6465566751694194690, guid: 47325c0b28d643d439737d979342b72f,
+      type: 3}
+    second:
+      variants:
+      - keywords: _SURFACE_TYPE_TRANSPARENT
+        passType: 0
+      - keywords: 
+        passType: 8
+  - first: {fileID: -6465566751694194690, guid: 921471242514c1246bbd85a0a8de3889,
+      type: 3}
+    second:
+      variants:
+      - keywords: _CUSTOM_SHAPE_ENABLE
+        passType: 0
+  - first: {fileID: 4800000, guid: 299ee2feb5b8dd24c9a55e50dd4e5f59, type: 3}
+    second:
+      variants:
+      - keywords: _CORRECT_ASPECT
+        passType: 0
+  - first: {fileID: 4800000, guid: 7787bfdacec31472ca6644d6e3616bd4, type: 3}
+    second:
+      variants:
+      - keywords: _MASKMAP_ON _NOISEMAP
+        passType: 8
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _COLORMAPBLEND _FX_LIGHT_MODE_UNLIT
+          _MASKMAP_ON _NOISEMAP
+        passType: 13
+  - first: {fileID: 4800000, guid: 7184a95c20fc1a441a8815af4c795ccd, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 8
+      - keywords: _ALPHATEST_ON _DISSOLVE _HOUDINI_VAT_SOFTBODY _MASKMAP_ON _NOISEMAP
+        passType: 8
+      - keywords: _DISSOLVE _HOUDINI_VAT_SOFTBODY
+        passType: 8
+      - keywords: _DISSOLVE _HOUDINI_VAT_SOFTBODY _MASKMAP_ON
+        passType: 8
+      - keywords: _DISSOLVE _HOUDINI_VAT_SOFTBODY _MASKMAP_ON _NOISEMAP
+        passType: 8
+      - keywords: _DISSOLVE _HOUDINI_VAT_SOFTBODY _NOISEMAP
+        passType: 8
+      - keywords: _DISSOLVE _MASKMAP_ON
+        passType: 8
+      - keywords: _HOUDINI_VAT_SOFTBODY
+        passType: 8
+      - keywords: _HOUDINI_VAT_SOFTBODY _MASKMAP_ON
+        passType: 8
+      - keywords: _HOUDINI_VAT_SOFTBODY _MASKMAP_ON _NOISEMAP
+        passType: 8
+      - keywords: _HOUDINI_VAT_SOFTBODY _NOISEMAP
+        passType: 8
+      - keywords: _MASKMAP_ON
+        passType: 8
+      - keywords: _MASKMAP_ON _NOISEMAP
+        passType: 8
+      - keywords: _NOISEMAP
+        passType: 8
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _ALPHAPREMULTIPLY_ON _DISSOLVE
+          _FX_LIGHT_MODE_UNLIT _HOUDINI_VAT_SOFTBODY _MASKMAP_ON _NOISEMAP
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _ALPHAPREMULTIPLY_ON _EMISSION
+          _FX_LIGHT_MODE_UNLIT _HOUDINI_VAT_SOFTBODY _MASKMAP_ON _NOISEMAP
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _ALPHAPREMULTIPLY_ON _EMISSION
+          _FX_LIGHT_MODE_UNLIT _MASKMAP_ON _NOISEMAP
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _ALPHAPREMULTIPLY_ON _FX_LIGHT_MODE_UNLIT
+          _HOUDINI_VAT_SOFTBODY _MASKMAP_ON _NOISEMAP
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _ALPHAPREMULTIPLY_ON _FX_LIGHT_MODE_UNLIT
+          _HOUDINI_VAT_SOFTBODY _MASKMAP_ON _VAT_HOUDINI
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _ALPHAPREMULTIPLY_ON _FX_LIGHT_MODE_UNLIT
+          _HOUDINI_VAT_SOFTBODY _VAT_HOUDINI
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _ALPHAPREMULTIPLY_ON _FX_LIGHT_MODE_UNLIT
+          _MASKMAP_ON _VAT_HOUDINI
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _ALPHAPREMULTIPLY_ON _FX_LIGHT_MODE_UNLIT
+          _VAT_HOUDINI
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _ALPHATEST_ON _DISSOLVE _FX_LIGHT_MODE_UNLIT
+          _HOUDINI_VAT_SOFTBODY _MASKMAP_ON _NOISEMAP
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _COLORMAPBLEND _DISSOLVE
+          _EMISSION _FX_LIGHT_MODE_UNLIT _HOUDINI_VAT_SOFTBODY _MASKMAP_ON _VAT_HOUDINI
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _COLORMAPBLEND _DISSOLVE
+          _EMISSION _FX_LIGHT_MODE_UNLIT _MASKMAP_ON _VAT_HOUDINI
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _COLORMAPBLEND _FX_LIGHT_MODE_UNLIT
+          _HOUDINI_VAT_SOFTBODY
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _COLORMAPBLEND _FX_LIGHT_MODE_UNLIT
+          _HOUDINI_VAT_SOFTBODY _NOISEMAP
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _DISSOLVE _FX_LIGHT_MODE_UNLIT
+          _HOUDINI_VAT_SOFTBODY _MASKMAP_ON _NOISEMAP _VAT_HOUDINI
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _DISSOLVE _FX_LIGHT_MODE_UNLIT
+          _HOUDINI_VAT_SOFTBODY _MASKMAP_ON _VAT_HOUDINI
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _DISSOLVE _FX_LIGHT_MODE_UNLIT
+          _HOUDINI_VAT_SOFTBODY _NOISEMAP
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _DISSOLVE _FX_LIGHT_MODE_UNLIT
+          _HOUDINI_VAT_SOFTBODY _VAT_HOUDINI
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _DISSOLVE _FX_LIGHT_MODE_UNLIT
+          _MASKMAP_ON
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _DISSOLVE _FX_LIGHT_MODE_UNLIT
+          _MASKMAP_ON _NOISEMAP _VAT_HOUDINI
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _DISSOLVE _FX_LIGHT_MODE_UNLIT
+          _MASKMAP_ON _VAT_HOUDINI
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _DISSOLVE _FX_LIGHT_MODE_UNLIT
+          _VAT_HOUDINI
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _FX_LIGHT_MODE_UNLIT _HOUDINI_VAT_SOFTBODY
+          _MASKMAP_ON _NOISEMAP _PARALLAX_MAPPING _VAT_HOUDINI
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _FX_LIGHT_MODE_UNLIT _HOUDINI_VAT_SOFTBODY
+          _MASKMAP_ON _NOISEMAP _VAT_HOUDINI
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _FX_LIGHT_MODE_UNLIT _HOUDINI_VAT_SOFTBODY
+          _MASKMAP_ON _VAT_HOUDINI
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _FX_LIGHT_MODE_UNLIT _HOUDINI_VAT_SOFTBODY
+          _NOISEMAP
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _FX_LIGHT_MODE_UNLIT _HOUDINI_VAT_SOFTBODY
+          _VAT_HOUDINI
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _FX_LIGHT_MODE_UNLIT _MASKMAP_ON
+          _NOISEMAP
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _FX_LIGHT_MODE_UNLIT _MASKMAP_ON
+          _NOISEMAP _PARALLAX_MAPPING _VAT_HOUDINI
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _FX_LIGHT_MODE_UNLIT _MASKMAP_ON
+          _NOISEMAP _VAT_HOUDINI
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _FX_LIGHT_MODE_UNLIT _MASKMAP_ON
+          _VAT_HOUDINI
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _FX_LIGHT_MODE_UNLIT _NOISEMAP
+          _VAT_HOUDINI
+        passType: 13
+      - keywords: EVALUATE_SH_VERTEX _ADDITIONAL_LIGHTS _FX_LIGHT_MODE_UNLIT _VAT_HOUDINI
+        passType: 13
+  - first: {fileID: 4800000, guid: 4be9481916d90194ebfa8b213fe3eef7, type: 3}
+    second:
+      variants:
+      - keywords: _MASK02_ON_ON
+        passType: 8
+      - keywords: _MASK02_ON_ON
+        passType: 13
+  - first: {fileID: 4800000, guid: 0ef36e79140a289449d5ba0f703d7cc7, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 8
+      - keywords: 
+        passType: 13
+  - first: {fileID: 4800000, guid: 2b02ff58d507c6a478f8b1a00964a56d, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: -6465566751694194690, guid: 0c14216252ecfd840b28173145c2b4c7,
+      type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: 
+        passType: 8
+  - first: {fileID: -6465566751694194690, guid: e9b1ab280727062439a897e6f710fa15,
+      type: 3}
+    second:
+      variants:
+      - keywords: _SURFACE_TYPE_TRANSPARENT
+        passType: 0
+      - keywords: 
+        passType: 8
+  - first: {fileID: 4800000, guid: 2f7eee9daf60f9c46a47357b0f46cf6a, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 8
+      - keywords: 
+        passType: 13
+  - first: {fileID: 4800000, guid: 35b95f80d573dd54f8ef5e8cd1d2611f, type: 3}
+    second:
+      variants:
+      - keywords: _ADDITIONALLIGHTSFLATENABLED_ON _ADDITIONAL_LIGHTS _MAINLIGHTFLATENABLED_ON
+          _MAIN_LIGHT_SHADOWS _NOISEDILATIONENABLED_ON _NOISEDISTORTIONDILATIONENABLED_ON
+          _NOISEDISTORTIONENABLED_ON _NOISEXZTWISTENABLED_ON _OBJECTSPACEUVS_ON _RADIALMASKDISTORTIONDILATIONENABLED_ON
+          _RADIALMASKDISTORTIONENABLED_ON _RADIALMASKSUBTRACTIVE_ON _VERTEXNOISEENABLED_ON
+          _VERTEXWAVEENABLED_ON _VERTICALCOLOUR_ON _VERTICALMASK1SUBTRACTIVE_ON _VERTICALMASK1_ON
+          _VERTICALMASK2_ON _VERTICALMASKSOBJECTSPACE_ON
+        passType: 13
+      - keywords: _ADDITIONALLIGHTSFLATENABLED_ON _ADDITIONAL_LIGHTS _MAINLIGHTFLATENABLED_ON
+          _MAIN_LIGHT_SHADOWS _NOISEDILATIONENABLED_ON _NOISEDISTORTIONDILATIONENABLED_ON
+          _NOISEDISTORTIONENABLED_ON _RADIALMASKDISTORTIONDILATIONENABLED_ON _RADIALMASKDISTORTIONENABLED_ON
+          _RADIALMASKSUBTRACTIVE_ON _RADIALMASK_ON _SPHERIZENOISE_ON _VERTEXNOISEDILATIONENABLED_ON
+          _VERTEXNOISEENABLED_ON _VERTEXWAVEENABLED_ON _VERTICALCOLOUR_ON _VERTICALMASKSOBJECTSPACE_ON
+        passType: 13
+      - keywords: _ADDITIONALLIGHTSFLATENABLED_ON _ADDITIONAL_LIGHTS _MAINLIGHTFLATENABLED_ON
+          _MAIN_LIGHT_SHADOWS _NOISEDILATIONENABLED_ON _NOISEDISTORTIONDILATIONENABLED_ON
+          _NOISEDISTORTIONENABLED_ON _RADIALMASKDISTORTIONDILATIONENABLED_ON _RADIALMASKDISTORTIONENABLED_ON
+          _RADIALMASKSUBTRACTIVE_ON _RADIALMASK_ON _SPHERIZENOISE_ON _VERTEXNOISEDILATIONENABLED_ON
+          _VERTEXNOISEENABLED_ON _VERTEXWAVEENABLED_ON _VERTICALMASKSOBJECTSPACE_ON
+        passType: 13
+      - keywords: _ADDITIONALLIGHTSFLATENABLED_ON _ADDITIONAL_LIGHTS _MAINLIGHTFLATENABLED_ON
+          _MAIN_LIGHT_SHADOWS _NOISEDILATIONENABLED_ON _NOISEDISTORTIONDILATIONENABLED_ON
+          _NOISEDISTORTIONENABLED_ON _RADIALMASKDISTORTIONDILATIONENABLED_ON _RADIALMASKDISTORTIONENABLED_ON
+          _RADIALMASKSUBTRACTIVE_ON _RADIALMASK_ON _VERTEXNOISEDILATIONENABLED_ON
+          _VERTEXNOISEENABLED_ON _VERTICALMASKSOBJECTSPACE_ON
+        passType: 13
+      - keywords: _ADDITIONALLIGHTSFLATENABLED_ON _ADDITIONAL_LIGHTS _MAINLIGHTFLATENABLED_ON
+          _MAIN_LIGHT_SHADOWS _NOISEDILATIONENABLED_ON _NOISEDISTORTIONDILATIONENABLED_ON
+          _NOISEDISTORTIONENABLED_ON _RADIALMASKDISTORTIONDILATIONENABLED_ON _RADIALMASKDISTORTIONENABLED_ON
+          _RADIALMASKSUBTRACTIVE_ON _RADIALMASK_ON _VERTEXNOISEDILATIONENABLED_ON
+          _VERTICALMASKSOBJECTSPACE_ON
+        passType: 13
+      - keywords: _ADDITIONALLIGHTSFLATENABLED_ON _ADDITIONAL_LIGHTS _MAINLIGHTFLATENABLED_ON
+          _MAIN_LIGHT_SHADOWS _NOISEDILATIONENABLED_ON _NOISEDISTORTIONDILATIONENABLED_ON
+          _RADIALMASKDISTORTIONDILATIONENABLED_ON _RADIALMASKDISTORTIONENABLED_ON
+          _RADIALMASKSUBTRACTIVE_ON _RADIALMASK_ON _VERTEXNOISEDILATIONENABLED_ON
+          _VERTICALMASKSOBJECTSPACE_ON
+        passType: 13
+      - keywords: _ADDITIONALLIGHTSFLATENABLED_ON _ADDITIONAL_LIGHTS _MAINLIGHTFLATENABLED_ON
+          _MAIN_LIGHT_SHADOWS _NOISEDILATIONENABLED_ON _NOISEDISTORTIONENABLED_ON
+          _RADIALMASKDISTORTIONDILATIONENABLED_ON _RADIALMASKDISTORTIONENABLED_ON
+          _RADIALMASKSUBTRACTIVE_ON _RADIALMASK_ON _SPHERIZENOISE_ON _VERTEXNOISEDILATIONENABLED_ON
+          _VERTEXNOISEENABLED_ON _VERTICALCOLOUR_ON _VERTICALMASKSOBJECTSPACE_ON
+        passType: 13
+      - keywords: _ADDITIONAL_LIGHTS _MAIN_LIGHT_SHADOWS _NOISEDILATIONENABLED_ON
+          _NOISEDISTORTIONDILATIONENABLED_ON _NOISEDISTORTIONENABLED_ON _RADIALMASKDISTORTIONDILATIONENABLED_ON
+          _RADIALMASKDISTORTIONENABLED_ON _RADIALMASKSUBTRACTIVE_ON _RADIALMASK_ON
+          _SPHERIZENOISE_ON _VERTEXNOISEDILATIONENABLED_ON _VERTEXNOISEENABLED_ON
+          _VERTEXWAVEENABLED_ON _VERTICALMASKSOBJECTSPACE_ON
+        passType: 13
+      - keywords: _ADDITIONAL_LIGHTS _MAIN_LIGHT_SHADOWS _NOISEDILATIONENABLED_ON
+          _NOISEDISTORTIONDILATIONENABLED_ON _NOISEDISTORTIONENABLED_ON _RADIALMASKDISTORTIONDILATIONENABLED_ON
+          _RADIALMASKDISTORTIONENABLED_ON _RADIALMASKSUBTRACTIVE_ON _RADIALMASK_ON
+          _VERTEXNOISEDILATIONENABLED_ON _VERTEXNOISEENABLED_ON _VERTICALMASKSOBJECTSPACE_ON
+        passType: 13
+  - first: {fileID: -6465566751694194690, guid: 1e4a73cebec89aa4187ef1d0f422154c,
+      type: 3}
+    second:
+      variants:
+      - keywords: _RAMPENABLED_ON
+        passType: 0
+      - keywords: _RAMPENABLED_ON
+        passType: 8
+  - first: {fileID: -6465566751694194690, guid: 31ebde7ddd8288e4aad40ae287173416,
+      type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: _RAMPENABLED_ON
+        passType: 0
+      - keywords: 
+        passType: 8
+      - keywords: _RAMPENABLED_ON
+        passType: 8
+  - first: {fileID: -6465566751694194690, guid: d60b8f608029b6d429577b2c013a4542,
+      type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: _RAMPENABLED_ON
+        passType: 0
+      - keywords: 
+        passType: 8
+      - keywords: _RAMPENABLED_ON
+        passType: 8
+  - first: {fileID: -6465566751694194690, guid: dc9bdcf108fe4c24b975211136f6fe21,
+      type: 3}
+    second:
+      variants:
+      - keywords: _DISSOLVETEXTURERADIAL_ON _DISTORTIONENABLED_ON _NOISE01RADIAL_ON
+          _RAMPENABLED_ON
+        passType: 0
+      - keywords: _DISTORTIONENABLED_ON
+        passType: 0
+      - keywords: _DISTORTIONENABLED_ON _NOISE01RADIAL_ON
+        passType: 0
+      - keywords: _DISTORTIONENABLED_ON _RAMPENABLED_ON
+        passType: 0
+      - keywords: _DISSOLVETEXTURERADIAL_ON _DISTORTIONENABLED_ON _NOISE01RADIAL_ON
+          _RAMPENABLED_ON
+        passType: 8
+      - keywords: _DISTORTIONENABLED_ON
+        passType: 8
+      - keywords: _DISTORTIONENABLED_ON _NOISE01RADIAL_ON
+        passType: 8
+      - keywords: _DISTORTIONENABLED_ON _RAMPENABLED_ON
+        passType: 8
+  - first: {fileID: 4800000, guid: a0f44a6d4bc74824d842451f2d08aa48, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 8
+      - keywords: _CONTRAST_ON _HUE_SHIFT_ON _USETURBULENCE_ON _USE_MASK02_ON
+        passType: 8
+      - keywords: _HUE_SHIFT_ON _USEDISSOLVE_ON _USE_MASK02_ON
+        passType: 8
+      - keywords: _USEDISSOLVE_ON
+        passType: 8
+      - keywords: 
+        passType: 13
+      - keywords: _CONTRAST_ON _HUE_SHIFT_ON _USEMT02_ON _USERAMP_ON _USETURBULENCE_ON
+          _USE_MASK02_ON
+        passType: 13
+      - keywords: _HUE_SHIFT_ON _USEDISSOLVE_ON _USE_MASK02_ON
+        passType: 13
+      - keywords: _USEDISSOLVE_ON _USEMT02_ON _USERAMP_ON
+        passType: 13
+  - first: {fileID: 4800000, guid: 284993d051c358843a7c3c6ee634316e, type: 3}
+    second:
+      variants:
+      - keywords: _GLITCH_ANALOG_NOISE _GLITCH_IMAGE_BLOCK
+        passType: 13
+      - keywords: _GLITCH_ANALOG_NOISE _GLITCH_IMAGE_BLOCK _GLITCH_WAVE_JITTER
+        passType: 13
+      - keywords: _GLITCH_IMAGE_BLOCK _GLITCH_LINE_BLOCK _GLITCH_SCAN_LINE_JITTER
+          _GLITCH_SCREEN_SHAKE
+        passType: 13
+      - keywords: _GLITCH_IMAGE_BLOCK _GLITCH_SCREEN_SHAKE
+        passType: 13
+      - keywords: _GLITCH_LINE_BLOCK _GLITCH_LINE_BLOCK_INFINITE _GLITCH_RGB_SPLIT
+        passType: 13
+      - keywords: _GLITCH_LINE_BLOCK _GLITCH_SCAN_LINE_JITTER _GLITCH_WAVE_JITTER
+        passType: 13
+  - first: {fileID: 4800000, guid: be91e1d72ed633e4d891947a64ee7ce7, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 8
+      - keywords: 
+        passType: 13
+  - first: {fileID: 4800000, guid: 5765fbf9beb83b446a8403b512952bc4, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 13
+  - first: {fileID: 4800000, guid: aba498c5a1619d24e896cf6ae3d256fc, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 13
+  - first: {fileID: 4800000, guid: 9a2a1871ea9a997499dcd2f988c608e9, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 13
+  - first: {fileID: -6465566751694194690, guid: d46a737af34f77c41b4a7c0dbb41b062,
+      type: 3}
+    second:
+      variants:
+      - keywords: _RAMPENABLED_ON
+        passType: 0
+      - keywords: _RAMPENABLED_ON
+        passType: 8
+  - first: {fileID: -6465566751694194690, guid: f11b1293c66e20f48ac339d73963cd94,
+      type: 3}
+    second:
+      variants:
+      - keywords: _DISTORTIONENABLED_ON _NOISE01RADIAL_ON _RAMPENABLED_ON
+        passType: 0
+      - keywords: _DISTORTIONENABLED_ON _RAMPENABLED_ON
+        passType: 0
+      - keywords: _DISTORTIONENABLED_ON _NOISE01RADIAL_ON _RAMPENABLED_ON
+        passType: 8
+      - keywords: _DISTORTIONENABLED_ON _RAMPENABLED_ON
+        passType: 8
+  - first: {fileID: 4800000, guid: 2a4f46052e2e61a4db8b61dde2cdaff0, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+  - first: {fileID: -6465566751694194690, guid: 5a7885114423023499f26bc30faffb88,
+      type: 3}
+    second:
+      variants:
+      - keywords: _RAMPENABLED_ON _RIMMASKENABLED_ON
+        passType: 0
+      - keywords: _RAMPENABLED_ON _RIMMASKENABLED_ON
+        passType: 8
+  - first: {fileID: -6465566751694194690, guid: 1a965244fc19cc144a3cc3e0055d9ce5,
+      type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 13
+  - first: {fileID: 4800000, guid: 4e7e8c5cf6539d7418e6d3f8169539bc, type: 3}
+    second:
+      variants:
+      - keywords: _FILL_OVERLAY_USE_GUIDES
+        passType: 13
+  - first: {fileID: -6465566751694194690, guid: 97664c30a05db684dbf7ca0cff0c476f,
+      type: 3}
+    second:
+      variants:
+      - keywords: _RAMPENABLED_ON
+        passType: 0
+      - keywords: _RAMPENABLED_ON
+        passType: 8
+  - first: {fileID: -6465566751694194690, guid: 0c316768fdd75f640b1e2b04f6b48532,
+      type: 3}
+    second:
+      variants:
+      - keywords: _RAMPENABLED_ON
+        passType: 0
+      - keywords: _RAMPENABLED_ON
+        passType: 8
+  - first: {fileID: 4800000, guid: e4d3ded226f121c40bec25177008287b, type: 3}
+    second:
+      variants:
+      - keywords: _CHROMATIC_ABERRATION _DISSOLVEMODE_LINEAR
+        passType: 0

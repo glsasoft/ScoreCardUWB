@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+      UVC 直读 /dev/video* 方案：依赖 system 签名 + System uid 直接打开 V4L2 设备，
+      不再走 Android Camera 子系统或 USB Host 权限模型。
+      因此不需要 android.permission.CAMERA、camera feature、usb.host 等声明。
+    -->
+    <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
+
+</manifest>

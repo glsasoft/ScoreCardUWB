@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc35b14bd52964149abd2c164ad6cc63, type: 3}
+  m_Name: EditorToolSceneViewConfig
+  m_EditorClassIdentifier: 
+  defaultMainWindowSize: {x: 150, y: 400}
+  defaultObjectListWindowSize: {x: 250, y: 400}
+  minWindowSize: {x: 150, y: 200}
+  maxWindowSize: {x: 500, y: 800}
+  enablePerformanceMonitoring: 1
+  performanceWarningThreshold: 100
+  maxSearchResults: 1000
+  autoCleanupNullReferences: 1
+  scrollViewThreshold: 10
+  maxScrollViewHeight: 300
+  minButtonWidth: 60
+  windowSpacing: 10
+  activateToolKey: 282
+  activateToolModifiers: 2
+  findCameraKey: 99
+  findLightKey: 108
+  enableVerboseLogging: 1
+  showPerformanceStatsByDefault: 1

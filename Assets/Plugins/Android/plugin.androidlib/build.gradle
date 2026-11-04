@@ -1,0 +1,145 @@
+plugins {
+    id "com.android.library"
+}
+
+// -----------------------------------------------------------------------
+// 从根工程 local.properties 读取/写入 SDK 相关路径。
+// Unity 构建 Android 时会把 sdk.dir / ndk.dir 写进 local.properties。
+// -----------------------------------------------------------------------
+def _localPropsFile = rootProject.file('local.properties')
+def loadLocalProperties = {
+    def props = new Properties()
+    if (_localPropsFile.exists()) {
+        _localPropsFile.withInputStream { props.load(it) }
+    }
+    return props
+}
+def saveLocalProperties = { Properties props ->
+    _localPropsFile.withOutputStream { props.store(it, null) }
+}
+def resolveSdkDir = {
+    def props = loadLocalProperties()
+    def sdkDir = props.getProperty('sdk.dir')
+    if (sdkDir != null) {
+        return sdkDir
+    }
+    return System.getenv('ANDROID_HOME') ?: System.getenv('ANDROID_SDK_ROOT')
+}
+
+// -----------------------------------------------------------------------
+// 沿用 Unity 主工程的 NDK 路径，避免写死本机绝对路径。
+//
+// 优先级（取首个命中）：
+//   1) 根工程 local.properties 中的 ndk.dir
+//   2) ANDROID_NDK_HOME / ANDROID_NDK_ROOT 环境变量
+//   3) 都没拿到时，由 AGP 按 ndkVersion 自行去 sdk.dir/ndk/<version> 下查找
+// -----------------------------------------------------------------------
+def resolveNdkPath = {
+    def props = loadLocalProperties()
+    def fromProps = props.getProperty('ndk.dir')
+    return fromProps ?: System.getenv('ANDROID_NDK_HOME') ?: System.getenv('ANDROID_NDK_ROOT')
+}
+def _ndkDir = resolveNdkPath()
+if (_ndkDir != null) {
+    logger.lifecycle("[plugin.androidlib] 使用 NDK 路径: ${_ndkDir}")
+} else {
+    logger.lifecycle("[plugin.androidlib] 未在 local.properties / 环境变量中找到 NDK，将按 ndkVersion 自动查找")
+}
+
+// -----------------------------------------------------------------------
+// 强制使用 Android SDK 自带的 CMake，避免 PATH 中的 MSYS2 cmake 被 AGP 误选
+// （MSYS2 cmake 在 Gradle 直接调用时会以 0xC0000139 崩溃）。
+//
+// 优先级：
+//   1) sdk.dir/cmake/<CMAKE_VERSION>
+//   2) sdk.dir/cmake 下已安装的最高版本
+// 解析结果写入 local.properties 的 cmake.dir，供 AGP 在配置 externalNativeBuild 时使用。
+// -----------------------------------------------------------------------
+def CMAKE_VERSION = "3.22.1"
+def resolveCmakeDir = {
+    def sdkDir = resolveSdkDir()
+    if (sdkDir == null) {
+        return null
+    }
+    def versioned = new File(sdkDir, "cmake/${CMAKE_VERSION}")
+    if (new File(versioned, "bin/cmake.exe").exists() || new File(versioned, "bin/cmake").exists()) {
+        return versioned.absolutePath
+    }
+    def cmakeRoot = new File(sdkDir, "cmake")
+    if (!cmakeRoot.isDirectory()) {
+        return null
+    }
+    def installed = cmakeRoot.listFiles()?.findAll { dir ->
+        dir.isDirectory() && (
+            new File(dir, "bin/cmake.exe").exists() ||
+            new File(dir, "bin/cmake").exists()
+        )
+    }?.sort { a, b -> a.name <=> b.name }
+    return installed ? installed.last().absolutePath : null
+}
+def _cmakeDir = resolveCmakeDir()
+if (_cmakeDir != null) {
+    def props = loadLocalProperties()
+    props.setProperty('cmake.dir', _cmakeDir)
+    saveLocalProperties(props)
+    logger.lifecycle("[plugin.androidlib] 强制使用 Android SDK CMake: ${_cmakeDir}")
+} else {
+    logger.warn("[plugin.androidlib] 未在 Android SDK 中找到 CMake ${CMAKE_VERSION}，请通过 SDK Manager 安装")
+}
+
+android {
+    namespace = "com.serenegiant.unity.uvcplugin"
+    // AGP 7.4.2 + Unity JDK 11 组合最高稳定支持 compileSdk 33
+    compileSdk = 33
+    buildToolsVersion "33.0.1"
+
+    // 与 Unity 主工程对齐的 NDK 版本号（Unity 2021/2022 LTS 内置 NDK r23b 即 23.1.7779620）
+    // 仅在上面 _ndkDir 解析失败、AGP 需要自行定位 NDK 时生效。
+    ndkVersion "23.1.7779620"
+    if (_ndkDir != null) {
+        ndkPath _ndkDir
+    }
+
+    defaultConfig {
+        // UVC 插件使用 NDK AImageDecoder（API 30+ 引入）做 MJPEG 解码。
+        // 主项目 minSdk=24，通过主 Manifest 的 tools:overrideLibrary 兼容；
+        // 运行设备 RK3588 + Android 12（API 31）远高于 30，无运行时风险。
+        minSdk 30
+        consumerProguardFiles("consumer-rules.pro")
+        // ndk abiFilters 与主项目对齐
+        ndk {
+            abiFilters "arm64-v8a", "armeabi-v7a"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+
+    compileOptions {
+        // Unity 内置 OpenJDK 11，不支持 VERSION_17，必须使用 VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+            version CMAKE_VERSION
+        }
+    }
+}
+
+dependencies {
+    // 仅依赖 Unity Player 的 classes.jar 做编译期符号解析，不打包输出。
+    // 摄像头插件全程只用 Android SDK + NDK 自带 API（V4L2 ioctl / AImageDecoder /
+    // OpenGL ES / EGL），不需要任何 androidx / kotlin / 第三方 maven 依赖，
+    // 避免在内网环境下因为无法访问 dl.google.com 而下载失败。
+    compileOnly fileTree(dir: "libs", include: ["*.jar"])
+}

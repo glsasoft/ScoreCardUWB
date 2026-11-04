@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e439f1c2a065443eba4717ad1545d140, type: 3}
+  m_Name: Test Tools Window Data
+  m_EditorClassIdentifier: 
+  tabName:
+  - rid: 7079180630043656192
+  - rid: 7079180630043656195
+  - rid: 7079180630043656197
+  references:
+    version: 2
+    RefIds:
+    - rid: 7079180630043656192
+      type: {class: ToolAsset, ns: ArtTools, asm: Assembly-CSharp-Editor}
+      data:
+        name: "\u5DE5\u5177"
+        toolPath:
+        - label: 1111
+          path: 123123
+        - label: 
+          path: 
+    - rid: 7079180630043656195
+      type: {class: FindObjectAsset, ns: ArtTools, asm: Assembly-CSharp-Editor}
+      data:
+        name: "\u8D44\u4EA7\u67E5\u627E"
+        myObject:
+        - label: 
+          myobject: {fileID: 11400000}
+    - rid: 7079180630043656197
+      type: {class: FindObjectAsset, ns: ArtTools, asm: Assembly-CSharp-Editor}
+      data:
+        name: 
+        myObject: []

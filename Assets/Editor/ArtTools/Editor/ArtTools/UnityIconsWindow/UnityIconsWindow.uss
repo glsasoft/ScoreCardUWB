@@ -1,0 +1,26 @@
+/*
+ * 文件名: UnityIconsWindow.uss
+ * 作用: Unity内置图标窗口的样式表文件
+ * 作者: ArtTools团队
+ * 创建日期: 2024
+ * 描述: 定义图标网格布局和图标项的视觉样式
+ */
+
+/* 图标容器样式 - 用于网格布局显示所有图标 */
+.container {
+    display: flex;              /* 使用弹性布局 */
+    flex-direction: row;        /* 水平排列 */
+    flex-wrap: wrap;           /* 允许换行 */
+}
+
+/* 单个图标项样式 - 定义每个图标的外观和交互效果 */
+.container > .container-item {
+    width: 25px;                                    /* 图标宽度 */
+    height: 25px;                                   /* 图标高度 */
+    margin: 5px;                                    /* 图标间距 */
+    border-width: 1px;                              /* 边框宽度 */
+    border-color: rgb(32, 32, 32);                  /* 边框颜色（深灰色） */
+    border-radius: 5px;                             /* 圆角半径 */
+    -unity-background-scale-mode: scale-to-fit;     /* 背景图片缩放模式 */
+    cursor: link;                                   /* 鼠标悬停时显示链接光标 */
+}

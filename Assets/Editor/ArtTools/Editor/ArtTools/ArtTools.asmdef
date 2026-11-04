@@ -1,0 +1,34 @@
+{
+    "name": "ArtTools",
+    "rootNamespace": "",
+    "references": [
+        "GUID:343deaaf83e0cee4ca978e7df0b80d21",
+        "GUID:ed33d4501162d9749af3d226843312ff",
+        "GUID:d8b63aba1907145bea998dd612889d6b",
+        "GUID:2bafac87e7f4b9b418d9448d219b01ab",
+        "GUID:3eae0364be2026648bf74846acb8a731",
+        "GUID:c0e30f0049ed4e945816500f1de6a3a3",
+        "GUID:b3be16df063f2f24189e875fa3da77dc",
+        "GUID:27619889b8ba8c24980f49ee34dbb44a",
+        "GUID:e9745f6a32442194c8dc5a43e9ab86f9",
+        "GUID:df380645f10b7bc4b97d4f5eb6303d95",
+        "GUID:9e705d6a72d9a354b810376671ddb3ac",
+        "GUID:6c0ea9aada2959e4b82c3f55513173ff",
+        "GUID:15fc0a57446b3144c949da3e2b9737a9",
+        "GUID:bc3b0daec27db604caf7fec37e54bf6d",
+        "GUID:f06555f75b070af458a003d92f9efb00",
+        "GUID:02f771204943f4a40949438e873e3eff",
+        "GUID:77ccaf49895b0d64e87cd4b4faf83c49"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

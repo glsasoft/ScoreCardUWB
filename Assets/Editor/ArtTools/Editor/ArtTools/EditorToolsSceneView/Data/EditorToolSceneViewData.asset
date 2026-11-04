@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42474817b2d9c2a43b790c7126bdaf39, type: 3}
+  m_Name: EditorToolSceneViewData
+  m_EditorClassIdentifier: 
+  gameObjectItems:
+  - displayLabel: "\u4E3B\u76F8\u673A"
+    objectName: Main Camera
+    enabled: 1
+    priority: 0
+  - displayLabel: "\u65B9\u5411\u5149"
+    objectName: Directional Light
+    enabled: 1
+    priority: 0
+  - displayLabel: "\u753B\u5E03"
+    objectName: Canvas
+    enabled: 1
+    priority: 0
+  - displayLabel: "\u4E8B\u4EF6\u7CFB\u7EDF"
+    objectName: EventSystem
+    enabled: 1
+    priority: 0
+  assetItems: []
+  componentItems:
+  - displayLabel: "\u76F8\u673A\u7EC4\u4EF6"
+    componentTypeName: Camera
+    enabled: 1
+    priority: 0
+  - displayLabel: "\u706F\u5149\u7EC4\u4EF6"
+    componentTypeName: Light
+    enabled: 1
+    priority: 0
+  - displayLabel: "\u7C92\u5B50\u7CFB\u7EDF"
+    componentTypeName: ParticleSystem
+    enabled: 1
+    priority: 0
+  - displayLabel: "\u53CD\u5C04\u63A2\u9488"
+    componentTypeName: ReflectionProbe
+    enabled: 1
+    priority: 0
+  - displayLabel: "\u97F3\u9891\u6E90"
+    componentTypeName: AudioSource
+    enabled: 1
+    priority: 0
+  tagItems:
+  - displayLabel: "\u4E3B\u76F8\u673A\u6807\u7B7E"
+    tagName: MainCamera
+    enabled: 1
+    priority: 0
+  - displayLabel: "\u73A9\u5BB6\u6807\u7B7E"
+    tagName: Player
+    enabled: 1
+    priority: 0
+  - displayLabel: "\u654C\u4EBA\u6807\u7B7E"
+    tagName: Enemy
+    enabled: 1
+    priority: 0
+  - displayLabel: "UI\u6807\u7B7E"
+    tagName: UI
+    enabled: 1
+    priority: 0
+  layerItems: []
+  quickActionItems: []

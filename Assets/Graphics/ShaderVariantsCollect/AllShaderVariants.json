@@ -1,0 +1,2615 @@
+{
+    "ShaderTotalCount": 74,
+    "VariantTotalCount": 266,
+    "ShaderVariantInfos": [
+        {
+            "AssetPath": "Assets/Art/Shaders/Character/XHHYCharacterUrp_Body.shader",
+            "ShaderName": "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Body",
+            "ShaderVariantCount": 5,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_EMISSION",
+                        "_NORMALMAP"
+                    ]
+                },
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_NORMALMAP"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Art/Shaders/Character/XHHYCharacterUrp_Eye.shader",
+            "ShaderName": "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Eye",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Art/Shaders/Character/XHHYCharacterUrp_Face.shader",
+            "ShaderName": "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Face",
+            "ShaderVariantCount": 3,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Art/Shaders/Character/XHHYCharacterUrp_Glasses.shader",
+            "ShaderName": "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Glasses",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Art/Shaders/Scene/Lit_Piu_TEST.shader",
+            "ShaderName": "Piu/Lit_Piu_TEST",
+            "ShaderVariantCount": 3,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_MAIN_LIGHT_SHADOWS",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Art/Shaders/UI/CircleRawImage.shader",
+            "ShaderName": "UI/CircleRawImage",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Art/Shaders/UI/UI_Screen.shader",
+            "ShaderName": "UI/Screen",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Art/Shaders/UI/UICircle.shader",
+            "ShaderName": "UI/UICircle",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_CORRECT_ASPECT"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ASE/RGB色相分离.shader",
+            "ShaderName": "URP/RGB色相分离",
+            "ShaderVariantCount": 6,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_RGB_GB"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_RGB_GB",
+                        "_USETIME_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_RGB_RG",
+                        "_USETIME_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_RGB_GB"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_RGB_GB",
+                        "_USETIME_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_RGB_RG",
+                        "_USETIME_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ASE/Solaris.shader",
+            "ShaderName": "URP/程序火焰",
+            "ShaderVariantCount": 7,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ADDITIONALLIGHTSFLATENABLED_ON",
+                        "_MAIN_LIGHT_SHADOWS",
+                        "_MAINLIGHTFLATENABLED_ON",
+                        "_NOISEDILATIONENABLED_ON",
+                        "_NOISEDISTORTIONDILATIONENABLED_ON",
+                        "_RADIALMASK_ON",
+                        "_RADIALMASKDISTORTIONDILATIONENABLED_ON",
+                        "_RADIALMASKDISTORTIONENABLED_ON",
+                        "_RADIALMASKSUBTRACTIVE_ON",
+                        "_VERTEXNOISEDILATIONENABLED_ON",
+                        "_VERTICALMASKSOBJECTSPACE_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ADDITIONALLIGHTSFLATENABLED_ON",
+                        "_MAIN_LIGHT_SHADOWS",
+                        "_MAINLIGHTFLATENABLED_ON",
+                        "_NOISEDILATIONENABLED_ON",
+                        "_NOISEDISTORTIONDILATIONENABLED_ON",
+                        "_NOISEDISTORTIONENABLED_ON",
+                        "_RADIALMASK_ON",
+                        "_RADIALMASKDISTORTIONDILATIONENABLED_ON",
+                        "_RADIALMASKDISTORTIONENABLED_ON",
+                        "_RADIALMASKSUBTRACTIVE_ON",
+                        "_VERTEXNOISEDILATIONENABLED_ON",
+                        "_VERTICALMASKSOBJECTSPACE_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ADDITIONALLIGHTSFLATENABLED_ON",
+                        "_MAIN_LIGHT_SHADOWS",
+                        "_MAINLIGHTFLATENABLED_ON",
+                        "_NOISEDILATIONENABLED_ON",
+                        "_NOISEDISTORTIONDILATIONENABLED_ON",
+                        "_NOISEDISTORTIONENABLED_ON",
+                        "_RADIALMASK_ON",
+                        "_RADIALMASKDISTORTIONDILATIONENABLED_ON",
+                        "_RADIALMASKDISTORTIONENABLED_ON",
+                        "_RADIALMASKSUBTRACTIVE_ON",
+                        "_VERTEXNOISEDILATIONENABLED_ON",
+                        "_VERTEXNOISEENABLED_ON",
+                        "_VERTICALMASKSOBJECTSPACE_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ADDITIONALLIGHTSFLATENABLED_ON",
+                        "_MAIN_LIGHT_SHADOWS",
+                        "_MAINLIGHTFLATENABLED_ON",
+                        "_NOISEDILATIONENABLED_ON",
+                        "_NOISEDISTORTIONENABLED_ON",
+                        "_RADIALMASK_ON",
+                        "_RADIALMASKDISTORTIONDILATIONENABLED_ON",
+                        "_RADIALMASKDISTORTIONENABLED_ON",
+                        "_RADIALMASKSUBTRACTIVE_ON",
+                        "_SPHERIZENOISE_ON",
+                        "_VERTEXNOISEDILATIONENABLED_ON",
+                        "_VERTEXNOISEENABLED_ON",
+                        "_VERTICALCOLOUR_ON",
+                        "_VERTICALMASKSOBJECTSPACE_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ADDITIONALLIGHTSFLATENABLED_ON",
+                        "_MAIN_LIGHT_SHADOWS",
+                        "_MAINLIGHTFLATENABLED_ON",
+                        "_NOISEDILATIONENABLED_ON",
+                        "_NOISEDISTORTIONDILATIONENABLED_ON",
+                        "_NOISEDISTORTIONENABLED_ON",
+                        "_RADIALMASK_ON",
+                        "_RADIALMASKDISTORTIONDILATIONENABLED_ON",
+                        "_RADIALMASKDISTORTIONENABLED_ON",
+                        "_RADIALMASKSUBTRACTIVE_ON",
+                        "_SPHERIZENOISE_ON",
+                        "_VERTEXNOISEDILATIONENABLED_ON",
+                        "_VERTEXNOISEENABLED_ON",
+                        "_VERTEXWAVEENABLED_ON",
+                        "_VERTICALMASKSOBJECTSPACE_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ADDITIONALLIGHTSFLATENABLED_ON",
+                        "_MAIN_LIGHT_SHADOWS",
+                        "_MAINLIGHTFLATENABLED_ON",
+                        "_NOISEDILATIONENABLED_ON",
+                        "_NOISEDISTORTIONDILATIONENABLED_ON",
+                        "_NOISEDISTORTIONENABLED_ON",
+                        "_RADIALMASK_ON",
+                        "_RADIALMASKDISTORTIONDILATIONENABLED_ON",
+                        "_RADIALMASKDISTORTIONENABLED_ON",
+                        "_RADIALMASKSUBTRACTIVE_ON",
+                        "_SPHERIZENOISE_ON",
+                        "_VERTEXNOISEDILATIONENABLED_ON",
+                        "_VERTEXNOISEENABLED_ON",
+                        "_VERTEXWAVEENABLED_ON",
+                        "_VERTICALCOLOUR_ON",
+                        "_VERTICALMASKSOBJECTSPACE_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ADDITIONALLIGHTSFLATENABLED_ON",
+                        "_MAIN_LIGHT_SHADOWS",
+                        "_MAINLIGHTFLATENABLED_ON",
+                        "_NOISEDILATIONENABLED_ON",
+                        "_NOISEDISTORTIONDILATIONENABLED_ON",
+                        "_NOISEDISTORTIONENABLED_ON",
+                        "_NOISEXZTWISTENABLED_ON",
+                        "_OBJECTSPACEUVS_ON",
+                        "_RADIALMASKDISTORTIONDILATIONENABLED_ON",
+                        "_RADIALMASKDISTORTIONENABLED_ON",
+                        "_RADIALMASKSUBTRACTIVE_ON",
+                        "_VERTEXNOISEENABLED_ON",
+                        "_VERTEXWAVEENABLED_ON",
+                        "_VERTICALCOLOUR_ON",
+                        "_VERTICALMASK1_ON",
+                        "_VERTICALMASK1SUBTRACTIVE_ON",
+                        "_VERTICALMASK2_ON",
+                        "_VERTICALMASKSOBJECTSPACE_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ASE/URP_Electronic_Screen.shader",
+            "ShaderName": "URP/Electronic_Screen",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ASE/URP_Electronic_Screen02.shader",
+            "ShaderName": "URP/Electronic_Screen_数位图",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ASE/URP_切割.shader",
+            "ShaderName": "URP/切割",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ASE/多功能材质_URP.shader",
+            "ShaderName": "URP/多功能材质_URP",
+            "ShaderVariantCount": 34,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_DISSOLVE_RADIAL3_ON",
+                        "_USEDISSOLVE_ON",
+                        "_USETURBULENCE_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_DISSOLVE_RADIAL3_ON",
+                        "_TURBULENCE_RADIAL_ON",
+                        "_USEDISSOLVE_ON",
+                        "_USETURBULENCE_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_MT_USER_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_MT_USER_ON",
+                        "_USE_MASK02_ON",
+                        "_USERAMP_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_TURBULENCE_RADIAL_ON",
+                        "_USETURBULENCE_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USE_DISSOLVEMASK_ON",
+                        "_USE_MASK02_ON",
+                        "_USE_TURBULENCEMASK_ON",
+                        "_USEDISSOLVE_ON",
+                        "_USETURBULENCE_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USE_MASK02_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USE_MASK02_ON",
+                        "_USETURBULENCE_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USE_MASK02_ON",
+                        "_USERAMP_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USE_MASK02_ON",
+                        "_USEDISSOLVE_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USE_MASK02_ON",
+                        "_USE_TURBULENCEMASK_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USE_MASK02_ON",
+                        "_USEDISSOLVE_ON",
+                        "_USERAMP_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USE_MASK02_ON",
+                        "_USERAMP_ON",
+                        "_USETURBULENCE_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USE_MASK02_ON",
+                        "_USEDISSOLVE_ON",
+                        "_USETURBULENCE_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USE_MASK02_ON",
+                        "_USEDISSOLVE_ON",
+                        "_USERAMP_ON",
+                        "_USETURBULENCE_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USEDISSOLVE_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USEDISSOLVE_ON",
+                        "_USETURBULENCE_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USEDISSOLVE_ON",
+                        "_USERAMP_ON",
+                        "_USETURBULENCE_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USERAMP_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USETURBULENCE_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_DISSOLVE_RADIAL3_ON",
+                        "_USEDISSOLVE_ON",
+                        "_USETURBULENCE_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_DISSOLVE_RADIAL3_ON",
+                        "_TURBULENCE_RADIAL_ON",
+                        "_USEDISSOLVE_ON",
+                        "_USETURBULENCE_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_TURBULENCE_RADIAL_ON",
+                        "_USETURBULENCE_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_USE_DISSOLVEMASK_ON",
+                        "_USE_MASK02_ON",
+                        "_USE_TURBULENCEMASK_ON",
+                        "_USEDISSOLVE_ON",
+                        "_USETURBULENCE_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_USE_MASK02_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_USE_MASK02_ON",
+                        "_USEDISSOLVE_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_USE_MASK02_ON",
+                        "_USETURBULENCE_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_USE_MASK02_ON",
+                        "_USE_TURBULENCEMASK_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_USE_MASK02_ON",
+                        "_USEDISSOLVE_ON",
+                        "_USETURBULENCE_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_USEDISSOLVE_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_USEDISSOLVE_ON",
+                        "_USETURBULENCE_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_USETURBULENCE_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ASE/多功能材质PRO_URP(Test).shader",
+            "ShaderName": "URP/多功能材质PRO(Test)",
+            "ShaderVariantCount": 8,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_CONTRAST_ON",
+                        "_HUE_SHIFT_ON",
+                        "_USE_MASK02_ON",
+                        "_USEMT02_ON",
+                        "_USERAMP_ON",
+                        "_USETURBULENCE_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_HUE_SHIFT_ON",
+                        "_USE_MASK02_ON",
+                        "_USEDISSOLVE_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USEDISSOLVE_ON",
+                        "_USEMT02_ON",
+                        "_USERAMP_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_CONTRAST_ON",
+                        "_HUE_SHIFT_ON",
+                        "_USE_MASK02_ON",
+                        "_USETURBULENCE_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_HUE_SHIFT_ON",
+                        "_USE_MASK02_ON",
+                        "_USEDISSOLVE_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_USEDISSOLVE_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ASE/折射.shader",
+            "ShaderName": "URP/折射",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/PandaShader/PandaShaderSampleURPV1.0.shader",
+            "ShaderName": "VFX/PandaShaderSampleURPV1.0",
+            "ShaderVariantCount": 12,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_FDEPTH_ON",
+                        "_FDISSOLVETEX_ON",
+                        "_FDISTORTTEX_ON",
+                        "_FMASKTEX_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_FDISSOLVETEX_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_FDISSOLVETEX_ON",
+                        "_FDISTORTTEX_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_FDISSOLVETEX_ON",
+                        "_FMASKTEX_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_FDISSOLVETEX_ON",
+                        "_FDISTORTTEX_ON",
+                        "_FMASKTEX_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_FDISSOLVETEX_ON",
+                        "_FDISTORTTEX_ON",
+                        "_FMASKTEX_ON",
+                        "_IFVTO_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_FDISTORTTEX_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_FDISTORTTEX_ON",
+                        "_FMASKTEX_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_FDISTORTTEX_ON",
+                        "_FFNL_ON",
+                        "_IFVTO_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_FFNL_ON",
+                        "_IFVTO_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_FMASKTEX_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ShaderGraph/ComplexGradientTransparencies.shadergraph",
+            "ShaderName": "RubfishVFX/ComplexGradientTransparencies",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_SURFACE_TYPE_TRANSPARENT"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ShaderGraph/DissolveParticleMV_v2.shadergraph",
+            "ShaderName": "SineVFX/TopDownEffects/SG/DissolveParticleMV_v2",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_RAMPENABLED_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_RAMPENABLED_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ShaderGraph/Fx_Shoot&Hit_Particle_apb.shadergraph",
+            "ShaderName": "ShaderGraph/Fx_Shoot&Hit_Particle_apb",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ShaderGraph/HP/2D Assets/Procedural Progress Bars/Core Shaders/Progress Bar Shaders/Procedural Progress Bar Unlit.shadergraph",
+            "ShaderName": "INab Studio/Procedural Progress Bar Unlit",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_CUSTOM_SHAPE_ENABLE"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ShaderGraph/HS_Blend_CG.shadergraph",
+            "ShaderName": "Shader Graphs/HS_Blend_CG",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_SURFACE_TYPE_TRANSPARENT"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ShaderGraph/HS_ShockWave.shadergraph",
+            "ShaderName": "Shader Graphs/HS_ShockWave",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ShaderGraph/LerpTransparencies.shadergraph",
+            "ShaderName": "Shader Graph/LerpTransparencies",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_SURFACE_TYPE_TRANSPARENT"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ShaderGraph/RefractionShader.shadergraph",
+            "ShaderName": "Shader Graphs/RefractionShader",
+            "ShaderVariantCount": 3,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_SURFACE_TYPE_TRANSPARENT"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ShaderGraph/StandardDissolve.shadergraph",
+            "ShaderName": "Shader Graph/StandardDissolve",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_SURFACE_TYPE_TRANSPARENT"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ShaderGraph/StandardDissolve_DoubleDissolve.shadergraph",
+            "ShaderName": "ShaderGraph/StandardDissolve_DoubleDissolve",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_SURFACE_TYPE_TRANSPARENT"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ShaderGraph/StandardTransparencyShader.shadergraph",
+            "ShaderName": "Shader Graph/StandardTransparencyShader",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_SURFACE_TYPE_TRANSPARENT"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ShaderGraph/StandardTransparencyShaderFresnel.shadergraph",
+            "ShaderName": "Shader Graph/StandardTransparencyShaderFresnel",
+            "ShaderVariantCount": 3,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_SURFACE_TYPE_TRANSPARENT"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ShaderGraph/Transparency_TrailControl.shadergraph",
+            "ShaderName": "ShaderGraph/Transparency_TrailControl",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_SURFACE_TYPE_TRANSPARENT"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ShaderGraph/模型_Depth.shadergraph",
+            "ShaderName": "ShaderGraph/模型_Depth",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_RAMPENABLED_ON",
+                        "_RIMMASKENABLED_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_RAMPENABLED_ON",
+                        "_RIMMASKENABLED_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ShaderGraph/波浪.shadergraph",
+            "ShaderName": "ShaderGraph/波浪",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_DISTORTIONENABLED_ON",
+                        "_NOISE01RADIAL_ON",
+                        "_RAMPENABLED_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_DISTORTIONENABLED_ON",
+                        "_NOISE01RADIAL_ON",
+                        "_RAMPENABLED_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ShaderGraph/溶解.shadergraph",
+            "ShaderName": "ShaderGraph/溶解",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_RAMPENABLED_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_RAMPENABLED_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ShaderGraph/溶解云.shadergraph",
+            "ShaderName": "ShaderGraph/溶解云",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_RAMPENABLED_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_RAMPENABLED_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ShaderGraph/溶解粒子.shadergraph",
+            "ShaderName": "ShaderGraph/溶解粒子",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_RAMPENABLED_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_RAMPENABLED_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/ShaderGraph/通用测试.shadergraph",
+            "ShaderName": "ShaderGraph/通用测试",
+            "ShaderVariantCount": 6,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_DISSOLVETEXTURERADIAL_ON",
+                        "_DISTORTIONENABLED_ON",
+                        "_NOISE01RADIAL_ON",
+                        "_RAMPENABLED_ON"
+                    ]
+                },
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_DISTORTIONENABLED_ON",
+                        "_NOISE01RADIAL_ON"
+                    ]
+                },
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_DISTORTIONENABLED_ON",
+                        "_RAMPENABLED_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_DISSOLVETEXTURERADIAL_ON",
+                        "_DISTORTIONENABLED_ON",
+                        "_NOISE01RADIAL_ON",
+                        "_RAMPENABLED_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_DISTORTIONENABLED_ON",
+                        "_NOISE01RADIAL_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_DISTORTIONENABLED_ON",
+                        "_RAMPENABLED_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/Test/Alpha Blended.shader",
+            "ShaderName": "URP Particles/Alpha Blended",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/Test/Doublecats_R_commen_shader.shader",
+            "ShaderName": "DC/Doublecats_R_common_shader",
+            "ShaderVariantCount": 4,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USE_CUSTOM1_X_DISSOLVE_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_USE_CUSTOM1_X_DISSOLVE_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/Test/Doublecats_RA_common_shader.shader",
+            "ShaderName": "DC/Doublecats_RA_common_shader",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USE_FRENSEL_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_USE_FRENSEL_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/Test/Doublecats_RA_common_shader3.shader",
+            "ShaderName": "DC/Doublecats_RA_common_shader3",
+            "ShaderVariantCount": 12,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USE_CUSTOM1_X_DISSOLVE_ON",
+                        "_USE_FRENSEL_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USE_CUSTOM1_X_DISSOLVE_ON",
+                        "_USE_CUSTOM1_Y_DISTORT_ON",
+                        "_USE_FRENSEL_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USE_CUSTOM1_Y_DISTORT_ON",
+                        "_USE_FRENSEL_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USE_CUSTOM1_ZW_MOVE_ON",
+                        "_USE_FRENSEL_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_USE_FRENSEL_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_USE_CUSTOM1_X_DISSOLVE_ON",
+                        "_USE_FRENSEL_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_USE_CUSTOM1_X_DISSOLVE_ON",
+                        "_USE_CUSTOM1_Y_DISTORT_ON",
+                        "_USE_FRENSEL_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_USE_CUSTOM1_Y_DISTORT_ON",
+                        "_USE_FRENSEL_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_USE_CUSTOM1_ZW_MOVE_ON",
+                        "_USE_FRENSEL_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_USE_FRENSEL_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/Test/HP.shader",
+            "ShaderName": "URP/Test/HP",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_MASK02_ON_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_MASK02_ON_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/Test/HP02.shader",
+            "ShaderName": "ZombieHP",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/Test/Lerp.shader",
+            "ShaderName": "URP/Lerp",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/Test/URP_切割02.shader",
+            "ShaderName": "URP/切割02",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/Test/URP屏幕扭曲.shader",
+            "ShaderName": "Test/URP屏幕扭曲",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Graphics/RenderFeature/EffPostProcessing/GlitchCombined.shader",
+            "ShaderName": "Eff/EffPostProcessing",
+            "ShaderVariantCount": 4,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_GLITCH_ANALOG_NOISE",
+                        "_GLITCH_IMAGE_BLOCK"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_GLITCH_ANALOG_NOISE",
+                        "_GLITCH_IMAGE_BLOCK",
+                        "_GLITCH_WAVE_JITTER"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_GLITCH_IMAGE_BLOCK",
+                        "_GLITCH_LINE_BLOCK",
+                        "_GLITCH_SCAN_LINE_JITTER",
+                        "_GLITCH_SCREEN_SHAKE"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_GLITCH_LINE_BLOCK",
+                        "_GLITCH_SCAN_LINE_JITTER",
+                        "_GLITCH_WAVE_JITTER"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Graphics/RenderFeature/SwapABRenderFeature/PiuFinalBlit.shader",
+            "ShaderName": "PostProcessingTemplate/PiuFinalBlit",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Graphics/Shader/Effect/SimpleEffect/SimpleEffect.shader",
+            "ShaderName": "Effect/SimpleEffect",
+            "ShaderVariantCount": 11,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_DISSOLVE_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_DISSOLVE_ON",
+                        "_MASK_TEX_ON_2",
+                        "_MASK_TEX_POLAR_ON_2"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_MASK_TEX_ON_1"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_MASK_TEX_ON_1",
+                        "_MASK_TEX_ON_2"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_MASK_TEX_ON_1",
+                        "_MASK_TEX_POLAR_ON_1"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_MASK_TEX_ON_1",
+                        "_MASK_TEX_ON_2",
+                        "_MASK_TEX_POLAR_ON_2"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_MASK_TEX_ON_1",
+                        "_MASK_TEX_ON_2",
+                        "_MASK_TEX_POLAR_ON_1",
+                        "_MASK_TEX_POLAR_ON_2"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_MASK_TEX_ON_2"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_MASK_TEX_ON_2",
+                        "_MASK_TEX_POLAR_ON_2"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_POLAR_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Graphics/Shader/Effect/UI/SimpleEffect_UI.shader",
+            "ShaderName": "Effect/UI/SimpleEffect",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_MASK_TEX_ON_1"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Package_Offline/Shader/ImageGray.shader",
+            "ShaderName": "URP/UI/GrayScale",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/TextMesh Pro/Resources/Fonts & Materials/Shaders/TMP_SDF.shader",
+            "ShaderName": "TextMeshPro/Distance Field",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "UNDERLAY_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/TextMesh Pro/Resources/Fonts & Materials/Shaders/TMP_SDF_WorldUV.shader",
+            "ShaderName": "TextMeshPro/Distance Field World UV",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Packages/com.unity.render-pipelines.universal/Shaders/Decal.shadergraph",
+            "ShaderName": "Shader Graphs/Decal",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Packages/com.unity.render-pipelines.universal/Shaders/Lit.shader",
+            "ShaderName": "Universal Render Pipeline/Lit",
+            "ShaderVariantCount": 12,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_MAIN_LIGHT_SHADOWS",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_MAIN_LIGHT_SHADOWS",
+                        "_NORMALMAP",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_MAIN_LIGHT_SHADOWS",
+                        "_SHADOWS_SOFT",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_MAIN_LIGHT_SHADOWS",
+                        "_NORMALMAP",
+                        "_SHADOWS_SOFT",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ENVIRONMENTREFLECTIONS_OFF",
+                        "_MAIN_LIGHT_SHADOWS",
+                        "_SHADOWS_SOFT",
+                        "_SURFACE_TYPE_TRANSPARENT",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ALPHAPREMULTIPLY_ON",
+                        "_MAIN_LIGHT_SHADOWS",
+                        "_NORMALMAP",
+                        "_SHADOWS_SOFT",
+                        "_SURFACE_TYPE_TRANSPARENT",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_MAIN_LIGHT_SHADOWS",
+                        "_METALLICSPECGLOSSMAP",
+                        "_NORMALMAP",
+                        "_OCCLUSIONMAP",
+                        "_SHADOWS_SOFT",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ALPHAPREMULTIPLY_ON",
+                        "_EMISSION",
+                        "_MAIN_LIGHT_SHADOWS",
+                        "_NORMALMAP",
+                        "_SHADOWS_SOFT",
+                        "_SURFACE_TYPE_TRANSPARENT",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ALPHAPREMULTIPLY_ON",
+                        "_MAIN_LIGHT_SHADOWS",
+                        "_METALLICSPECGLOSSMAP",
+                        "_NORMALMAP",
+                        "_SHADOWS_SOFT",
+                        "_SURFACE_TYPE_TRANSPARENT",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_EMISSION",
+                        "_MAIN_LIGHT_SHADOWS",
+                        "_METALLICSPECGLOSSMAP",
+                        "_NORMALMAP",
+                        "_OCCLUSIONMAP",
+                        "_SHADOWS_SOFT",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Packages/com.unity.render-pipelines.universal/Shaders/PostProcessing/LutBuilderLdr.shader",
+            "ShaderName": "Hidden/Universal Render Pipeline/LutBuilderLdr",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Packages/com.unity.render-pipelines.universal/Shaders/PostProcessing/UberPost.shader",
+            "ShaderName": "Hidden/Universal Render Pipeline/UberPost",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Packages/com.unity.render-pipelines.universal/Shaders/Unlit.shader",
+            "ShaderName": "Universal Render Pipeline/Unlit",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_SURFACE_TYPE_TRANSPARENT"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Packages/com.unity.render-pipelines.universal/Shaders/Utils/CopyDepth.shader",
+            "ShaderName": "Hidden/Universal Render Pipeline/CopyDepth",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_OUTPUT_DEPTH"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Packages/com.unity.render-pipelines.universal/Shaders/Utils/CoreBlit.shader",
+            "ShaderName": "Hidden/Universal/CoreBlit",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Packages/com.unity.render-pipelines.universal/Shaders/Utils/FallbackError.shader",
+            "ShaderName": "Hidden/Universal Render Pipeline/FallbackError",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Packages/com.xuanxuan.nb.fx/NBShaders/Shader/ParticleBase.shader",
+            "ShaderName": "Effects/NBShader(Legacy)",
+            "ShaderVariantCount": 50,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_MASKMAP_ON",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_MASKMAP_ON",
+                        "_NOISEMAP",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_MASKMAP_ON",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_DISSOLVE",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_DISSOLVE",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_MASKMAP_ON",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_COLORMAPBLEND",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_NOISEMAP",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ALPHAPREMULTIPLY_ON",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_DISSOLVE",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_NOISEMAP",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_DISSOLVE",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_MASKMAP_ON",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_NOISEMAP",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_DISSOLVE",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_COLORMAPBLEND",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_NOISEMAP",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_COLORMAPBLEND",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_MASKMAP_ON",
+                        "_NOISEMAP",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ALPHAPREMULTIPLY_ON",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_MASKMAP_ON",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ALPHAPREMULTIPLY_ON",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_DISSOLVE",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_MASKMAP_ON",
+                        "_NOISEMAP",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ALPHAPREMULTIPLY_ON",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_MASKMAP_ON",
+                        "_NOISEMAP",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ALPHAPREMULTIPLY_ON",
+                        "_EMISSION",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_MASKMAP_ON",
+                        "_NOISEMAP",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_MASKMAP_ON",
+                        "_NOISEMAP",
+                        "_PARALLAX_MAPPING",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ALPHAPREMULTIPLY_ON",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_MASKMAP_ON",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_COLORMAPBLEND",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_NOISEMAP",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ALPHAPREMULTIPLY_ON",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_MASKMAP_ON",
+                        "_NOISEMAP",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_DISSOLVE",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_MASKMAP_ON",
+                        "_NOISEMAP",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ALPHAPREMULTIPLY_ON",
+                        "_EMISSION",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_MASKMAP_ON",
+                        "_NOISEMAP",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ALPHATEST_ON",
+                        "_DISSOLVE",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_MASKMAP_ON",
+                        "_NOISEMAP",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_COLORMAPBLEND",
+                        "_DISSOLVE",
+                        "_EMISSION",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_MASKMAP_ON",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ALPHAPREMULTIPLY_ON",
+                        "_DISSOLVE",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_MASKMAP_ON",
+                        "_NOISEMAP",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_MASKMAP_ON",
+                        "_NOISEMAP",
+                        "_PARALLAX_MAPPING",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ALPHATEST_ON",
+                        "_DISSOLVE",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_MASKMAP_ON",
+                        "_NOISEMAP",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_COLORMAPBLEND",
+                        "_DISSOLVE",
+                        "_EMISSION",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_MASKMAP_ON",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ALPHAPREMULTIPLY_ON",
+                        "_EMISSION",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_MASKMAP_ON",
+                        "_NOISEMAP",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ALPHAPREMULTIPLY_ON",
+                        "_DISSOLVE",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_MASKMAP_ON",
+                        "_NOISEMAP",
+                        "_VAT_HOUDINI",
+                        "EVALUATE_SH_VERTEX"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_ALPHATEST_ON",
+                        "_DISSOLVE",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_MASKMAP_ON",
+                        "_NOISEMAP"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_DISSOLVE",
+                        "_MASKMAP_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_DISSOLVE",
+                        "_HOUDINI_VAT_SOFTBODY"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_DISSOLVE",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_NOISEMAP"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_DISSOLVE",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_MASKMAP_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_DISSOLVE",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_MASKMAP_ON",
+                        "_NOISEMAP"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_HOUDINI_VAT_SOFTBODY"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_MASKMAP_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_NOISEMAP"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_MASKMAP_ON",
+                        "_NOISEMAP"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_MASKMAP_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_MASKMAP_ON",
+                        "_NOISEMAP"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_NOISEMAP"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Hidden/BlitCopy",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Hidden/Internal-GUIRoundedRect",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Hidden/Internal-GUIRoundedRectWithColorPerBorder",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Hidden/Internal-GUITexture",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Hidden/Internal-GUITextureBlit",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Hidden/Internal-GUITextureClip",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Hidden/Internal-GUITextureClipText",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Hidden/Internal-UIRAtlasBlitCopy",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Hidden/UIElements/EditorUIE",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Mobile/Particles/Additive",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Mobile/Particles/Alpha Blended",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Particles/Standard Unlit",
+            "ShaderVariantCount": 3,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_ALPHABLEND_ON",
+                        "_COLOROVERLAY_ON",
+                        "_REQUIRE_UV2"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_ALPHABLEND_ON",
+                        "_REQUIRE_UV2"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_ALPHABLEND_ON",
+                        "_REQUIRE_UV2",
+                        "PROCEDURAL_INSTANCING_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Skybox/Procedural",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "_SUNDISK_SIMPLE"
+                    ]
+                }
+            ]
+        }
+    ]
+}
