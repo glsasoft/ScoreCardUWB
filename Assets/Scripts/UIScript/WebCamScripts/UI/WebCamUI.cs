@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using Cinemachine;
 using Cysharp.Threading.Tasks;
-using LetsPiu.GameLogic;
 using UnityEngine;
 using UnityEngine.UI;
 

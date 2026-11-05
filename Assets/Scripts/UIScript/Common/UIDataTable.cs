@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using LetsPiu.UI.UIScript.GamesHallScripts.Offline.Logic;
 using LetsPiu.UI.UIScript.LoginScripts.Logic;
-using LetsPiu.UI.UIScript.SettingScripts.Logic;
 using LetsPiu.UI.UIScript.ScanQrCode.Logic;
 using LetsPiu.Common.UI;
 using LetsPiu.UI.UIScript.Common.UI;
@@ -31,12 +30,6 @@ namespace LetsPiu
 
             #region 游戏大厅页面定义
             AddPanelData(UIID.OfflinePage, typeof(OfflinePageLogic), "OfflinePage");
-            #endregion
-
-            #region 设置页面定义
-
-            AddPanelData(UIID.SettingPanel, typeof(SettingPanel), "SettingPanel");
-            AddPanelData(UIID.SettingBasicPage, typeof(SettingBasicPageLogic), "SettingBasicPage");
             #endregion
 
             #region loading面板定义

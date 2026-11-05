@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<linker>
-  <assembly fullname="Unity.AI.Navigation">
-    <type fullname="Unity.AI.Navigation.NavMeshModifier" preserve="all" />
-    <type fullname="Unity.AI.Navigation.NavMeshModifierVolume" preserve="all" />
-    <type fullname="Unity.AI.Navigation.NavMeshSurface" preserve="all" />
-  </assembly>
-</linker>

@@ -267,7 +267,6 @@ namespace LetsPiu.UI
         async UniTask ClearRes()
         {
             AudioPlayModule.S.ReleaseAll();
-            EffectResourceModule.S.ClearAllEffects();
             AvatarMgr.S.DisposeSafe();
 
             await UniTask.NextFrame();

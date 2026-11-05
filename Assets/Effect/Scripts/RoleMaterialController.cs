@@ -12,22 +12,7 @@ namespace LetsPiu.Graphics
     [DisallowMultipleComponent] // 防止组件重复添加
     public class RoleMaterialController : MonoBehaviour
     {
-        private static readonly int CenterPointPosition = Shader.PropertyToID("_CenterPointPosition");
-        private static readonly int OverallColorExtent = Shader.PropertyToID("_OverallColorExtent");
-        private static readonly int OverallColorStrength = Shader.PropertyToID("_OverallColorStrength");
-        private static readonly int OverallColor = Shader.PropertyToID("_OverallColor");
-        private static readonly int DissolveMapEdge = Shader.PropertyToID("_DissolveMapEdge");
-        private static readonly int DissolveTexFlowAndBevel = Shader.PropertyToID("_DissolveTexFlowAndBevel");
-        private static readonly int DissolveMap = Shader.PropertyToID("_DissolveMap");
-        private static readonly int DissolveDirWidth = Shader.PropertyToID("_DissolveDirWidth");
-        private static readonly int DissolveDir = Shader.PropertyToID("_DissolveDir");
-        private static readonly int DissolveColorStrength = Shader.PropertyToID("_DissolveColorStrength");
-        private static readonly int DissolveColor = Shader.PropertyToID("_DissolveColor");
-        private static readonly int DissolveMapThreshold = Shader.PropertyToID("_DissolveMapThreshold");
-        private static readonly int DissolveDirThreshold = Shader.PropertyToID("_DissolveDirThreshold");
-        private static readonly int DissolveFit = Shader.PropertyToID("_DissolveFit");
-        private static readonly int Origin = Shader.PropertyToID("_DissolveOrigin");
-        //private static readonly int DissolveOn = Shader.PropertyToID("_Dissolve_On");
+        static readonly int _CenterPointPosition = Shader.PropertyToID("_CenterPointPosition");
         static readonly int _FaceForwardDirection = Shader.PropertyToID("_FaceForwardDirection");
         static readonly int _FaceUpDirection = Shader.PropertyToID("_FaceUpDirection");
         static readonly int _PerspectiveRemovalAmount = Shader.PropertyToID("_PerspectiveRemovalAmount");
@@ -76,47 +61,6 @@ namespace LetsPiu.Graphics
         [Range(0, 256)]
         public float outlineWidthExtraMultiplier = 1;
 
-        // 主要参数
-        [Header("控制溶解主开关")]
-        [HideInInspector]
-        public bool dissolveOn = false;
-
-        [Header("溶解颜色")]
-        [HideInInspector]
-        [ColorUsage(true, true)] public Color dissolveColor = Color.white;
-        [HideInInspector]
-        [Range(0, 3)] public float dissolveColorStrength = 1;
-
-        [Header("方向溶解")]
-        [HideInInspector]
-        public Transform DissolveOrigin;
-        [HideInInspector]
-        [Range(-10, 10)] public float dissolveFit = 0;
-        [HideInInspector]
-        [Range(0, 1)] public float dissolveDirThreshold = 0;
-        [HideInInspector]
-        public Vector3 dissolveDir = Vector3.up;
-        [HideInInspector]
-        [Range(0, 0.5f)] public float dissolveDirWidth = 0.1f;
-
-        [Header("贴图溶解")]
-        [HideInInspector]
-        [Range(0, 1)] public float dissolveMapThreshold = 0;
-        [HideInInspector]
-        public Texture2D dissolveMap;
-        [HideInInspector]
-        [Range(0, 0.5f)] public float dissolveMapEdge = 0;
-        [HideInInspector]
-        public Vector4 dissolveTexFlowAndBevel = Vector4.zero;
-
-        [Header("整体变色")]
-        [HideInInspector]
-        public Color overallColor = Color.black;
-        [HideInInspector]
-        [Range(0, 20)] public float overallColorStrength = 1;
-        [HideInInspector]
-        [Range(0, 1)] public float overallColorExtent = 0;
-
         // readonly ：地址不变，内容可能变
         private readonly List<Material> allMaterials = new List<Material>(); // 动态数组
         private readonly List<Material> faceMaterials = new List<Material>();
@@ -145,9 +89,6 @@ namespace LetsPiu.Graphics
         {
             if (Application.isPlaying || previewInEditor)
             {
-                //RefreshMaterialList();
-                if (dissolveOn) SetProperty();
-
                 perspectiveRemovalAmount = Mathf.Clamp01(perspectiveRemovalAmount);
                 outlineWidthExtraMultiplier = Mathf.Clamp(outlineWidthExtraMultiplier, 0, 256);
                 foreach (var mat in allMaterials)
@@ -168,7 +109,6 @@ namespace LetsPiu.Graphics
             m_FaceMaterials = faceMaterials;
 
             RefreshMaterialList();
-            DissolveInit();
         }
 
         private void OnEnable()
@@ -185,11 +125,6 @@ namespace LetsPiu.Graphics
             }
         }
 
-        private void Update()
-        {
-            if (dissolveOn) SetProperty();
-        }
-
         private void LateUpdate()
         {
             if (modelRoot && modelRoot.position != lastPosition)
@@ -199,7 +134,7 @@ namespace LetsPiu.Graphics
                 foreach (var mat in allMaterials)
                 {
                     if (mat)
-                        mat.SetVector(CenterPointPosition, lastPosition);
+                        mat.SetVector(_CenterPointPosition, lastPosition);
                 }
             }
 
@@ -291,10 +226,10 @@ namespace LetsPiu.Graphics
                     {
                         MaterialPropertyCache cache = new MaterialPropertyCache();
 
-                        if (mat.HasVector(CenterPointPosition))
+                        if (mat.HasVector(_CenterPointPosition))
                         {
                             cache.hasCenterPointPosition = true;
-                            cache.centerPointPosition = mat.GetVector(CenterPointPosition);
+                            cache.centerPointPosition = mat.GetVector(_CenterPointPosition);
                             materialPropertyCacheDic[mat] = cache;
                         }
                         if (mat.HasFloat(_PerspectiveRemovalAmount))
@@ -339,7 +274,7 @@ namespace LetsPiu.Graphics
                 {
                     if (mat && materialPropertyCacheDic.TryGetValue(mat, out MaterialPropertyCache cache))
                     {
-                        if (cache.hasCenterPointPosition) mat.SetVector(CenterPointPosition, cache.centerPointPosition);
+                        if (cache.hasCenterPointPosition) mat.SetVector(_CenterPointPosition, cache.centerPointPosition);
                         if (cache.hasFaceForwardDirection) mat.SetVector(_FaceForwardDirection, cache.faceForwardDirection);
                         if (cache.hasFaceUpDirection) mat.SetVector(_FaceUpDirection, cache.faceUpDirection);
                         if (cache.hasPerspectiveRemovalAmount) mat.SetFloat(_PerspectiveRemovalAmount, cache.perspectiveRemovalAmount);
@@ -352,54 +287,6 @@ namespace LetsPiu.Graphics
 #if UNITY_EDITOR
                 //AssetDatabase.SaveAssets();
 #endif
-            }
-        }
-
-        private void SetProperty()
-        {
-            foreach (var mat in allMaterials)
-            {
-                if (mat.HasProperty(Origin))
-                    mat.SetVector(Origin, DissolveOrigin ? DissolveOrigin.position : Vector3.zero);
-                mat.SetFloat(DissolveFit, dissolveFit);
-                mat.SetFloat(DissolveDirThreshold, dissolveDirThreshold);
-                mat.SetFloat(DissolveMapThreshold, dissolveMapThreshold);
-                mat.SetColor(DissolveColor, dissolveColor);
-                mat.SetFloat(DissolveColorStrength, dissolveColorStrength);
-                mat.SetVector(DissolveDir, (Vector4)transform.TransformDirection(dissolveDir));
-                // mat.SetVector(DissolveDir, (Vector4)dissolveDir);
-                mat.SetFloat(DissolveDirWidth, dissolveDirWidth);
-
-                if (mat.HasProperty(DissolveMap) && dissolveMap != null)
-                    mat.SetTexture(DissolveMap, dissolveMap);
-
-                mat.SetVector(DissolveTexFlowAndBevel, dissolveTexFlowAndBevel);
-                mat.SetFloat(DissolveMapEdge, dissolveMapEdge);
-
-                mat.SetColor(OverallColor, overallColor);
-                mat.SetFloat(OverallColorStrength, overallColorStrength);
-                mat.SetFloat(OverallColorExtent, overallColorExtent);
-            }
-        }
-
-        // 外部控制开关
-        public void EnableDissolve(bool enable)
-        {
-            dissolveOn = enable;
-            if (dissolveOn == false)
-            {
-                DissolveInit();
-            }
-        }
-
-        // 参数初始化
-        public void DissolveInit()
-        {
-            foreach (var mat in allMaterials)
-            {
-                mat.SetFloat(DissolveDirThreshold, 0.0f);
-                mat.SetFloat(DissolveMapThreshold, 0.0f);
-                mat.SetFloat(OverallColorExtent, 0.0f);
             }
         }
 
@@ -428,9 +315,6 @@ namespace LetsPiu.Graphics
         // 右键菜单手动刷新
         [ContextMenu("Refresh Materials (Editor)")]
         private void ContextRefresh() => RefreshMaterialList();
-
-        //[ContextMenu("Dissolve On/Off")]
-        //private void DissolveRefresh() => EnableDissolve(!dissolveOn);
 #endif
     }
 
