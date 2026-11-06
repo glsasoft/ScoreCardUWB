@@ -10,6 +10,7 @@ namespace LetsPiu
     public class AsyncPrefab : MonoBehaviour
     {
         [SerializeField] private string m_LocalObjectName;
+        private GameObject m_Instance;
 
         private ResLoader m_ResLoader;
         private Action m_ResLoadedCallBack;
@@ -102,6 +103,8 @@ namespace LetsPiu
                 instance.transform.localRotation = Quaternion.identity;
                 instance.transform.localScale = Vector3.one;
                 instance.SetActive(true);
+                Destroy(m_Instance);
+                m_Instance = instance;
             }
 
             if (onResLoadFinish != null)

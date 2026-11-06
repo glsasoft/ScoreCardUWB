@@ -2,7 +2,9 @@ using System.IO;
 using System.Threading;
 using System.Collections.Concurrent;
 using UnityEngine;
+using UnityEngine.Scripting;
 
+[Preserve]
 public class FileLogger
 {
     private static ConcurrentQueue<LogData> _logQueue = new ConcurrentQueue<LogData>();
