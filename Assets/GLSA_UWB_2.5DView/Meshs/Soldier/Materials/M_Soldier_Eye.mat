@@ -36,7 +36,6 @@ Material:
   - SHADOWCASTER
   - ThickOutline
   - EYESPECIALEFFECTS
-  - DepthOnly
   - ModelTransparent
   m_LockedProperties: 
   m_SavedProperties:
@@ -162,7 +161,7 @@ Material:
     - _EnableRendering: 1
     - _EnvironmentReflections: 1
     - _ExtraThickOutlineMaxFinalWidth: 100
-    - _ExtraThickOutlineStencilID: 207
+    - _ExtraThickOutlineStencilID: 199
     - _ExtraThickOutlineWidth: 4
     - _ExtraThickOutlineZOffset: -0.1
     - _FixFaceNormalAmount: 1
@@ -170,7 +169,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _HairAlpha: 0.85
+    - _HairAlpha: 0
     - _HitFlashGroup: 0
     - _HitFlashIntensity: 0
     - _HitFlashPower: 2
@@ -279,7 +278,7 @@ Material:
     - _CharacterBoundCenterPosWS: {r: 0, g: 0, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DepthTexRimLightTintColor: {r: 1, g: 1, b: 1, a: 1}
-    - _DissolveBorderTintColor: {r: 0, g: 5.2874618, b: 5.3403134, a: 1}
+    - _DissolveBorderTintColor: {r: 0, g: 4, b: 4, a: 1}
     - _DissolveTopBorderTintColor: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionMapSingleChannelMask: {r: 0, g: 1, b: 0, a: 0}

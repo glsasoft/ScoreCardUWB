@@ -69,7 +69,7 @@ MonoBehaviour:
     colorFar: {r: 0.62, g: 0.7, b: 0.82, a: 1}
     skyFogAmount: 1
     sunInfluence: 0.5
-  renderPassEvent: 1000
+  renderPassEvent: 450
   debugMode: 0
 --- !u!114 &-6332787464191705935
 MonoBehaviour:
@@ -223,7 +223,7 @@ MonoBehaviour:
   m_Active: 1
   settings:
     passTag: NiloToonOutlineRenderObjects
-    Event: 350
+    Event: 500
     filterSettings:
       RenderQueueType: 0
       LayerMask:

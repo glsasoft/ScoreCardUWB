@@ -216,7 +216,9 @@ half4 FragmentShaderOutLineNoLight(Varyings input, half facing : VFACE) : SV_TAR
     ApplySurfaceToOutlineColorEditIfOutlinePass(color.xyz, toonMap);
     ApplyPerCharacterEffectColorEditForwardPass(color.rgb);
     ApplyDissolve(color.xyz, input);
-//    color.xyz = MyFog(color.xyz,input.positionWS_ZOffsetFinalSum.xyz);
-    //color=  _Alpha;
+
+    // 描边画在 BeforeRenderingPostProcessing，会跟着角色一起进 Bloom / 色调映射。
+    // 这里如果再把描边 lerp 向雾色（尤其是高亮雾色），会直接被 Bloom 放大成过曝光晕，
+    // 所以描边只保留自身颜色，不吃雾。
     return color;
 }
