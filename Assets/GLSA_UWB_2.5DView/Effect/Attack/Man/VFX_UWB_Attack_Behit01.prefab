@@ -10015,6 +10015,7 @@ GameObject:
   - component: {fileID: 2593904073582745406}
   - component: {fileID: 3872120735174759032}
   - component: {fileID: 5445873900331151454}
+  - component: {fileID: 656698614898807440}
   m_Layer: 0
   m_Name: "\u4E00"
   m_TagString: Untagged
@@ -14993,6 +14994,28 @@ MonoBehaviour:
     m_RotationOrder: 4
   scaleType: 0
   useShape: 0
+--- !u!114 &656698614898807440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2725947701393582879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8aa87937116feb41b82b0ab99b5f943, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useNewSystem: 0
+  useCollide: 0
+  triggerType: 0
+  size: 0
+  subParticleSystems:
+  - {fileID: 0}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  isColliderLayer: 0
 --- !u!1 &2983662091041036378
 GameObject:
   m_ObjectHideFlags: 0
