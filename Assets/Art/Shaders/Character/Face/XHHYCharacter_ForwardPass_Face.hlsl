@@ -1,7 +1,7 @@
 #pragma once
 
 #include "XHHYCharacter_LightUtil_Face.hlsl" //光照相关
-#include "XHHYUtilityHLSL/Common.hlsl"//通用方法
+#include "../XHHYUtilityHLSL/Common.hlsl"//通用方法（原路径相对本目录找不到，改成显式相对路径）
 
 Varyings VertexShaderForward(Attributes input)
 {
@@ -58,6 +58,7 @@ Varyings VertexShaderForward(Attributes input)
     output.normalWS_averageShadowAttenuation.xyz = lightingNormalWS_faceArea.xyz;
     
     output.color = input.color;
+    output.dissolveHeight = GetDissolveHeightOS(positionWS.y - _DissolveRootY);
     output.depth = vertexPositionInput.positionVS.z;
     // 消除透视相机的失真
     output.positionCS = NiloDoPerspectiveRemoval(output.positionCS, positionWS, _HeadBonePositionWS,
@@ -143,6 +144,8 @@ half4 FragmentShaderForward(Varyings input, half facing : VFACE) : SV_TARGET
 //return float4(addLight,1) ;
     color += addLight ;
 
+    // 受击闪白（独立一层菲涅尔）
+    ApplyHitFlash(color, lightingData);
     //应用溶解
     ApplyDissolve(color, input);
     //应用雾（雾前和雾后有扩展逻辑功能）

@@ -21,3 +21,19 @@ void NiloDoDitherFadeoutClip(float2 SV_POSITIONxy, float ditherOpacity)
     clip(ditherOpacity - DITHER_THRESHOLDS[index]);
 }
 
+// 只取 4x4 网点图案的阈值，不在这里 clip。
+// 调用方自己去拼条件再统一 clip 一次，省一次 discard（移动端 TBDR 上 discard 会打断 HSR）。
+// 判 pass 的写法：(1.0 - ditherAmount) - NiloGetDitherThreshold(pos) > 0
+half NiloGetDitherThreshold(float2 SV_POSITIONxy)
+{
+    float DITHER_THRESHOLDS[16] =
+    {
+        1.0 / 17.0,  9.0 / 17.0,  3.0 / 17.0, 11.0 / 17.0,
+        13.0 / 17.0,  5.0 / 17.0, 15.0 / 17.0,  7.0 / 17.0,
+        4.0 / 17.0, 12.0 / 17.0,  2.0 / 17.0, 10.0 / 17.0,
+        16.0 / 17.0,  8.0 / 17.0, 14.0 / 17.0,  6.0 / 17.0
+    };
+    uint index = (uint(SV_POSITIONxy.x) % 4) * 4 + uint(SV_POSITIONxy.y) % 4;
+    return DITHER_THRESHOLDS[index];
+}
+

@@ -39,20 +39,14 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Face"
 
         [SubToggle(_IsFaceGroup,_)]_FaceShadowNoFollowThrLight("阴影不跟随灯光", Float) = 0
         [Sub(_IsFaceGroup)]_FaceShadowResult("正面阴影", Range(-1,1)) = 1
-        [SubToggle(_IsFaceGroup,_)]_FaceShadowRool("侧面阴影", Float) = 0
+        [Sub(_IsFaceGroup)]_FaceShadowRool("侧面阴影", Range(-1,1)) = 0.5
+        [Sub(_IsFaceGroup)]_ShadowOffset("阴影偏移", Range(-1,1)) = 0.5
+        [Sub(_IsFaceGroup)]_FaceShadowSmoothNdotL("阴影平滑度", Range(0, 5)) = 1
 
 
-        [Sub(_IsFaceGroup)]_FaceShadowGradientMapUVScaleOffset("阴影贴图缩放偏移", Vector) = (1,1,0,0)
+        [HideInInspector]_FaceShadowGradientMapUVScaleOffset("阴影贴图缩放偏移", Vector) = (1,1,0,0)
 
         [HideInInspector]_FaceShadowGradientIntensity("_FaceShadowGradientIntensity (默认 1)", Range(0,1)) = 1
-
-        [Title(_IsFaceGroup, Softness)]
-        [Sub(_IsFaceGroup)]_FaceShadowGradientResultSoftness("阴影软硬", Range(0,1)) = 0.005
-
-
-        [Title(_IsFaceGroup, Mask)]
-        [Sub(_IsFaceGroup)]_FaceShadowGradientMaskMap("阴影遮罩（白=有阴影，黑=无阴影）", 2D) = "white" {}
-        [HideInInspector]_FaceShadowGradientMaskMapChannel("_FaceShadowGradientMaskMapChannel (默认 G)", Vector) = (0,1,0,0) // sampled as .r, channel picker is unused
 
         [Title(_IsFaceGroup, Debug)]
         [SubToggle(_IsFaceGroup, _)]_DebugFaceShadowGradientMap("调试阴影贴图", Float) = 0
@@ -83,10 +77,6 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Face"
         [Title(_RENDER_OUTLINE, VertexWidth)]
         [SubToggle(_RENDER_OUTLINE,_)]_UseOutlineWidthMaskFromVertexColor("顶点色控制描边宽度", Float) = 0
         [Channel(_RENDER_OUTLINE)]_OutlineWidthMaskFromVertexColor("描边宽度通道", Vector) = (0,1,0,0)
-
-        [Main(g3,_,off,on)]
-        [PassSwitch(ThickOutline)]
-        _group3 ("厚描边", float) = 0
 
         [HideInInspector]_OutlineZOffset("_OutlineZOffset (View Space unit push away) (默认 0.0001)", Range(0,1)) = 0.0001
         [HideInInspector]_OutlineZOffsetForFaceArea("_OutlineZOffsetForFaceArea (View Space unit push away) (默认 0.02)", Range(0,1)) = 0.02
@@ -135,15 +125,27 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Face"
         // EnableDepthTextureRimLightAndShadow
         [HideInInspector]_NiloToonEnableDepthTextureRimLightAndShadow("_NiloToonEnableDepthTextureRimLightAndShadow", Float) = 0
 
+        // 受击闪白（独立一层菲涅尔，跟角色边缘光分开）
+        [Main(HitFlashGroup,_,off,off)]_HitFlashGroup("受击闪白", Float) = 0
+        [Sub(HitFlashGroup)][HDR]_HitFlashColor("闪白颜色", Color) = (0.2216981,0.9486833,1,1)
+        [Sub(HitFlashGroup)]_HitFlashIntensity("闪白强度", Range(0,10)) = 0
+        [Sub(HitFlashGroup)]_HitFlashPower("闪白菲涅尔指数", Range(0.1,16)) = 2
+
         // dissolve
         [Main(DissolveGroup,_,off,off)]_DissolveGroup("溶解", Float) = 0
+        [SubToggle(DissolveGroup, _NILOTOON_DISSOLVE)]_EnableDissolve("启用溶解", Float) = 0
         [Sub(DissolveGroup)]_DissolveAmount("溶解程度", Range(0,1)) = 0
-        [Sub(DissolveGroup)]_DissolveThresholdMap("溶解阈值贴图", 2D) = "linearGrey" {}
-        [Sub(DissolveGroup)]_DissolveBorderRange("溶解边缘范围", Range(0,1)) = 0.02
+        [Sub(DissolveGroup)]_DissolveMinY("溶解高度下限 (物体Y)", Float) = 0
+        [Sub(DissolveGroup)]_DissolveMaxY("溶解高度上限 (物体Y)", Float) = 1.515
+        [Sub(DissolveGroup)]_DissolveRootY("溶解基准世界Y", Float) = 0
+        [HideInInspector]_DissolveThresholdMap("溶解阈值贴图", 2D) = "linearGrey" {}
+        [Sub(DissolveGroup)]_DissolveBorderRange("溶解边缘范围", Range(0.01,1)) = 0.04
         [Sub(DissolveGroup)][HDR]_DissolveBorderTintColor("溶解边缘颜色", Color) = (0,4,4,1)
-        [Sub(DissolveGroup)]_DissolveTopBorderRange("溶解顶部范围", Float) = 1
-        [Sub(DissolveGroup)][HDR]_DissolveTopBorderTintColor("溶解顶部颜色", Color) = (1,1,1)
-        [Sub(DissolveGroup)]_DitherFadeoutAmount("抖动淡出", Range(0,1)) = 0.5
+        [Sub(DissolveGroup)]_DissolveTopBorderRange("溶解顶部范围", Range(0.01,1)) = 0.02
+        [Sub(DissolveGroup)][HDR]_DissolveTopBorderTintColor("溶解顶部颜色", Color) = (1,1,1,0)
+        [Sub(DissolveGroup)]_DissolveEdgeDitherStrength("溶解边缘网点强度", Range(0,1)) = 0
+        [SubToggle(DissolveGroup, _NILOTOON_DITHER_FADEOUT)]_EnableDitherFadeout("启用全局网点", Float) = 0
+        [Sub(DissolveGroup)]_DitherFadeoutAmount("全局网点淡出", Range(0,1)) = 0
 
         [Main(PerspectiveGroup,_,off,off)]_PerspectiveGroup("透视消除", Float) = 0
         [Sub(PerspectiveGroup)]_PerspectiveRemovalAmount("强度", Range(0,1)) = 0
@@ -157,9 +159,6 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Face"
         [HideInInspector][Enum(UnityEngine.Rendering.StencilOp)] _StencilOp ("Stencil Operation", Int) = 0 // 0 = keep, 2 = replace
 
         //ThickOut
-        [HideInInspector]_ThickOutWidth("_ThickOutWidth", Float) = 2
-        [HideInInspector][HDR]_ThickOutColor("_ThickOutColor", Color) = (1,1,1,1)
-        [HideInInspector]_ThickOutAlphaHeight("_ThickOutAlphaHeight", Float) = 1
 
         [HideInInspector]_LightDirFromCameraDir("_LightDirFromCameraDir", Int) = 0
 
@@ -320,35 +319,6 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Face"
         }
 
 
-        Pass
-        {
-            Name "ThickOutline"
-            Tags
-            {
-                "LightMode" = "ThickOutline"
-            }
-
-            Blend SrcAlpha OneMinusSrcAlpha
-
-            Stencil
-            {
-                Ref 190
-                Comp Greater // passing depth test = passing stencil
-                // Ref 225
-                // Comp NotEqual // passing depth test = passing stencil
-                Pass replace // replace means write
-            }
-
-            ZWrite On
-
-            HLSLPROGRAM
-            #pragma shader_feature_local _ALPHATEST_ON
-            #pragma vertex VertexShaderOutLine
-            #pragma fragment FragmentShaderOutLine
-            #include "Face\XHHYCharacter_Input_Face.hlsl"
-            #include "Face/XHHYCharacter_ThickOutlinePass_Face.hlsl"
-            ENDHLSL
-        }
 
         Pass //"ShadowCaster"
         {
@@ -496,8 +466,6 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Face"
         //#pragma exclude_renderers gles gles3 glcore
         #pragma target 4.5
         //  #pragma enable_d3d11_debug_symbols
-        #pragma multi_compile _ _NILOTOON_FORCE_MINIMUM_SHADER
-        #pragma multi_compile_local _ _NILOTOON_DISSOLVE
         ENDHLSL
 
         /*Pass//"EyeSpecialEffects"
@@ -720,35 +688,6 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Face"
         }
 
 
-        Pass
-        {
-            Name "ThickOutline"
-            Tags
-            {
-                "LightMode" = "ThickOutline"
-            }
-
-            Blend SrcAlpha OneMinusSrcAlpha
-
-            Stencil
-            {
-                Ref 190
-                Comp Greater // passing depth test = passing stencil
-                // Ref 225
-                // Comp NotEqual // passing depth test = passing stencil
-                Pass replace // replace means write
-            }
-
-            ZWrite On
-
-            HLSLPROGRAM
-            #pragma shader_feature_local _ALPHATEST_ON
-            #pragma vertex VertexShaderOutLine
-            #pragma fragment FragmentShaderOutLine
-            #include "Face\XHHYCharacter_Input_Face.hlsl"
-            #include "Face/XHHYCharacter_ThickOutlinePass_Face.hlsl"
-            ENDHLSL
-        }
 
         Pass //"ShadowCaster"
         {

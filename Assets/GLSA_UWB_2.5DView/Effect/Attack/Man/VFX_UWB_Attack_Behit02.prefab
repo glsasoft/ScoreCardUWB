@@ -9991,7 +9991,6 @@ GameObject:
   - component: {fileID: 6439677712713761965}
   - component: {fileID: 3449296747497834195}
   - component: {fileID: 8419305393382468414}
-  - component: {fileID: 8625978276388119891}
   m_Layer: 0
   m_Name: SmokeWave
   m_TagString: Untagged
@@ -14952,28 +14951,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   scaleType: 0
   useShape: 0
---- !u!114 &8625978276388119891
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7252403260448824183}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8aa87937116feb41b82b0ab99b5f943, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useNewSystem: 0
-  useCollide: 0
-  triggerType: 0
-  size: 0
-  subParticleSystems:
-  - {fileID: 0}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  isColliderLayer: 0
 --- !u!1 &7252403260460970546
 GameObject:
   m_ObjectHideFlags: 0

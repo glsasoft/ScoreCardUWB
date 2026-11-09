@@ -108,6 +108,9 @@ struct Varyings
     // 调试用途
     float3 uv8 : TEXCOORD8;
 
+    // 溶解用：局部 Y 轴归一化高度（0 = 头顶，1 = 脚底）
+    half dissolveHeight : TEXCOORD9;
+
     // 为了支持GPU实例化和单通道立体渲染（VR），添加以下部分
     UNITY_VERTEX_INPUT_INSTANCE_ID     // 在非OpenGL和非PSL中会变成：uint instanceID : SV_InstanceID
     UNITY_VERTEX_OUTPUT_STEREO         // 在非OpenGL和非PSL中会变成：uint stereoTargetEyeIndexAsRTArrayIdx : SV_RenderTargetArrayIndex
@@ -192,6 +195,10 @@ CBUFFER_START(UnityPerMaterial)
 float _HairAlpha;                      // 头发透明度 [0,1]
 float3 _ShadowColor;                   // 阴影颜色 RGB
 float _EnableRendering;                // 启用渲染开关 [0,1]
+
+// 方向光染色
+half _SunTintEnable;                   // 是否受方向光染色 [0,1]
+half _SunTintAmount;                   // 方向光染色程度 [0,1]
 
 // 贴花相关
 float4 _DecalColor;                    // 贴花颜色 RGBA
@@ -535,6 +542,11 @@ half3 _PerCharEffectRimColor;           // 每角色效果边缘光颜色 RGB
 half _PerCharEffectRimSharpnessPower;   // 每角色效果边缘光锐度幂次
 half _PerCharEffectDesaturatePercentage; // 每角色效果去饱和度百分比 [0,1]
 
+// 受击闪白：独立一层菲涅尔，不跟角色边缘光共用参数
+half3 _HitFlashColor;
+half _HitFlashIntensity;
+half _HitFlashPower;
+
 // 皮肤属性
 half4 _SkinMaskMapChannelMask;          // 皮肤遮罩贴图通道遮罩 RGBA
 
@@ -568,6 +580,12 @@ float _Cull;                            // 剔除模式
 // 溶解效果属性
 float _DissolveAmount;                  // 溶解数量 [0,1]
 float _DissolveBorderRange;             // 溶解边界范围
+float _DissolveEdgeDitherStrength;      // 溶解边缘网点强度 [0,1]，0 = 关
+float _EnableDissolve;                  // 溶解总开关（绑 _NILOTOON_DISSOLVE keyword）
+float _EnableDitherFadeout;             // 全局网点开关（绑 _NILOTOON_DITHER_FADEOUT keyword）
+float _DissolveMinY;                    // 溶解高度下限（物体空间 Y）
+float _DissolveMaxY;                    // 溶解高度上限（物体空间 Y）
+float _DissolveRootY;                   // 角色根节点的世界 Y，用来把世界高度换算成角色局部高度
 half4 _DissolveBorderTintColor;         // 溶解边界色调颜色 RGBA
 float _DissolveTopBorderRange;          // 溶解顶部边界范围
 half4 _DissolveTopBorderTintColor;      // 溶解顶部边界色调颜色 RGBA
@@ -581,16 +599,22 @@ half3 _PerCharacterBaseMapOverrideTintColor; // 每角色基础贴图覆盖色�
 //float _ASDASD;                          // 测试变量
 //float _TestInt;                         // 测试整数
 float3 _CenterPointPosition;            // 中心点位置 XYZ
-
-float _ThickOutWidth;                   // 厚轮廓宽度
-float4 _ThickOutColor;                  // 厚轮廓颜色 RGBA
-float _ThickOutAlphaHeight;             // 厚轮廓Alpha高度
 int _LightDirFromCameraDir;             // 光照方向来自摄像机方向 [0,1]
 float3 _LightDirFromCameraDirOffSet;    // 光照方向来自摄像机方向偏移 XYZ
 float4 _M_CombinedRotation0, _M_CombinedRotation1, _M_CombinedRotation2; // 组合旋转矩阵行
 half _LightMode;
 float _AlphaMask; 
 CBUFFER_END
+
+// 把物体空间 Y 转成溶解高度：0 = 头顶（先消失），1 = 脚底（最后消失）。
+// 用物体空间而不是世界空间，角色跑动、跳跃时溶解面跟着角色走，不会横穿身体。
+// 注意 positionOS 是 bind pose 的顶点位置，蒙皮动画不会改变它，
+// 所以这个高度轴是固定的，溶解线不会随骨骼动画抖动。
+half GetDissolveHeightOS(float positionOSY)
+{
+    half h = saturate((positionOSY - _DissolveMinY) / max(_DissolveMaxY - _DissolveMinY, 1e-5));
+    return 1.0 - h;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 全局统一变量

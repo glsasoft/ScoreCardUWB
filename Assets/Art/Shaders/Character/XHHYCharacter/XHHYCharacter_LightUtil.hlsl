@@ -798,6 +798,16 @@ void ApplyPerCharacterEffectColorEditForwardPass(inout half3 color, ToonLighting
     color.rgb += (rim * (1 - lightingData.isFaceArea)) * _PerCharEffectRimColor; // 边缘光不能显示在脸上，因为它看起来很难看
 }
 
+// 受击闪白：独立一层菲涅尔，不跟角色边缘光共用参数。
+// 用 PolygonNdotV（几何法线）而不是带法线图的 NdotV，闪白不会被法线图带歪。
+void ApplyHitFlash(inout half3 color, ToonLightingData lightingData)
+{
+    half fresnel = 1.0 - saturate(lightingData.PolygonNdotV);
+    fresnel = pow(fresnel, max(_HitFlashPower, 0.001));
+    // 纯菲涅尔：只有边缘一圈闪，中间不加白，power 拉大边缘就越窄
+    color.rgb += fresnel * _HitFlashColor.rgb * _HitFlashIntensity;
+}
+
 void ApplyPerCharacterEffectColorEditForwardPass(inout half3 color)
 {
     //////////////////////////////////////////////////////////////////////////////////
@@ -846,18 +856,37 @@ void ApplyPerCharacterEffectColorEdit(inout half3 color, ToonLightingData lighti
 void ApplyDissolve(inout half3 color, Varyings input)
 {
     #if _NILOTOON_DISSOLVE
-    // read black and white map
-    half dissolveMapThresholdMapValue = tex2D(_DissolveThresholdMap, input.uv).g;
-  // dissolveMapThresholdMapValue =  _DissolveSource == 0?dissolveMapThresholdMapValue:input.color.z;
+    // 阈值来源：物体空间 Y 的归一化高度（GetDissolveHeightOS），在顶点阶段算好传过来。
+    // 0 = 头顶先消失，1 = 脚底最后消失。_DissolveAmount 从 0 涨到 1 就是从上往下扫。
+    half dissolveMapThresholdMapValue = input.dissolveHeight;
     half dissolve = dissolveMapThresholdMapValue - _DissolveAmount;
+
+    // 边缘网点：只在溶解边界那一圈把像素打碎，越靠边越稀。
+    // 和全局网点（_NILOTOON_DITHER_FADEOUT + _DitherFadeoutAmount）互不干扰，
+    // 两个都开就是 AND，单独开哪个都行。
+    if (_DissolveEdgeDitherStrength > 0)
+    {
+        half edgeDist = saturate(abs(dissolve) / max(_DissolveBorderRange, 1e-4));
+        half edgeMask = 1 - edgeDist;                 // 1 = 正好在边界上
+        half edgeDither = (1 - edgeMask * _DissolveEdgeDitherStrength)
+                        - NiloGetDitherThreshold(input.positionCS.xy);
+        dissolve = min(dissolve, edgeDither);         // 和高度条件合成一次 clip
+    }
 
     // clip threshold
     clip(dissolve);
-    float dissolveBorderTintColorMask = smoothstep(_DissolveAmount + _DissolveBorderRange, _DissolveAmount, dissolveMapThresholdMapValue);
-    dissolveBorderTintColorMask = lerp(0,dissolveBorderTintColorMask,_DissolveBorderTintColor.a);
 
-    float dissolveTopBorderTintColorMask = smoothstep(_DissolveAmount + _DissolveTopBorderRange, _DissolveAmount, dissolveMapThresholdMapValue);
-    dissolveBorderTintColorMask = lerp(0,dissolveBorderTintColorMask,_DissolveTopBorderTintColor.a);
+    // smoothstep 的两个 edge 相等是未定义行为，会整块闪。
+    // 这里兜一个下限，滑块拉到 0.01 也安全，旧材质里存了 0 也不会炸。
+    float borderRange = max(_DissolveBorderRange, 0.001);
+    float topBorderRange = max(_DissolveTopBorderRange, 0.001);
+
+    float dissolveBorderTintColorMask = smoothstep(_DissolveAmount + borderRange, _DissolveAmount, dissolveMapThresholdMapValue);
+    dissolveBorderTintColorMask = lerp(0, dissolveBorderTintColorMask, _DissolveBorderTintColor.a);
+
+    float dissolveTopBorderTintColorMask = smoothstep(_DissolveAmount + topBorderRange, _DissolveAmount, dissolveMapThresholdMapValue);
+    dissolveTopBorderTintColorMask = lerp(0, dissolveTopBorderTintColorMask, _DissolveTopBorderTintColor.a);
+
     //对 "近阈值区域 "进行HDR色彩调剂 
     color += dissolveBorderTintColorMask * _DissolveBorderTintColor.rgb;
     color += dissolveTopBorderTintColorMask * _DissolveTopBorderTintColor.rgb ;
@@ -867,14 +896,20 @@ void ApplyDissolve(inout half3 color, Varyings input)
 void ApplyDissolve_th( Varyings input)
 {
     #if _NILOTOON_DISSOLVE
-    // read black and white map
-    half dissolveMapThresholdMapValue = tex2D(_DissolveThresholdMap, input.uv).g;
-    //dissolveMapThresholdMapValue =  _DissolveSource == 0?dissolveMapThresholdMapValue:input.color.z;
+    half dissolveMapThresholdMapValue = input.dissolveHeight;
     half dissolve = dissolveMapThresholdMapValue - _DissolveAmount;
+
+    if (_DissolveEdgeDitherStrength > 0)
+    {
+        half edgeDist = saturate(abs(dissolve) / max(_DissolveBorderRange, 1e-4));
+        half edgeMask = 1 - edgeDist;
+        half edgeDither = (1 - edgeMask * _DissolveEdgeDitherStrength)
+                        - NiloGetDitherThreshold(input.positionCS.xy);
+        dissolve = min(dissolve, edgeDither);
+    }
 
     // clip threshold
     clip(dissolve);
-   
     #endif
 }
 
