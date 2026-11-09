@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 namespace ExpandParticleSystem
 {
@@ -18,9 +17,6 @@ namespace ExpandParticleSystem
                   = "AnimClipToolbarPopup";
         #endif
         private ParticleSystem thisParticleSystem;//自身的粒子系统
-
-        public bool isOpen_NewSubparticle = false;//是否打开新的子发射器
-        public NewSubParticleSystem newSubParticle;
 
         public bool isOpen_ParticleTransform = true;//是否打开Transform（默认展开，其余面板默认折叠）
 
@@ -59,8 +55,6 @@ namespace ExpandParticleSystem
                 return;
             }
 
-            //新的子发射器
-            Enable(out newSubParticle);
             //粒子预设
             Enable(out particlePreset);
             //粒子旋转
@@ -98,11 +92,6 @@ namespace ExpandParticleSystem
             {
                 preset.enabled = enabled;
             }
-            NewSubParticleSystem sub = thisParticleSystem.GetComponent<NewSubParticleSystem>();
-            if (sub != null)
-            {
-                sub.enabled = enabled;
-            }
         }
         public override void OnInspectorGUI()
         {
@@ -116,8 +105,6 @@ namespace ExpandParticleSystem
             GUIUpdate_ParticleTransform();
             ///粒子预设
             GUIUpdate_ParticlePreset();
-            ///新的子发射器
-            GUIUpdate_NewSubSystem();
             ///绕轴旋转
             GUIUpdate_ParticleRot();
             ///移动配置
@@ -146,122 +133,6 @@ namespace ExpandParticleSystem
                 t.hideFlags = HideFlags.HideInInspector;
             }
         }
-#region 新的子发射器
-        //private void Enable_NewSubSystem()
-        //{
-        //    newSubParticle = thisParticleSystem.gameObject.GetComponent<NewSubParticleSystem>();
-        //    if (newSubParticle == null)
-        //    {
-        //        newSubParticle = thisParticleSystem.gameObject.AddComponent<NewSubParticleSystem>();
-        //        newSubParticle.hideFlags = HideFlags.HideInInspector;
-        //    }
-        //}
-        private void GUIUpdate_NewSubSystem()
-        {
-            using (new GUILayout.HorizontalScope("box"))
-            {
-                EditorGUI.BeginChangeCheck();
-                newSubParticle.useNewSystem = EditorGUILayout.Toggle("", newSubParticle.useNewSystem, GUILayout.Width(20));
-                if (EditorGUI.EndChangeCheck())
-                {
-                    newSubParticle.enabled = newSubParticle.useNewSystem;
-                    newSubParticle.OpenOldCollide();
-                    newSubParticle.OpenOldSubSystem();
-                }
-                if (GUILayout.Button("新子发射器", new GUIStyle(ButtonStyleName)))
-                {
-                    isOpen_NewSubparticle = !isOpen_NewSubparticle;
-                }
-            }
-            if (isOpen_NewSubparticle)
-            {
-                newSubParticle.OpenOldCollide();
-                if (newSubParticle.useCollide = EditorGUILayout.Toggle("开启碰撞", newSubParticle.useCollide))
-                {
-                    ColliderLayer();
-                    newSubParticle.size = EditorGUILayout.Slider("碰撞大小", newSubParticle.size, 0, 20);
-                }
-                ShowType();
-                ShowObject();
-            }
-            //if (GUI.changed)
-            //{
-
-            //    for (int i = 0; i < particleCollide.subParticleSystems.Count; i++)
-            //    {
-            //        if (particleCollide.subParticleSystems[i] != null && !particleCollide.subParticleSystems[i].Equals(particleCollide.subParticleSystems_Current[i]))
-            //        {
-            //            particleCollide.OpenOldSubSystem();
-            //            particleCollide.subParticleSystems_Current[i] = particleCollide.subParticleSystems[i];
-            //        }
-            //    }
-            //}
-        }
-        /// <summary>
-        /// 显示碰撞层   
-        /// </summary>
-        private void ColliderLayer()
-        {
-            //EditorGUI.BeginChangeCheck();
-            if (newSubParticle.isColliderLayer = EditorGUILayout.Toggle("是否根据碰撞层", newSubParticle.isColliderLayer))
-            {
-                using (new GUILayout.HorizontalScope("Box"))
-                {
-                    GUILayout.Label("碰撞层");
-                    newSubParticle.layerMask = EditorGUILayout.MaskField(InternalEditorUtility.LayerMaskToConcatenatedLayersMask(newSubParticle.layerMask), InternalEditorUtility.layers);
-                    newSubParticle.layerMask = InternalEditorUtility.ConcatenatedLayersMaskToLayerMask(newSubParticle.layerMask);
-                }
-            }
-            //if (EditorGUI.EndChangeCheck())
-            //{
-
-            //}
-        }
-        private void ShowType()
-        {
-            EditorGUI.BeginChangeCheck();
-            newSubParticle.triggerType = (ParticleSystemSubEmitterType)EditorGUILayout.EnumPopup("出生方式", newSubParticle.triggerType);
-            if (EditorGUI.EndChangeCheck())
-            {
-                newSubParticle.SetParticleSystemSubEmitterType();
-            }
-        }
-        /// <summary>
-        /// 显示子类系统
-        /// </summary>
-        private void ShowObject()
-        {
-            GUILayout.Label("子 粒子");
-            for (int i = 0; i < newSubParticle.subParticleSystems.Count; i++)
-            {
-                using (new GUILayout.HorizontalScope())
-                {
-                    EditorGUI.BeginChangeCheck();
-                    newSubParticle.subParticleSystems[i] = (ParticleSystem)EditorGUILayout.ObjectField(newSubParticle.subParticleSystems[i], typeof(ParticleSystem), true);
-                    if (EditorGUI.EndChangeCheck())
-                    {
-                        ParticleSystem p = newSubParticle.subParticleSystems[i];
-                        newSubParticle.OpenOldSubSystem(i);
-                        newSubParticle.SetParent(p.gameObject);
-                    }
-                    if (GUILayout.Button("", new GUIStyle("OL Plus")))
-                    {
-                        newSubParticle.subParticleSystems.Add(null);
-                    }
-
-                    if (GUILayout.Button("", new GUIStyle("OL Minus")))
-                    {
-                        newSubParticle.RemoveSubParticleSystem(newSubParticle.subParticleSystems[i]);
-                        newSubParticle.subParticleSystems.Remove(newSubParticle.subParticleSystems[i]);
-                        if (newSubParticle.subParticleSystems.Count == 0)
-                        {
-                            newSubParticle.subParticleSystems.Add(null);
-                        }
-                    }
-                }
-            }
-        }
-#endregion
 #region 粒子预设
         //private void Enable_ParticlePreset()
         //{
@@ -861,22 +732,6 @@ namespace ExpandParticleSystem
                     objects.Add(inChildren[i].gameObject);
                 }
             }
-            //插件单独记录的子系统，同样排除本体
-            if (newSubParticle != null && newSubParticle.subParticleSystems != null)
-            {
-                for (int i = 0; i < newSubParticle.subParticleSystems.Count; i++)
-                {
-                    ParticleSystem sub = newSubParticle.subParticleSystems[i];
-                    if (sub == null || sub == thisParticleSystem)
-                    {
-                        continue;
-                    }
-                    if (!objects.Contains(sub.gameObject))
-                    {
-                        objects.Add(sub.gameObject);
-                    }
-                }
-            }
             return objects;
         }
         /// <summary>
@@ -897,18 +752,6 @@ namespace ExpandParticleSystem
                 if (!systems.Contains(inChildren[i]))
                 {
                     systems.Add(inChildren[i]);
-                }
-            }
-            //插件单独记录的子系统也一起改
-            if (newSubParticle != null && newSubParticle.subParticleSystems != null)
-            {
-                for (int i = 0; i < newSubParticle.subParticleSystems.Count; i++)
-                {
-                    ParticleSystem sub = newSubParticle.subParticleSystems[i];
-                    if (sub != null && !systems.Contains(sub))
-                    {
-                        systems.Add(sub);
-                    }
                 }
             }
             //只改还是 Unity 默认值 1000 的，已经手动调过的不动
