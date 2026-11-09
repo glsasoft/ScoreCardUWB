@@ -163,6 +163,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 7497109b24ded1c478ab75a2ba214d7c, type: 2}
   - {fileID: 2100000, guid: 85ceff628d250fe47a7d151730ed415d, type: 2}
   - {fileID: 2100000, guid: a7163326ef7e68246acc215f0998a396, type: 2}
+  - {fileID: 2100000, guid: 7cac49e7a62391b42891565cfa544c77, type: 2}
   - {fileID: 2100000, guid: ec977599cc0b30042aa76440e17f9fd7, type: 2}
   - {fileID: 2100000, guid: 8c15893210127d9409b931b700f8368a, type: 2}
   - {fileID: 2100000, guid: d87fbb8b9eb9e0741a3a5eb54c411c91, type: 2}
@@ -170,18 +171,3 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 4d830d810079b964c9bded61dcdb40ca, type: 2}
   perspectiveRemovalAmount: 0
   outlineWidthExtraMultiplier: 1
-  dissolveOn: 0
-  dissolveColor: {r: 1, g: 1, b: 1, a: 1}
-  dissolveColorStrength: 1
-  DissolveOrigin: {fileID: 0}
-  dissolveFit: 0
-  dissolveDirThreshold: 0
-  dissolveDir: {x: 0, y: 1, z: 0}
-  dissolveDirWidth: 0.1
-  dissolveMapThreshold: 0
-  dissolveMap: {fileID: 0}
-  dissolveMapEdge: 0
-  dissolveTexFlowAndBevel: {x: 0, y: 0, z: 0, w: 0}
-  overallColor: {r: 0, g: 0, b: 0, a: 1}
-  overallColorStrength: 1
-  overallColorExtent: 0
