@@ -1,7 +1,7 @@
 #pragma once
 
 #include "XHHYCharacter_LightUtil_Eye.hlsl" //光照相关
-#include "XHHYUtilityHLSL/Common.hlsl"//通用方法
+#include "../XHHYUtilityHLSL/Common.hlsl"//通用方法（原路径相对本目录找不到，改成显式相对路径）
 
 //TEXTURE2D(_NiloToonAverageShadowMapRT);
 
@@ -59,6 +59,7 @@ Varyings VertexShaderForward(Attributes input)
     output.normalWS_averageShadowAttenuation.xyz = lightingNormalWS_faceArea.xyz;
     
     output.color = input.color;
+    output.dissolveHeight = GetDissolveHeightOS(positionWS.y - _DissolveRootY);
     output.depth = vertexPositionInput.positionVS.z;
     //SH
     half3 normalWSForSH = lightingNormalWS_faceArea.xyz;
@@ -105,6 +106,8 @@ half4 FragmentShaderForward(Varyings input, half facing : VFACE) : SV_TARGET
     #endif
     ApplyPerCharacterBaseMapOverride(color, input, lightingData);
     ApplyPerCharacterEffectColorEditForwardPass(color, lightingData);
+    // 受击闪白（独立一层菲涅尔）
+    ApplyHitFlash(color, lightingData);
     //应用溶解
     ApplyDissolve(color, input);
     //应用雾（雾前和雾后有扩展逻辑功能）
@@ -112,6 +115,18 @@ half4 FragmentShaderForward(Varyings input, half facing : VFACE) : SV_TARGET
 //    color = MyFog(color,lightingData.positionWS);
     // 覆盖输出阿尔法
     ApplyOverrideOutputAlpha(surfaceData.alpha);
+
+    // 方向光染色：把角色整体往主光颜色上拉，和空气透视雾保持同一套光照氛围。
+    // 用 keyword 剥离，没开时这里一行指令都不生成。
+    // _MainLightColor 是 URP 每帧推的主光色（线性空间、已乘 intensity），不用自己传。
+    #if defined(_SUNTINT)
+    {
+        half3 sunCol = _MainLightColor.rgb;
+        // 归一化到最大分量为 1，只保留色相，避免光强调高时把角色打爆。
+        sunCol /= max(max(sunCol.r, max(sunCol.g, sunCol.b)), 1e-4);
+        color *= lerp(half3(1, 1, 1), sunCol, (half)saturate(_SunTintAmount));
+    }
+    #endif
 
     return half4(color,  _Alpha);
 }

@@ -58,6 +58,9 @@ float depth : TEXCOORD6;
     half4 color : COLOR;
     // vertex color rgba, currently only for "control depth texture rimlight and shadow width by vertex color" or "debug shading"
 
+    // 溶解用：局部 Y 轴归一化高度（0 = 头顶，1 = 脚底）
+    half dissolveHeight : TEXCOORD9;
+
     // debug use
     //--------------------------------------------------------------------
     #if _NILOTOON_DEBUG_SHADING
@@ -134,6 +137,10 @@ float _HairAlpha;
 // 启用渲染
 
 float _EnableRendering;
+
+// 方向光染色
+half _SunTintEnable;
+half _SunTintAmount;
 
 float4 _DecalColor;
 float _LineNumber;
@@ -433,6 +440,11 @@ half3 _PerCharEffectRimColor;
 half _PerCharEffectRimSharpnessPower;
 half _PerCharEffectDesaturatePercentage;
 
+// 受击闪白：独立一层菲涅尔，不跟角色边缘光共用参数
+half3 _HitFlashColor;
+half _HitFlashIntensity;
+half _HitFlashPower;
+
 // skin
 //float _IsSkin;
 half4 _SkinMaskMapChannelMask;
@@ -472,6 +484,12 @@ float _DissolveBorderRange;
 half4 _DissolveBorderTintColor;
 float _DissolveTopBorderRange;
 half4 _DissolveTopBorderTintColor;
+float _DissolveMinY;
+float _DissolveMaxY;
+float _DissolveRootY;
+float _DissolveEdgeDitherStrength;
+float _EnableDissolve;
+float _EnableDitherFadeout;
 
 
 // per character basemap override
@@ -483,10 +501,14 @@ half3 _PerCharacterBaseMapOverrideTintColor;
 
 float3 _CenterPointPosition;
 
-float _ThickOutWidth;
-float4 _ThickOutColor;
-float _ThickOutAlphaHeight;
 CBUFFER_END
+
+// 把物体空间 Y 转成溶解高度：0 = 头顶（先消失），1 = 脚底（最后消失）。
+half GetDissolveHeightOS(float positionOSY)
+{
+    half h = saturate((positionOSY - _DissolveMinY) / max(_DissolveMaxY - _DissolveMinY, 1e-5));
+    return 1.0 - h;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 全局性的制服

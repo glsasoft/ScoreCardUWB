@@ -135,22 +135,46 @@ void ApplyPerCharacterEffectColorEditForwardPass(inout half3 color, ToonLighting
    // color.rgb += (rim ) * _PerCharEffectRimColor; // 边缘光不能显示在脸上，因为它看起来很难看
 }
 
+// 受击闪白：独立一层菲涅尔，不跟角色边缘光共用参数。
+// 用 PolygonNdotV（几何法线）而不是带法线图的 NdotV，闪白不会被法线图带歪。
+void ApplyHitFlash(inout half3 color, ToonLightingData lightingData)
+{
+    half fresnel = 1.0 - saturate(lightingData.PolygonNdotV);
+    fresnel = pow(fresnel, max(_HitFlashPower, 0.001));
+    // 纯菲涅尔：只有边缘一圈闪，中间不加白，power 拉大边缘就越窄
+    color.rgb += fresnel * _HitFlashColor.rgb * _HitFlashIntensity;
+}
+
 
 void ApplyDissolve(inout half3 color, Varyings input)
 {
     #if _NILOTOON_DISSOLVE
-    // read black and white map
-    half dissolveMapThresholdMapValue = tex2D(_DissolveThresholdMap, input.uv).g;
-   //dissolveMapThresholdMapValue =  _DissolveSource == 0?dissolveMapThresholdMapValue:input.color.z;
+    // 阈值来源：物体空间 Y 的归一化高度，在顶点阶段算好传过来
+    half dissolveMapThresholdMapValue = input.dissolveHeight;
     half dissolve = dissolveMapThresholdMapValue - _DissolveAmount;
+
+    if (_DissolveEdgeDitherStrength > 0)
+    {
+        half edgeDist = saturate(abs(dissolve) / max(_DissolveBorderRange, 1e-4));
+        half edgeMask = 1 - edgeDist;
+        half edgeDither = (1 - edgeMask * _DissolveEdgeDitherStrength)
+                        - NiloGetDitherThreshold(input.positionCS.xy);
+        dissolve = min(dissolve, edgeDither);
+    }
 
     // clip threshold
     clip(dissolve);
-    float dissolveBorderTintColorMask = smoothstep(_DissolveAmount + _DissolveBorderRange, _DissolveAmount, dissolveMapThresholdMapValue);
-    dissolveBorderTintColorMask = lerp(0,dissolveBorderTintColorMask,_DissolveBorderTintColor.a);
 
-    float dissolveTopBorderTintColorMask = smoothstep(_DissolveAmount + _DissolveTopBorderRange, _DissolveAmount, dissolveMapThresholdMapValue);
-    dissolveBorderTintColorMask = lerp(0,dissolveBorderTintColorMask,_DissolveTopBorderTintColor.a);
+    // smoothstep 两个 edge 相等是未定义行为，会整块闪
+    float borderRange = max(_DissolveBorderRange, 0.001);
+    float topBorderRange = max(_DissolveTopBorderRange, 0.001);
+
+    float dissolveBorderTintColorMask = smoothstep(_DissolveAmount + borderRange, _DissolveAmount, dissolveMapThresholdMapValue);
+    dissolveBorderTintColorMask = lerp(0, dissolveBorderTintColorMask, _DissolveBorderTintColor.a);
+
+    float dissolveTopBorderTintColorMask = smoothstep(_DissolveAmount + topBorderRange, _DissolveAmount, dissolveMapThresholdMapValue);
+    dissolveTopBorderTintColorMask = lerp(0, dissolveTopBorderTintColorMask, _DissolveTopBorderTintColor.a);
+
     //对 "近阈值区域 "进行HDR色彩调剂 
     color += dissolveBorderTintColorMask * _DissolveBorderTintColor.rgb;
     color += dissolveTopBorderTintColorMask * _DissolveTopBorderTintColor.rgb ;
@@ -160,14 +184,20 @@ void ApplyDissolve(inout half3 color, Varyings input)
 void ApplyDissolve_th( Varyings input)
 {
     #if _NILOTOON_DISSOLVE
-    // read black and white map
-    half dissolveMapThresholdMapValue = tex2D(_DissolveThresholdMap, input.uv).g;
-   // dissolveMapThresholdMapValue =  _DissolveSource == 0?dissolveMapThresholdMapValue:input.color.z;
+    half dissolveMapThresholdMapValue = input.dissolveHeight;
     half dissolve = dissolveMapThresholdMapValue - _DissolveAmount;
+
+    if (_DissolveEdgeDitherStrength > 0)
+    {
+        half edgeDist = saturate(abs(dissolve) / max(_DissolveBorderRange, 1e-4));
+        half edgeMask = 1 - edgeDist;
+        half edgeDither = (1 - edgeMask * _DissolveEdgeDitherStrength)
+                        - NiloGetDitherThreshold(input.positionCS.xy);
+        dissolve = min(dissolve, edgeDither);
+    }
 
     // clip threshold
     clip(dissolve);
-   
     #endif
 }
 
@@ -181,16 +211,6 @@ void BaseColorAlphaClipTest(Varyings input)
 {
     UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
 
-    #if _NILOTOON_DISSOLVE
-    // read black and white map
-    half dissolveMapThresholdMapValue = tex2D(_DissolveThresholdMap, input.uv).g;
-    //dissolveMapThresholdMapValue =  _DissolveSource == 0?dissolveMapThresholdMapValue:input.color.z;
-    half dissolve = dissolveMapThresholdMapValue - _DissolveAmount;
-
-    // clip threshold
-    clip(dissolve);
-    #endif
-                
     #if _ALPHATEST_ON
     DoClipTestToTargetAlphaValue(GetFinalBaseColor(input).a);
     #endif
@@ -199,6 +219,7 @@ void BaseColorAlphaClipTest(Varyings input)
     NiloDoDitherFadeoutClip(input.positionCS.xy, 1-_DitherFadeoutAmount);
     #endif
     
+    // 位置高度溶解统一走 ApplyDissolve，跟主 pass 同一套逻辑
     half3 dummy = half3(0, 0, 0);
     ApplyDissolve(dummy, input);
 }

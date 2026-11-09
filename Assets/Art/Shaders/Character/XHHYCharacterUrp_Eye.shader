@@ -19,13 +19,15 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Eye"
         [SubEnum(RenderStateGroup, RGBA, 15, RGB, 14)]_ColorMask("颜色通道", Float) = 15
         [Sub(RenderStateGroup)]_ExtraThickOutlineStencilID ("模板 ID", Range (0, 255)) = 199
 
+        // 方向光染色：让角色跟随主方向光的颜色，和空气透视雾统一氛围。
+        // 用 keyword 开关，关掉时整段代码被剥离，不产生任何指令。
+        [Main(SunTintGroup,_,off,off)]_SunTintGroup("方向光染色", Float) = 0
+        [SubToggle(SunTintGroup, _SUNTINT)]_SunTintEnable("受方向光影响", Float) = 0
+        [Sub(SunTintGroup)]_SunTintAmount("影响程度", Range(0,1)) = 0.5
+
         [Main(g2,_,off,on)]
         [PassSwitch(ModelTransparent)]
         _group2 ("半透明", float) = 0
-
-        [Main(g3,_,off,on)]
-        [PassSwitch(ThickOutline)]
-        _group3 ("厚描边", float) = 0
 
         [HideInInspector]_EnableRendering("_EnableRendering(默认启用) ", Float) = 1
 
@@ -38,14 +40,26 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Eye"
         // per char center
         [HideInInspector]_CharacterBoundCenterPosWS("_CharacterBoundCenterPosWS", Vector) = (0,0,0)
 
+        // 受击闪白（独立一层菲涅尔，跟角色边缘光分开）
+        [Main(HitFlashGroup,_,off,off)]_HitFlashGroup("受击闪白", Float) = 0
+        [Sub(HitFlashGroup)][HDR]_HitFlashColor("闪白颜色", Color) = (0.2216981,0.9486833,1,1)
+        [Sub(HitFlashGroup)]_HitFlashIntensity("闪白强度", Range(0,10)) = 0
+        [Sub(HitFlashGroup)]_HitFlashPower("闪白菲涅尔指数", Range(0.1,16)) = 2
+
         [Main(DissolveGroup,_,off,off)]_DissolveGroup("溶解", Float) = 0
-        [HideInInspector]_DissolveAmount("溶解程度", Range(0,1)) = 0
+        [SubToggle(DissolveGroup, _NILOTOON_DISSOLVE)]_EnableDissolve("启用溶解", Float) = 0
+        [Sub(DissolveGroup)]_DissolveAmount("溶解程度", Range(0,1)) = 0
+        [Sub(DissolveGroup)]_DissolveMinY("溶解高度下限 (物体Y)", Float) = 0
+        [Sub(DissolveGroup)]_DissolveMaxY("溶解高度上限 (物体Y)", Float) = 1.515
+        [Sub(DissolveGroup)]_DissolveRootY("溶解基准世界Y", Float) = 0
         [HideInInspector]_DissolveThresholdMap("溶解阈值贴图", 2D) = "linearGrey" {}
-        [HideInInspector]_DissolveBorderRange("溶解边缘范围", Range(0,1)) = 0.02
-        [HideInInspector]_DissolveBorderTintColor("溶解边缘颜色", Color) = (0,4,4,1)
-        [HideInInspector]_DissolveTopBorderRange("溶解顶部范围", Float) = 1
-        [HideInInspector]_DissolveTopBorderTintColor("溶解顶部颜色", Color) = (1,1,1)
-        [Sub(DissolveGroup)]_DitherFadeoutAmount("抖动淡出", Range(0,1)) = 0.5
+        [Sub(DissolveGroup)]_DissolveBorderRange("溶解边缘范围", Range(0.01,1)) = 0.04
+        [Sub(DissolveGroup)][HDR]_DissolveBorderTintColor("溶解边缘颜色", Color) = (0,4,4,1)
+        [Sub(DissolveGroup)]_DissolveTopBorderRange("溶解顶部范围", Range(0.01,1)) = 0.02
+        [Sub(DissolveGroup)][HDR]_DissolveTopBorderTintColor("溶解顶部颜色", Color) = (1,1,1,0)
+        [Sub(DissolveGroup)]_DissolveEdgeDitherStrength("溶解边缘网点强度", Range(0,1)) = 0
+        [SubToggle(DissolveGroup, _NILOTOON_DITHER_FADEOUT)]_EnableDitherFadeout("启用全局网点", Float) = 0
+        [Sub(DissolveGroup)]_DitherFadeoutAmount("全局网点淡出", Range(0,1)) = 0
 
         [Main(PerspectiveGroup,_,off,off)]_PerspectiveGroup("透视消除", Float) = 0
         [Sub(PerspectiveGroup)]_PerspectiveRemovalAmount("强度", Range(0,1)) = 0
@@ -79,9 +93,6 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Eye"
         [HideInInspector][Enum(UnityEngine.Rendering.StencilOp)] _StencilOp ("Stencil Operation", Int) = 0 // 0 = keep, 2 = replace
 
         //ThickOut
-        [HideInInspector]_ThickOutWidth("_ThickOutWidth", Float) = 2
-        [HideInInspector][HDR]_ThickOutColor("_ThickOutColor", Color) = (1,1,1,1)
-        [HideInInspector]_ThickOutAlphaHeight("_ThickOutAlphaHeight", Float) = 1
 
         [HideInInspector]_TimeStooped("_TimeStooped",int) = 0
 
@@ -100,7 +111,7 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Eye"
             "RenderType"="Opaque"
             "UniversalMaterialType" = "Lit"
             "IgnoreProjector" = "True"
-            "Queue"="Geometry-3"
+            "Queue"="Geometry"
         }
 
         HLSLINCLUDE
@@ -208,9 +219,9 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Eye"
 
             // render state
             Cull [_Cull]
-            ZWrite [_ZWrite]
+            ZWrite On
             //Blend one one
-            Blend SrcAlpha OneMinusSrcAlpha
+            //Blend SrcAlpha OneMinusSrcAlpha   // 眼睛改成不透明，关掉 alpha 混合
             ColorMask [_ColorMask]
             ZTest [_ZTest]
             Stencil
@@ -229,6 +240,7 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Eye"
             #pragma multi_compile_local _ _NILOTOON_DITHER_FADEOUT
             #pragma multi_compile _ _NILOTOON_DEBUG_SHADING
 #pragma multi_compile_local _ _NILOTOON_PERCHARACTER_BASEMAP_OVERRIDE
+            #pragma shader_feature_local _SUNTINT
          //   #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE //(can use _fragment suffix)
        //     #pragma multi_compile _ _PERSPECTIVEREMOVAL //透视矫正
 
@@ -284,35 +296,6 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Eye"
         }
 
 
-        Pass
-        {
-            Name "ThickOutline"
-            Tags
-            {
-                "LightMode" = "ThickOutline"
-            }
-
-            Blend SrcAlpha OneMinusSrcAlpha
-
-            Stencil
-            {
-                Ref 190
-                Comp Greater // passing depth test = passing stencil
-                // Ref 225
-                // Comp NotEqual // passing depth test = passing stencil
-                Pass replace // replace means write
-            }
-
-            ZWrite On
-
-            HLSLPROGRAM
-            #pragma vertex VertexShaderOutLine
-            #pragma fragment FragmentShaderOutLine
-            #include "Eye\XHHYCharacter_Input_Eye.hlsl"
-            #include "Eye/XHHYCharacter_ThickOutlinePass_Eye.hlsl"
-            ENDHLSL
-
-        }
 
 
 

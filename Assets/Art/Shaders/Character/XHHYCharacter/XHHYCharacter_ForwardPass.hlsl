@@ -13,7 +13,7 @@
 #pragma once
 
 #include "XHHYCharacter_LightUtil.hlsl" // 光照相关工具函数
-#include "XHHYUtilityHLSL/Common.hlsl" // 通用工具方法
+#include "../XHHYUtilityHLSL/Common.hlsl" // 通用工具方法（原路径 "XHHYUtilityHLSL/Common.hlsl" 相对本目录找不到，改成显式相对路径）
 
 //TEXTURE2D(_NiloToonAverageShadowMapRT); // 平均阴影贴图渲染纹理（已注释）
 
@@ -64,6 +64,11 @@ Varyings VertexShaderForward(Attributes input)
 
     // 传递顶点颜色
     output.color = input.color;
+    // 溶解用的局部 Y 轴高度（0 = 头顶，1 = 脚底）
+    // 世界 Y 减去角色根节点的世界 Y，得到角色自身的高度。
+    // 不要用 input.positionOS.y：在蒙皮网格上它和 bind pose 的模型高度对不上，方向会串。
+    // 基准用 uniform 而不是每个渲染器自己的矩阵，否则头发、身体原点不同会互相错位。
+    output.dissolveHeight = GetDissolveHeightOS(positionWS.y - _DissolveRootY);
     // 设置视空间深度值
     output.depth = vertexPositionInput.positionVS.z;
 
@@ -244,6 +249,9 @@ half4 FragmentShaderForward(Varyings input, half facing : VFACE) : SV_TARGET
     color += addLight;
     #endif
 
+    // 受击闪白（独立一层菲涅尔）
+    ApplyHitFlash(color, lightingData);
+
     // 应用溶解效果
     ApplyDissolve(color, input);
     
@@ -297,6 +305,18 @@ else if (_AlphaMask == 1)
     }*/
     #endif
     
+    // 方向光染色：把角色整体往主光颜色上拉，和空气透视雾保持同一套光照氛围。
+    // 用 keyword 剥离，没开时这里一行指令都不生成。
+    // _MainLightColor 是 URP 每帧推的主光色（线性空间、已乘 intensity），不用自己传。
+    #if defined(_SUNTINT)
+    {
+        half3 sunCol = _MainLightColor.rgb;
+        // 归一化到最大分量为 1，只保留色相，避免光强调高时把角色打爆。
+        sunCol /= max(max(sunCol.r, max(sunCol.g, sunCol.b)), 1e-4);
+        color *= lerp(half3(1, 1, 1), sunCol, (half)saturate(_SunTintAmount));
+    }
+    #endif
+
     return half4(min(color,2), _Alpha); // 返回最终颜色和透明度
 }
 
@@ -340,7 +360,7 @@ half4 FragmentShaderForward2(Varyings input, half facing : VFACE) : SV_TARGET
     ApplyPerCharacterBaseMapOverride(color, input, lightingData);
     ApplyPerCharacterEffectColorEditForwardPass(color, lightingData);
     ApplyVolumeEffectColorEdit(color);
-    
+
     // 应用溶解效果
     ApplyDissolve(color, input);
     

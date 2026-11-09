@@ -21,7 +21,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 29f439093c298e743b25ee9f19f946d3, type: 2}
   m_DefaultRendererIndex: 0
   m_RequireDepthTexture: 1
-  m_RequireOpaqueTexture: 0
+  m_RequireOpaqueTexture: 1
   m_OpaqueDownsampling: 0
   m_SupportsTerrainHoles: 0
   m_SupportsHDR: 1
@@ -36,7 +36,7 @@ MonoBehaviour:
   m_ShEvalMode: 0
   m_MainLightRenderingMode: 1
   m_MainLightShadowsSupported: 1
-  m_MainLightShadowmapResolution: 1024
+  m_MainLightShadowmapResolution: 4096
   m_AdditionalLightsRenderingMode: 1
   m_AdditionalLightsPerObjectLimit: 8
   m_AdditionalLightShadowsSupported: 0
@@ -47,24 +47,24 @@ MonoBehaviour:
   m_ReflectionProbeBlending: 0
   m_ReflectionProbeBoxProjection: 0
   m_ShadowDistance: 100
-  m_ShadowCascadeCount: 1
+  m_ShadowCascadeCount: 4
   m_Cascade2Split: 0.01
   m_Cascade3Split: {x: 0.1, y: 0.3}
   m_Cascade4Split: {x: 0.049999997, y: 0.19999997, z: 0.35}
   m_CascadeBorder: 0.5
   m_ShadowDepthBias: 1
-  m_ShadowNormalBias: 0
+  m_ShadowNormalBias: 0.3
   m_AnyShadowsSupported: 1
   m_SoftShadowsSupported: 1
   m_ConservativeEnclosingSphere: 1
   m_NumIterationsEnclosingSphere: 64
-  m_SoftShadowQuality: 2
+  m_SoftShadowQuality: 0
   m_AdditionalLightsCookieResolution: 2048
   m_AdditionalLightsCookieFormat: 3
   m_UseSRPBatcher: 1
   m_SupportsDynamicBatching: 1
   m_MixedLightingSupported: 1
-  m_SupportsLightCookies: 0
+  m_SupportsLightCookies: 1
   m_SupportsLightLayers: 0
   m_DebugLevel: 0
   m_StoreActionsOptimization: 1

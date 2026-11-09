@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
   m_Name: DrawMainPlayBaseOutline
   m_EditorClassIdentifier: 
-  m_Active: 1
+  m_Active: 0
   settings:
     passTag: DrawMainPlayBaseOutline
     Event: 350
@@ -39,10 +39,38 @@ MonoBehaviour:
       failOperation: 0
       zFailOperation: 0
     cameraSettings:
-      overrideCamera: 1
+      overrideCamera: 0
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
       cameraFieldOfView: 60
+--- !u!114 &-7979972897660026244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 458a7e6b279ca79469b077dc9ed0f6f8, type: 3}
+  m_Name: AerialFogRenderFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  material: {fileID: 2100000, guid: 17dc52f65e5066845920f9806cb002da, type: 2}
+  parameters:
+    fogStart: 18
+    fogEnd: 20.5
+    fogCurve: 1.5
+    density: 0.14
+    heightFalloff: 0.06
+    baseHeight: 0
+    maxOpacity: 0.9
+    colorNear: {r: 0.58, g: 0.56, b: 0.55, a: 1}
+    colorFar: {r: 0.62, g: 0.7, b: 0.82, a: 1}
+    skyFogAmount: 1
+    sunInfluence: 0.5
+  renderPassEvent: 450
+  debugMode: 0
 --- !u!114 &-6332787464191705935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,7 +204,7 @@ MonoBehaviour:
       failOperation: 0
       zFailOperation: 0
     cameraSettings:
-      overrideCamera: 1
+      overrideCamera: 0
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
       cameraFieldOfView: 60
@@ -200,7 +228,7 @@ MonoBehaviour:
       RenderQueueType: 0
       LayerMask:
         serializedVersion: 2
-        m_Bits: 507895
+        m_Bits: 65
       PassNames:
       - NiloToonOutline
     overrideMaterial: {fileID: 0}
@@ -405,7 +433,7 @@ MonoBehaviour:
       failOperation: 0
       zFailOperation: 0
     cameraSettings:
-      overrideCamera: 1
+      overrideCamera: 0
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
       cameraFieldOfView: 60
@@ -447,6 +475,7 @@ MonoBehaviour:
   - {fileID: 3713028405584028479}
   - {fileID: -6054192299906671859}
   - {fileID: 1778101375366567835}
+  - {fileID: -7979972897660026244}
   - {fileID: 171660731581342198}
   - {fileID: 8027614698455345250}
   - {fileID: 5315231592767027498}
@@ -455,7 +484,8 @@ MonoBehaviour:
   - {fileID: -165131773400208323}
   - {fileID: -2605867569837830488}
   - {fileID: 549793882548607311}
-  m_RendererFeatureMap: 66c1fa647310121fdc6b9aba9ae846f6aba3524f7c28fee90535e692d75d60f0930316f79f4bb6cb3f63c593a95387330d5b28022e30fbab9b975bb5c715ad18f621ca9f86dc610262a8223f09d1676f2af9cfe9f87ec34954b8198f6e361ed4da7c83f341d01c913dac59e98655b5fda80e1b704019d6db4f19fe8c9f42a107
+  - {fileID: 5650186387430830941}
+  m_RendererFeatureMap: 66c1fa647310121fdc6b9aba9ae846f6aba3524f7c28fee90535e692d75d60f0930316f79f4bb6cb3f63c593a95387330d5b28022e30fbab9b975bb5c715ad187cc2bae5ed704191f621ca9f86dc610262a8223f09d1676f2af9cfe9f87ec34954b8198f6e361ed4da7c83f341d01c913dac59e98655b5fda80e1b704019d6db4f19fe8c9f42a1075df38f59957e694e
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -484,7 +514,7 @@ MonoBehaviour:
     m_Bits: 507895
   m_TransparentLayerMask:
     serializedVersion: 2
-    m_Bits: 507895
+    m_Bits: 507831
   m_DefaultStencilState:
     overrideStencilState: 0
     stencilReference: 1
@@ -627,6 +657,41 @@ MonoBehaviour:
       normalBlend: 1
   m_CopyDepthPS: {fileID: 4800000, guid: d6dae50ee9e1bfa4db75f19f99355220, type: 3}
   m_DBufferClear: {fileID: 4800000, guid: f056d8bd2a1c7e44e9729144b4c70395, type: 3}
+--- !u!114 &5650186387430830941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62c9c65cf3354c93be831c8bc075510, type: 3}
+  m_Name: ScreenSpaceAmbientOcclusion
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  m_Settings:
+    AOMethod: 0
+    Downsample: 0
+    AfterOpaque: 0
+    Source: 1
+    NormalSamples: 1
+    Intensity: 3
+    DirectLightingStrength: 1
+    Radius: 0.035
+    Samples: 0
+    BlurQuality: 0
+    Falloff: 100
+    SampleCount: -1
+  m_BlueNoise256Textures:
+  - {fileID: 2800000, guid: 36f118343fc974119bee3d09e2111500, type: 3}
+  - {fileID: 2800000, guid: 4b7b083e6b6734e8bb2838b0b50a0bc8, type: 3}
+  - {fileID: 2800000, guid: c06cc21c692f94f5fb5206247191eeee, type: 3}
+  - {fileID: 2800000, guid: cb76dd40fa7654f9587f6a344f125c9a, type: 3}
+  - {fileID: 2800000, guid: e32226222ff144b24bf3a5a451de54bc, type: 3}
+  - {fileID: 2800000, guid: 3302065f671a8450b82c9ddf07426f3a, type: 3}
+  - {fileID: 2800000, guid: 56a77a3e8d64f47b6afe9e3c95cb57d5, type: 3}
+  m_Shader: {fileID: 4800000, guid: 0849e84e3d62649e8882e9d6f056a017, type: 3}
 --- !u!114 &8027614698455345250
 MonoBehaviour:
   m_ObjectHideFlags: 0

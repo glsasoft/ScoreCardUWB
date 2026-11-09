@@ -24,6 +24,12 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Body"
         [SubEnum(RenderStateGroup, RGBA, 15, RGB, 14)]_ColorMask("颜色通道", Float) = 15
         [Sub(RenderStateGroup)]_ExtraThickOutlineStencilID ("模板 ID", Range (0, 255)) = 199
 
+        // 方向光染色：让角色跟随主方向光的颜色，和空气透视雾统一氛围。
+        // 用 keyword 开关，关掉时整段代码被剥离，不产生任何指令。
+        [Main(SunTintGroup,_,off,off)]_SunTintGroup("方向光染色", Float) = 0
+        [SubToggle(SunTintGroup, _SUNTINT)]_SunTintEnable("受方向光影响", Float) = 0
+        [Sub(SunTintGroup)]_SunTintAmount("影响程度", Range(0,1)) = 0.5
+
         [Main(TextureGroup,_,on,off)]_TextureGroup("主贴图", Float) = 0
         [Sub(TextureGroup)][MainTexture]_BaseMap("主贴图", 2D) = "white" {}
         [Sub(TextureGroup)][HDR][MainColor]_BaseColor("基础颜色", Color) = (1,1,1,1)
@@ -301,15 +307,27 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Body"
         // EnableDepthTextureRimLightAndShadow
         [HideInInspector]_NiloToonEnableDepthTextureRimLightAndShadow("NiloToon启用深度纹理边缘光和阴影", Float) = 0
 
+        // 受击闪白（独立一层菲涅尔，跟角色边缘光分开）
+        [Main(HitFlashGroup,_,off,off)]_HitFlashGroup("受击闪白", Float) = 0
+        [Sub(HitFlashGroup)][HDR]_HitFlashColor("闪白颜色", Color) = (0.2216981,0.9486833,1,1)
+        [Sub(HitFlashGroup)]_HitFlashIntensity("闪白强度", Range(0,10)) = 0
+        [Sub(HitFlashGroup)]_HitFlashPower("闪白菲涅尔指数", Range(0.1,16)) = 2
+
         // dither fadeout / dissolve
         [Main(DissolveGroup,_,off,off)]_DissolveGroup("溶解", Float) = 0
-        [HideInInspector]_DissolveAmount("溶解程度", Range(0,1)) = 0
+        [SubToggle(DissolveGroup, _NILOTOON_DISSOLVE)]_EnableDissolve("启用溶解", Float) = 0
+        [Sub(DissolveGroup)]_DissolveAmount("溶解程度", Range(0,1)) = 0
+        [Sub(DissolveGroup)]_DissolveMinY("溶解高度下限 (物体Y)", Float) = 0
+        [Sub(DissolveGroup)]_DissolveMaxY("溶解高度上限 (物体Y)", Float) = 1.515
+        [Sub(DissolveGroup)]_DissolveRootY("溶解基准世界Y", Float) = 0
         [HideInInspector]_DissolveThresholdMap("溶解阈值贴图", 2D) = "linearGrey" {}
-        [HideInInspector]_DissolveBorderRange("溶解边缘范围", Range(0,1)) = 0.02
-        [HideInInspector]_DissolveBorderTintColor("溶解边缘颜色", Color) = (0,4,4,1)
-        [HideInInspector]_DissolveTopBorderRange("溶解顶部范围", Float) = 1
-        [HideInInspector]_DissolveTopBorderTintColor("溶解顶部颜色", Color) = (1,1,1)
-        [Sub(DissolveGroup)]_DitherFadeoutAmount("抖动淡出", Range(0,1)) = 0.5
+        [Sub(DissolveGroup)]_DissolveBorderRange("溶解边缘范围", Range(0.01,1)) = 0.04
+        [Sub(DissolveGroup)][HDR]_DissolveBorderTintColor("溶解边缘颜色", Color) = (0,4,4,1)
+        [Sub(DissolveGroup)]_DissolveTopBorderRange("溶解顶部范围", Range(0.01,1)) = 0.02
+        [Sub(DissolveGroup)][HDR]_DissolveTopBorderTintColor("溶解顶部颜色", Color) = (1,1,1,0)
+        [Sub(DissolveGroup)]_DissolveEdgeDitherStrength("溶解边缘网点强度", Range(0,1)) = 0
+        [SubToggle(DissolveGroup, _NILOTOON_DITHER_FADEOUT)]_EnableDitherFadeout("启用全局网点", Float) = 0
+        [Sub(DissolveGroup)]_DitherFadeoutAmount("全局网点淡出", Range(0,1)) = 0
 
         // BaseMap Override
         [HideInInspector]_PerCharacterBaseMapOverrideAmount("角色基础贴图覆盖量", Range(0,1)) = 0
@@ -329,11 +347,6 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Body"
         [HideInInspector][Enum(UnityEngine.Rendering.CompareFunction)] _StencilComp ("Stencil Comparison", Int) = 8
         [HideInInspector][Enum(UnityEngine.Rendering.StencilOp)] _StencilOp ("Stencil Operation", Int) = 0
 
-        //粗描边
-        [HideInInspector]_ThickOutWidth("粗描边宽度", Float) = 2
-        [HideInInspector][HDR]_ThickOutColor("粗描边颜色", Color) = (1,1,1,1)
-        [HideInInspector]_ThickOutAlphaHeight("粗描边Alpha高度", Float) = 1
-
         [HideInInspector]_LightDirFromCameraDir("光照方向来自相机方向", Int) = 0
         [HideInInspector]_LightDirFromCameraDirOffSet("光照方向来自相机方向偏移", Vector) = (0,0,0,0)
 
@@ -350,7 +363,7 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Body"
             "RenderType"="Opaque"
             "UniversalMaterialType" = "Lit"
             "IgnoreProjector" = "True"
-            "Queue"="Geometry-2"
+            "Queue"="Geometry"
         }
         LOD 300
         HLSLINCLUDE
@@ -382,16 +395,6 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Body"
             {
                 // "LightMode" = "UniversalPipeline"
             }
-            Stencil
-            {
-                Ref 190
-               // Comp Greater // passing depth test = passing stencil
-
-                // Ref 225
-                // Comp NotEqual // passing depth test = passing stencil
-
-                Pass replace // replace means write
-            }
 
             // render state
             Cull [_Cull]
@@ -422,6 +425,7 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Body"
 
             #pragma shader_feature_local _NORMALMAP
              #pragma shader_feature_local_fragment _DEBUG
+            #pragma shader_feature_local _SUNTINT
 
             //#define ModelRenderer 1
             //  #pragma multi_compile_fragment _ _MAIN_LIGHT_SHADOWS_CASCADE
@@ -444,14 +448,16 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Body"
             Name "Outline"
             Tags
             {
-
-                "LightMode" = "NiloToonOutline" // 这里我们将"NiloToonOutline"设置为自定义通道的"LightMode"值，但它可以是任何字符串，只需选择一个你喜欢的
-
+                // 描边必须在所有不透明物体之后、天空盒之前统一绘制（独立的 RenderObjects pass）。
+                // 放进不透明队列会和薄物体（耳朵、布料边缘）的背面外扩互相穿模。
+                "LightMode" = "NiloToonOutline"
             }
 
             // 渲染状态
             // TODO: 我们应该找到一种方法来从第一个通道翻转Cull，而不是硬编码“Cull Front”
             Cull Front // 对于额外的通道挤出网格描边方法，必须使用Cull Front。
+            ZWrite On
+            ZTest LEqual
             ColorMask [_ColorMask]
            // ZTest Less
             /*Stencil
@@ -483,41 +489,6 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Body"
         }
 
 
-        Pass
-        {
-            Name "ThickOutline"
-            Tags
-            {
-                "LightMode" = "ThickOutline"
-            }
-
-         //   Blend SrcAlpha OneMinusSrcAlpha
-
-            
-            Stencil
-            {
-                Ref 190
-                Comp NotEqual // passing depth test = passing stencil
-
-                // Ref 225
-                // Comp NotEqual // passing depth test = passing stencil
-
-                Pass replace // replace means write
-            }
-
-
-
-            ZWrite On
-
-            HLSLPROGRAM
-            #pragma shader_feature_local _ALPHATEST_ON
-            #pragma vertex VertexShaderOutLine
-            #pragma fragment FragmentShaderOutLine
-            #include "XHHYCharacter\XHHYCharacter_Input.hlsl"
-            #include "XHHYCharacter/XHHYCharacter_ThickOutlinePass.hlsl"
-            ENDHLSL
-
-        }
 
 
 
@@ -573,6 +544,32 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Body"
             #pragma shader_feature_local _ALPHATEST_ON
             #pragma vertex VertexShaderDepthOnlyOrDepthNormal
             #pragma fragment BaseColorAlphaClipTest // we only need to do Clip(), no need color shading
+
+            #include "XHHYCharacter\XHHYCharacter_Input.hlsl"
+            #include "XHHYCharacter\XHHYCharacter_DepthOnlyOrDepthNormalPass.hlsl"
+            ENDHLSL
+        }
+
+        Pass //"DepthNormals"
+        {
+            Name "DepthNormals"
+            Tags
+            {
+                "LightMode" = "DepthNormals"
+            }
+
+            // SSAO（Renderer Feature）要读深度法线图，角色所有部件都必须参与。
+            // 之前 Body 少了这个 pass，深度法线图里只有眼睛和脸有数据，
+            // 身体 / 头发 / 背心会被 SSAO 当成"没有表面"，AO 结果不对。
+            ZWrite On
+            ZTest LEqual
+            Cull [_Cull]
+
+            HLSLPROGRAM
+            #pragma target 4.5
+            #pragma shader_feature_local _ALPHATEST_ON
+            #pragma vertex VertexShaderDepthOnlyOrDepthNormal
+            #pragma fragment BaseColorAlphaClipTest_AndDepthNormalColorOutput
 
             #include "XHHYCharacter\XHHYCharacter_Input.hlsl"
             #include "XHHYCharacter\XHHYCharacter_DepthOnlyOrDepthNormalPass.hlsl"

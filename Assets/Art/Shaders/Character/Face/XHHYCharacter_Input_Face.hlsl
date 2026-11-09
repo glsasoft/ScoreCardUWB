@@ -58,6 +58,9 @@ float depth : TEXCOORD6;
     half4 color : COLOR;
     // vertex color rgba, currently only for "control depth texture rimlight and shadow width by vertex color" or "debug shading"
 
+    // 溶解用：局部 Y 轴归一化高度（0 = 头顶，1 = 脚底）
+    half dissolveHeight : TEXCOORD9;
+
     // debug use
     //--------------------------------------------------------------------
     #if _NILOTOON_DEBUG_SHADING
@@ -90,7 +93,6 @@ SAMPLER(sampler_DecalMap);
 TEXTURE2D(_RampLightingTex);            
 
 sampler2D _FaceShadowGradientMap;
-sampler2D _FaceShadowGradientMaskMap;
 
 #if _NILOTOON_DISSOLVE //溶解
     sampler2D _DissolveThresholdMap;
@@ -168,11 +170,11 @@ half _ShadingGradeMapRemapEnd;
 float4 _FaceShadowGradientMapUVScaleOffset;
 float _DebugFaceShadowGradientMap;
 half _FaceShadowGradientIntensity;
-half _FaceShadowGradientResultSoftness;
-half4 _FaceShadowGradientMaskMapChannel;
 float _FaceShadowNoFollowThrLight;
 float _FaceShadowResult;
 float _FaceShadowRool;
+float _ShadowOffset;   // 面部阴影偏移（对应 MainRoleFace 的同名参数），默认 0.5 = 不偏移
+float _FaceShadowSmoothNdotL;   // 面部阴影软阈值平滑度（SigmoidSharp 的 sharp 系数）
 
 half _OverrideByFaceShadowTintColor;
 half3 _FaceShadowTintColor;
@@ -279,6 +281,11 @@ half3 _PerCharEffectRimColor;
 half _PerCharEffectRimSharpnessPower;
 half _PerCharEffectDesaturatePercentage;
 
+// 受击闪白：独立一层菲涅尔，不跟角色边缘光共用参数
+half3 _HitFlashColor;
+half _HitFlashIntensity;
+half _HitFlashPower;
+
 // skin
 //float _IsSkin;
 half4 _SkinMaskMapChannelMask;
@@ -318,6 +325,12 @@ float _DissolveBorderRange;
 half4 _DissolveBorderTintColor;
 float _DissolveTopBorderRange;
 half4 _DissolveTopBorderTintColor;
+float _DissolveMinY;
+float _DissolveMaxY;
+float _DissolveRootY;
+float _DissolveEdgeDitherStrength;
+float _EnableDissolve;
+float _EnableDitherFadeout;
 
 
 // per character basemap override
@@ -329,9 +342,6 @@ half3 _PerCharacterBaseMapOverrideTintColor;
 
 float3 _CenterPointPosition;
 
-float _ThickOutWidth;
-float4 _ThickOutColor;
-float _ThickOutAlphaHeight;
 int _LightDirFromCameraDir;
 float3 _LightDirFromCameraDirOffSet;
 float3 _LightDir;
@@ -339,6 +349,13 @@ float3 _LightDir;
 float4 _M_CombinedRotation0,_M_CombinedRotation1,_M_CombinedRotation2;
 half _LightMode;
 CBUFFER_END
+
+// 把物体空间 Y 转成溶解高度：0 = 头顶（先消失），1 = 脚底（最后消失）。
+half GetDissolveHeightOS(float positionOSY)
+{
+    half h = saturate((positionOSY - _DissolveMinY) / max(_DissolveMaxY - _DissolveMinY, 1e-5));
+    return 1.0 - h;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 全局性的制服
@@ -536,8 +553,10 @@ half4 GetLightingNormalWS_FaceArea(half3 normalWS, float3 positionWS, float2 uv)
     half3 resultNormalWS = normalWS; // 默认使用原始的normalWS
     half isFaceArea = 1;             
 
-    // 方法A：通过强迫脸部法线成为脸部的前进方向矢量
-    half3 flatDirectionFixFaceNormalWS = _FaceForwardDirection;
+    // 方法A：通过强迫脸部法线成为脸部的前进方向矢量。
+    // _FaceForwardDirection 存的是【模型本地空间】方向（默认 (0,0,1) = 模型本地 +Z 朝前），
+    // 这里转到世界空间，角色怎么转都自动跟着走，不需要外部每帧喂世界空间向量。
+    half3 flatDirectionFixFaceNormalWS = normalize(TransformObjectToWorldDir(_FaceForwardDirection));
 
     // 方法B：通过强制脸部法线成为球体代理法线，使用_HeadBonePositionWS作为球体代理中心。
     half3 proxySphereFixFaceNormalWS = positionWS - _HeadBonePositionWS;

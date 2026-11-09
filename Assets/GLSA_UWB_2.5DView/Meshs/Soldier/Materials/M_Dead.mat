@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: M_Dead
+  m_Shader: {fileID: 4800000, guid: e43418a03e9891e43b3469f9f7ce32a6, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _DISSOLVEENABLED_ON
+  - _DISTORTENABLED_ON
+  - _FRESNELENABLED_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: 5e6925315e354e34d824c78289062efd, type: 3}
+        m_Scale: {x: 0.5, y: 0.1}
+        m_Offset: {x: 0, y: 0}
+    - _DissolveMap:
+        m_Texture: {fileID: 2800000, guid: 0748c62a3e5183a4a8db4c056482e7b4, type: 3}
+        m_Scale: {x: 3, y: 3}
+        m_Offset: {x: 0, y: 0}
+    - _DistortMap:
+        m_Texture: {fileID: 2800000, guid: 75c8d799ae5badc468ec98aeefd67f0d, type: 3}
+        m_Scale: {x: 0.1, y: 0.7}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _BaseAlpha: 1
+    - _Cull: 2
+    - _DepthFadeDistance: 1
+    - _DepthFadeRange: 2
+    - _DissolveAmount: 0.751
+    - _DissolveEdgeWidth: 0
+    - _DissolveEnabled: 1
+    - _DistortEnabled: 1
+    - _DistortSpeed: 1
+    - _DistortSpeedX: 0.05
+    - _DistortSpeedY: -0.02
+    - _DistortStrength: 0.216
+    - _FlowSpeed: 1
+    - _FlowSpeedX: 0
+    - _FlowSpeedY: 0.3
+    - _FresnelEnabled: 1
+    - _RimIntensity: 2.96
+    - _RimPower: 0.56
+    - _UseRT: 0
+    m_Colors:
+    - _BaseColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 0.5019608}
+    - _DeadColor: {r: 1.446, g: 1.446, b: 1.446, a: 1}
+    - _DissolveEdgeColor: {r: 0, g: 0, b: 0, a: 0}
+    - _FlowDir: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _GhostColor: {r: 0.603, g: 0.603, b: 0.603, a: 0.2}
+    - _RimColor: {r: 0, g: 0.8273995, b: 1, a: 1}
+  m_BuildTextureStacks: []
