@@ -363,7 +363,7 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Body"
             "RenderType"="Opaque"
             "UniversalMaterialType" = "Lit"
             "IgnoreProjector" = "True"
-            "Queue"="Geometry-2"
+            "Queue"="Geometry"
         }
         LOD 300
         HLSLINCLUDE
@@ -448,14 +448,16 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Body"
             Name "Outline"
             Tags
             {
-
+                // 描边必须在所有不透明物体之后、天空盒之前统一绘制（独立的 RenderObjects pass）。
+                // 放进不透明队列会和薄物体（耳朵、布料边缘）的背面外扩互相穿模。
                 "LightMode" = "NiloToonOutline"
-
             }
 
             // 渲染状态
             // TODO: 我们应该找到一种方法来从第一个通道翻转Cull，而不是硬编码“Cull Front”
             Cull Front // 对于额外的通道挤出网格描边方法，必须使用Cull Front。
+            ZWrite On
+            ZTest LEqual
             ColorMask [_ColorMask]
            // ZTest Less
             /*Stencil

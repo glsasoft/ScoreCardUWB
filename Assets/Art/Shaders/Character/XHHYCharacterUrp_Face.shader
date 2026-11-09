@@ -184,7 +184,7 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Face"
             "RenderType"="Opaque"
             "UniversalMaterialType" = "Lit"
             "IgnoreProjector" = "True"
-            "Queue"="Geometry-2"
+            "Queue"="Geometry"
         }
         LOD 300
         HLSLINCLUDE
@@ -246,7 +246,6 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Face"
         Pass//"test"
         {
             Name "Facetest"
-          
 
             // render state
             Cull [_Cull]
@@ -294,6 +293,7 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Face"
             Cull Front
             ColorMask [_ColorMask]
             ZTest Less
+            ZWrite On
             Stencil
             {
                 Ref [_ExtraThickOutlineStencilID]
@@ -459,7 +459,7 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Face"
             "RenderType"="Opaque"
             "UniversalMaterialType" = "Lit"
             "IgnoreProjector" = "True"
-            "Queue"="Geometry-2"
+            "Queue"="Geometry"
         }
         LOD 200
         HLSLINCLUDE
@@ -663,6 +663,7 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Face"
             Cull Front
             ColorMask [_ColorMask]
             ZTest Less
+            ZWrite On
             Stencil
             {
                 Ref [_ExtraThickOutlineStencilID]

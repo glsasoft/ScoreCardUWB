@@ -111,7 +111,7 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Eye"
             "RenderType"="Opaque"
             "UniversalMaterialType" = "Lit"
             "IgnoreProjector" = "True"
-            "Queue"="Geometry-3"
+            "Queue"="Geometry"
         }
 
         HLSLINCLUDE

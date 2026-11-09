@@ -143,8 +143,8 @@ Material:
     - _DissolveBorderRange: 0.04
     - _DissolveEdgeDitherStrength: 0
     - _DissolveGroup: 0
-    - _DissolveMaxY: 1.538881
-    - _DissolveMinY: -0.20976698
+    - _DissolveMaxY: 1.515
+    - _DissolveMinY: 0
     - _DissolveRootY: 0
     - _DissolveTopBorderRange: 0.02
     - _DitherFadeoutAmount: 0
@@ -271,7 +271,7 @@ Material:
     - _CharacterBoundCenterPosWS: {r: 0, g: 0, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DepthTexRimLightTintColor: {r: 1, g: 1, b: 1, a: 1}
-    - _DissolveBorderTintColor: {r: 0, g: 5.287461, b: 5.3403125, a: 1}
+    - _DissolveBorderTintColor: {r: 0, g: 4, b: 4, a: 1}
     - _DissolveTopBorderTintColor: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionMapSingleChannelMask: {r: 0, g: 1, b: 0, a: 0}

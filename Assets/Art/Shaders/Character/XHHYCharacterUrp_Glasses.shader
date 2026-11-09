@@ -47,6 +47,7 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Glasses"
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/GlobalSamplers.hlsl"
+            #include "Assets/Graphics/RenderFeature/AerialFog/AerialFogCommon.hlsl"
 
             TEXTURE2D(_BaseMap);
             SAMPLER(sampler_BaseMap);
@@ -117,6 +118,11 @@ Shader "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Glasses"
                 half streak = max(spec.r, max(spec.g, spec.b));
                 half3 rgb = baseMap.rgb * _BaseColor.rgb + spec;
                 half alpha = saturate(baseMap.a * _BaseColor.a + streak);
+
+                // 透明物画在屏幕空间雾之后，本来整片免疫；这里用自己的世界坐标补一遍，
+                // 远的镜片/面罩才能和周围一起变淡。
+                rgb = AerialFogApply(rgb, input.positionWS);
+
                 return half4(rgb, alpha);
             }
             ENDHLSL
