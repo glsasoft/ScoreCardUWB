@@ -5002,7 +5002,6 @@ GameObject:
   - component: {fileID: 1454933942813098493}
   - component: {fileID: 1693814887583310432}
   - component: {fileID: 1350290048953572710}
-  - component: {fileID: 8440216396192652642}
   m_Layer: 0
   m_Name: Lizi
   m_TagString: Untagged
@@ -9903,28 +9902,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   scaleType: 0
   useShape: 0
---- !u!114 &8440216396192652642
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1521758267874303681}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8aa87937116feb41b82b0ab99b5f943, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useNewSystem: 0
-  useCollide: 0
-  triggerType: 0
-  size: 0
-  subParticleSystems:
-  - {fileID: 0}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  isColliderLayer: 0
 --- !u!1 &3558867492998488552
 GameObject:
   m_ObjectHideFlags: 0
@@ -14936,7 +14913,6 @@ GameObject:
   - component: {fileID: 6067883674712232248}
   - component: {fileID: 679157096899172044}
   - component: {fileID: 8986616079506822537}
-  - component: {fileID: 8102437731133991750}
   m_Layer: 0
   m_Name: Ring
   m_TagString: Untagged
@@ -19909,28 +19885,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   scaleType: 0
   useShape: 0
---- !u!114 &8102437731133991750
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3704061964568698605}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8aa87937116feb41b82b0ab99b5f943, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useNewSystem: 0
-  useCollide: 0
-  triggerType: 0
-  size: 0
-  subParticleSystems:
-  - {fileID: 0}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  isColliderLayer: 0
 --- !u!1 &4116363110968823985
 GameObject:
   m_ObjectHideFlags: 0
@@ -19946,7 +19900,6 @@ GameObject:
   - component: {fileID: 5402970494693498317}
   - component: {fileID: 5219207865739710736}
   - component: {fileID: 3249110387113654772}
-  - component: {fileID: 5632448928584666178}
   m_Layer: 0
   m_Name: Ring02
   m_TagString: Untagged
@@ -24919,28 +24872,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   scaleType: 0
   useShape: 0
---- !u!114 &5632448928584666178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4116363110968823985}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8aa87937116feb41b82b0ab99b5f943, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useNewSystem: 0
-  useCollide: 0
-  triggerType: 0
-  size: 0
-  subParticleSystems:
-  - {fileID: 0}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  isColliderLayer: 0
 --- !u!1 &5079459872439628049
 GameObject:
   m_ObjectHideFlags: 0
@@ -24956,7 +24887,6 @@ GameObject:
   - component: {fileID: 8883973182943820747}
   - component: {fileID: 2892708754213760796}
   - component: {fileID: 1136722684869011794}
-  - component: {fileID: 8290249864995149091}
   m_Layer: 0
   m_Name: Trail
   m_TagString: Untagged
@@ -29934,28 +29864,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   scaleType: 0
   useShape: 0
---- !u!114 &8290249864995149091
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5079459872439628049}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8aa87937116feb41b82b0ab99b5f943, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useNewSystem: 0
-  useCollide: 0
-  triggerType: 0
-  size: 0
-  subParticleSystems:
-  - {fileID: 0}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  isColliderLayer: 0
 --- !u!1 &5174638001571471811
 GameObject:
   m_ObjectHideFlags: 0
@@ -35027,7 +34935,6 @@ GameObject:
   - component: {fileID: 1401853862804391530}
   - component: {fileID: 8643769498309431144}
   - component: {fileID: 6036609699260219597}
-  - component: {fileID: 2557528253422471863}
   m_Layer: 0
   m_Name: Alp
   m_TagString: Untagged
@@ -40000,28 +39907,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   scaleType: 0
   useShape: 0
---- !u!114 &2557528253422471863
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5768779152186285872}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8aa87937116feb41b82b0ab99b5f943, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useNewSystem: 0
-  useCollide: 0
-  triggerType: 0
-  size: 0
-  subParticleSystems:
-  - {fileID: 0}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  isColliderLayer: 0
 --- !u!1 &6961561315854233547
 GameObject:
   m_ObjectHideFlags: 0
@@ -40037,7 +39922,6 @@ GameObject:
   - component: {fileID: 3559440962649918929}
   - component: {fileID: 2530362462406544993}
   - component: {fileID: 5775210633240507176}
-  - component: {fileID: 1998013292576823475}
   m_Layer: 0
   m_Name: RingWenli
   m_TagString: Untagged
@@ -45010,25 +44894,3 @@ MonoBehaviour:
     m_RotationOrder: 4
   scaleType: 0
   useShape: 0
---- !u!114 &1998013292576823475
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6961561315854233547}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8aa87937116feb41b82b0ab99b5f943, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useNewSystem: 0
-  useCollide: 0
-  triggerType: 0
-  size: 0
-  subParticleSystems:
-  - {fileID: 0}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  isColliderLayer: 0

@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 5384347498086556930}
   - component: {fileID: 2226243288927528019}
   - component: {fileID: 7383861005102045646}
-  - component: {fileID: 4315138422461529562}
   m_Layer: 0
   m_Name: Shot
   m_TagString: Untagged
@@ -4994,28 +4993,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   scaleType: 0
   useShape: 0
---- !u!114 &4315138422461529562
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 263820209149907524}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8aa87937116feb41b82b0ab99b5f943, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useNewSystem: 0
-  useCollide: 0
-  triggerType: 0
-  size: 0
-  subParticleSystems:
-  - {fileID: 0}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  isColliderLayer: 0
 --- !u!1 &593135560542370351
 GameObject:
   m_ObjectHideFlags: 0
@@ -15037,7 +15014,6 @@ GameObject:
   - component: {fileID: 8938706855911798240}
   - component: {fileID: 5072334316418032925}
   - component: {fileID: 2404693514768926332}
-  - component: {fileID: 4965590426869668726}
   m_Layer: 0
   m_Name: Red
   m_TagString: Untagged
@@ -20019,28 +19995,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   scaleType: 0
   useShape: 0
---- !u!114 &4965590426869668726
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1928773920840761744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8aa87937116feb41b82b0ab99b5f943, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useNewSystem: 0
-  useCollide: 0
-  triggerType: 0
-  size: 0
-  subParticleSystems:
-  - {fileID: 0}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  isColliderLayer: 0
 --- !u!1 &2293303947521702306
 GameObject:
   m_ObjectHideFlags: 0
@@ -49944,7 +49898,6 @@ GameObject:
   - component: {fileID: 4064576514607315441}
   - component: {fileID: 6266751266144115729}
   - component: {fileID: 1196736692939392445}
-  - component: {fileID: 7583718433625746600}
   m_Layer: 0
   m_Name: Ring_Main
   m_TagString: Untagged
@@ -54917,28 +54870,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   scaleType: 0
   useShape: 0
---- !u!114 &7583718433625746600
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8163406376575390335}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8aa87937116feb41b82b0ab99b5f943, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useNewSystem: 0
-  useCollide: 0
-  triggerType: 0
-  size: 0
-  subParticleSystems:
-  - {fileID: 0}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  isColliderLayer: 0
 --- !u!1 &9116425074975019289
 GameObject:
   m_ObjectHideFlags: 0
