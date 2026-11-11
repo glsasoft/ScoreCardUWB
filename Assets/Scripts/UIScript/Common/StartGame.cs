@@ -23,8 +23,6 @@ public static class StartGame
 
         await TableManager.S.LoadTable();
 
-        ResLoader loader = new ResLoader();
-
         UIModule.S.OpenPanel(LetsPiu.UIDefine.UIID.LoginPanel, pnl =>
         {
             UniTask.Post(async () => 

@@ -13,8 +13,6 @@ namespace LetsPiu.UI.UIScript.SceneLoad.UIPnlScript
     /// </summary>
     public class DefaultLoadingPanel : LoadPanelBase
     {
-        const string VideoFailTip = "视频下载失败，请检查网络后重新打开应用";
-
         [SerializeField] TMP_Text m_ProgressTip;
 
         public override void OnOpen(object[] args)
@@ -25,20 +23,7 @@ namespace LetsPiu.UI.UIScript.SceneLoad.UIPnlScript
 
         public override async UniTask<LoadType> OnDataReceiveSuccess()
         {
-            ShowTip("正在检查视频资源...", Color.white);
-            bool ready = await RemoteVideoStore.EnsureReady((progress, text) =>
-            {
-                SetSliderAmount(progress * m_DataSliderMax);
-                ShowTip(text, Color.white);
-            });
-            if (!ready)
-            {
-                ShowTip(VideoFailTip, new Color(1f, 0.35f, 0.35f));
-                return LoadType.LoadSeverDataFail;
-            }
-
             ShowTip("正在同步服务器时间...", Color.white);
-            Debug.Log("[DefaultLoadingPanel] 视频准备完成，开始同步服务器时间");
             bool synced = await ServerTimeSync.SyncAsync();
             if (!synced)
             {

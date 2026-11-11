@@ -2,6 +2,7 @@ using LetsPiu.UIDefine;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using LetsPiu.UI.UIScript.GamesHallScripts.Common.Logic;
 using LetsPiu.UI.UIScript.GamesHallScripts.Offline.Logic;
 using LetsPiu.UI.UIScript.LoginScripts.Logic;
 using LetsPiu.UI.UIScript.ScanQrCode.Logic;
@@ -29,6 +30,7 @@ namespace LetsPiu
             AddPanelData(UIID.AppUpdatePanel, typeof(AppUpdatePanel), "AppUpdatePanel");
 
             #region 游戏大厅页面定义
+            AddPanelData(UIID.HomePagePanel, typeof(HomePageLogic), "HomePagePanel");
             AddPanelData(UIID.OfflinePage, typeof(OfflinePageLogic), "OfflinePage");
             #endregion
 

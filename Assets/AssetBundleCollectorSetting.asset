@@ -114,6 +114,30 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
+      - CollectPath: Assets/Package_Initial/PanleUI
+        CollectorGUID: 0afc92dda0d7a38458faf4ab33fdc36e
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectPrefab
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Package_Offline/PanleUI
+        CollectorGUID: 5379199c7ea574546bf2a0b84d528b54
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectPrefab
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Package_Offline/Scene
+        CollectorGUID: 0a29b47b87745d047b73c09e1f5517ab
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectScene
+        AssetTags: 
+        UserData: 
     - GroupName: Art
       GroupDesc: "\u6240\u6709\u7F8E\u672F\u8D44\u6E90"
       AssetTags: 
