@@ -116,7 +116,7 @@ Material:
     - _Distortion_Mask_Negate: 0.125
     - _Emission_VS_Enabled: 0
     - _FinalOpacityPower: 2
-    - _FinalPower: 32
+    - _FinalPower: 12.8
     - _Final_Opacity_Exp_Reversed: 1
     - _Final_UV_Rotation: 0
     - _Final_UV_U_Scale: 1
@@ -159,5 +159,5 @@ Material:
     - _Distortion_Scroll_Speed: {r: 0, g: -0.5625, b: 0, a: 0}
     - _Distortion_UV_Scale: {r: 5, g: 0.25, b: 0, a: 0}
     - _FinalColor: {r: 1, g: 1, b: 1, a: 1}
-    - _RampColorTint: {r: 0.345098, g: 0.5019512, b: 1, a: 1}
+    - _RampColorTint: {r: 0.44609153, g: 0.4723645, b: 1, a: 1}
   m_BuildTextureStacks: []

@@ -146,7 +146,7 @@ Material:
     - _Distortion_Scroll_Speed: {r: 0, g: -0.5625, b: 0, a: 0}
     - _Distortion_UV_Scale: {r: 5, g: 0.25, b: 0, a: 0}
     - _FinalColor: {r: 1, g: 1, b: 1, a: 1}
-    - _RampColorTint: {r: 0.4666667, g: 0.4987226, b: 1, a: 1}
+    - _RampColorTint: {r: 0.24123985, g: 0.28587285, b: 1, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &3450584947638215253
 MonoBehaviour:
