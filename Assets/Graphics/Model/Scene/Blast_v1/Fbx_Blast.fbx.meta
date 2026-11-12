@@ -1,0 +1,110 @@
+fileFormatVersion: 2
+guid: b30e86dad2eb42d4c9e15503e868bf3b
+ModelImporter:
+  serializedVersion: 22200
+  internalIDToNameTable: []
+  externalObjects: {}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties:
+    - '#BAKERY{"meshName":["zlgd","zjzzjjg_low_2_2","zjzzjjg_low_2","zjzzjjg_low_1","zjzjx_low_2_2","zjzjx_low_2","zjzjx_low_1","zjz_7_1","zjz2_3_1_20","zjz2_3_1_19","zjz2_3_1_18","zjz2_3_1_17","zjz2_3_1_16","zjz2_3_1_15","zjz2_3_1_14","zjz2_3_1_13","zjz2_3_1_12","zjz2_3_1_11","zjz2_3_1_10","zjz2_3_1_9","zjz2_3_1_8","zjz2_3_1_7","zjz2_3_1_6","zjz2_3_1_5","zjz2_3_1_4","zjz2_3_1_3","zjz2_3_1_2","zjz2_3_1_1","YT_LOW","XXX_2","xml","xiaoboxlow__11","xiaoboxlow__10","xiaoboxlow__9","xiaoboxlow__8","xiaoboxlow__7","xiaoboxlow__6","xiaoboxlow__5","xiaoboxlow__4","xiaoboxlow__3","xiaoboxlow__2","xiaoboxlow__1","sm_ground_wq_5","sm_ground_wq_4","sm_ground_wq_3","sm_ground_wq_2","sm_ground_wq","sm_zawu_10","sm_zawu_9_2","sm_zawu_9","sm_zawu_8_2","sm_zawu_8","sm_zawu_7_3","sm_zawu_7_2","sm_zawu_7","sm_zawu_6_4","sm_zawu_6_3","sm_zawu_6_2","sm_zawu_6","sm_zawu_5_4","sm_zawu_5_3","sm_zawu_5_2","sm_zawu_5","sm_zawu_4_4","sm_zawu_4_3","sm_zawu_4_2","sm_zawu_4","sm_zawu_3_4","sm_zawu_3_3","sm_zawu_3_2","sm_zawu_3","sm_zawu_2_7","sm_zawu_2_6","sm_zawu_2_5","sm_zawu_2_4","sm_zawu_2_3","sm_zawu_2_2_2","sm_zawu_2_2","sm_zawu_1_7","sm_zawu_1_6","sm_zawu_1_5","sm_zawu_1_4","sm_zawu_1_3","sm_zawu_1_2","sm_zawu_1","sm_zawu","sm_hp_7","sm_hp_6","sm_hp_5","sm_hp_4","sm_hp_3_3","sm_hp_3_2","sm_hp_3","sm_hp_2_4","sm_hp_2_3","sm_hp_2_2","sm_hp_2","sm_hp_1_4","sm_hp_1_3","sm_hp_1_2","sm_hp_1","sm_ground_xz_2","sm_ground_1_4","sm_ground_9","sm_ground_8","sm_ground_7","sm_ground_6","sm_ground_5","sm_ground_2","boxlow__41","boxlow__40","boxlow__39","boxlow__38","boxlow__37","boxlow__36","boxlow__35","boxlow__34","boxlow__33","boxlow__32","boxlow__31","boxlow__30","boxlow__29","boxlow__28","boxlow__27","boxlow__26","boxlow__25","boxlow__24","boxlow__23","boxlow__22","boxlow__21","boxlow__20","boxlow__19","boxlow__18","boxlow__17","boxlow__16","boxlow__15","boxlow__14","boxlow__13","boxlow__12","boxlow__11","boxlow__10","boxlow__9","boxlow__8","boxlow__7","boxlow__6","boxlow__5","boxlow__4","boxlow__3","boxlow__2","boxlow__1_2","boxlow__1","L","jingguan_1","jingguan","csd","bgd_15","bgd_14","bgd_13","bgd_12","bgd_11","bgd_10","bgd_9","bgd_8","bgd_7","bgd_6","bgd_5","bgd_4","bgd_3","bgd_2","bgd_1","a_8","a_7","a_5","a_4","a_3","a_2","a_1"],"padding":[4,13,14,16,22,22,12,2,43,29,35,25,17,29,7,10,24,14,25,16,8,12,14,24,12,4,4,3,13,2,2,70,70,70,70,70,70,70,70,70,70,70,10,5,4,4,14,86,59,111,159,182,33,182,58,47,44,58,19,57,39,41,75,123,29,75,40,106,137,45,22,57,24,49,22,47,70,132,25,159,20,46,16,82,45,8,31,20,36,20,32,27,36,26,26,40,36,26,36,20,26,13,13,10,11,6,12,7,1,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,39,23,39,39,39,39,39,39,39,39,39,39,39,39,23,39,39,39,39,39,3,8,10,3,8,7,15,7,5,6,5,4,18,17,5,7,4,5,4,6,6,4,10,6,13,4],"unwrapper":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}'
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 1
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
