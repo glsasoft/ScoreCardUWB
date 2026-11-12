@@ -8805,8 +8805,23 @@ ParticleSystem:
     primitives: []
   SubModule:
     serializedVersion: 2
-    enabled: 0
-    subEmitters: []
+    enabled: 1
+    subEmitters:
+    - serializedVersion: 3
+      emitter: {fileID: 713142728439182397}
+      type: 0
+      properties: 0
+      emitProbability: 1
+    - serializedVersion: 3
+      emitter: {fileID: 2479677719750230408}
+      type: 0
+      properties: 0
+      emitProbability: 1
+    - serializedVersion: 3
+      emitter: {fileID: 5085056932812436588}
+      type: 0
+      properties: 0
+      emitProbability: 1
   LightsModule:
     enabled: 0
     ratio: 0
@@ -28758,8 +28773,13 @@ ParticleSystem:
     - {fileID: 0}
   SubModule:
     serializedVersion: 2
-    enabled: 0
-    subEmitters: []
+    enabled: 1
+    subEmitters:
+    - serializedVersion: 3
+      emitter: {fileID: 3176815339605830175}
+      type: 0
+      properties: 0
+      emitProbability: 1
   LightsModule:
     enabled: 0
     ratio: 0

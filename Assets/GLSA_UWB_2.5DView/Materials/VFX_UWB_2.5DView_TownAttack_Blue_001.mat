@@ -190,7 +190,7 @@ Material:
     - _FinalOpacityExp: 4
     - _FinalOpacityExp1: 1.125
     - _FinalOpacityPower: 1
-    - _FinalPower: 25
+    - _FinalPower: 6.3
     - _MainMaskExp: 1
     - _MainMaskScaleU: 1
     - _MainMaskScaleV: 1

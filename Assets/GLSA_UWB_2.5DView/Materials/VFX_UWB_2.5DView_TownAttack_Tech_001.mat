@@ -187,10 +187,10 @@ Material:
     - _Distortion_Random_Offset_Switch: 0
     - _EMISSIONVERTEXSTREAMENABLED: 1
     - _FinalOpacityDoubleAoLSwitch: 0
-    - _FinalOpacityExp: 4
+    - _FinalOpacityExp: 2.44
     - _FinalOpacityExp1: 1.125
     - _FinalOpacityPower: 1
-    - _FinalPower: 20
+    - _FinalPower: 11.9
     - _MainMaskExp: 1
     - _MainMaskScaleU: 1
     - _MainMaskScaleV: 1

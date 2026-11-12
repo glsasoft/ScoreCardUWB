@@ -274,7 +274,7 @@ Material:
     m_Colors:
     - _BackFaceTintColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _CenterPointPosition: {r: 2.22, g: 0, b: 1.05, a: 0}
+    - _CenterPointPosition: {r: 0, g: 0, b: 100, a: 0}
     - _CharacterBoundCenterPosWS: {r: 0, g: 0, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DepthTexRimLightTintColor: {r: 1, g: 1, b: 1, a: 1}
