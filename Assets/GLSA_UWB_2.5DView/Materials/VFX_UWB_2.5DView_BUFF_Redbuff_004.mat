@@ -102,8 +102,8 @@ Material:
     - _Distortion_Mask_Enabled: 1
     - _Distortion_Mask_Negate: 0.25
     - _Emission_VS_Enabled: 0
-    - _FinalOpacityPower: 1
-    - _FinalPower: 40
+    - _FinalOpacityPower: 0.91
+    - _FinalPower: 7.9
     - _Final_Opacity_Exp_Reversed: 1.25
     - _Final_UV_Rotation: 0
     - _Final_UV_U_Scale: 1

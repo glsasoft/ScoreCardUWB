@@ -93,7 +93,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Ramp:
-        m_Texture: {fileID: 2800000, guid: 3e0f550e3bcd41a480c2149d17639b96, type: 3}
+        m_Texture: {fileID: 2800000, guid: 77035129325fdea418297a36deccaf3d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SecondMask:
@@ -266,8 +266,8 @@ Material:
     m_Colors:
     - _CustomColorMaskChannels: {r: 1, g: 0, b: 0, a: 0}
     - _CustomColorMaskChannels1: {r: 1, g: 0, b: 0, a: 0}
-    - _FinalColor: {r: 0.48584908, g: 0.6327495, b: 1, a: 1}
+    - _FinalColor: {r: 1, g: 0.89353096, b: 0.89759463, a: 1}
     - _MainMaskChannelsMultiply: {r: 1, g: 0, b: 0, a: 0}
     - _Noise01ScrollSpeedUV: {r: 1, g: 1, b: 0, a: 0}
-    - _RampColorTint: {r: 1, g: 1, b: 1, a: 1}
+    - _RampColorTint: {r: 1, g: 0.92587596, b: 0.92587596, a: 1}
   m_BuildTextureStacks: []
