@@ -3,81 +3,81 @@ Shader "Piu/Lit_Piu_TEST"
     Properties
     {
 
-        [Main(Preset, _, off, off)] _PresetGroup ("Surface Options", float) = 0
-        [Preset(Preset,XHHY_BlendModePreset)] _BlendMode2 ("Blend Mode Preset", float) = 0
-        [SubEnum(Preset, UnityEngine.Rendering.CullMode)] _Cull ("Cull", Float) = 1
-        [SubEnum(Preset, UnityEngine.Rendering.BlendMode)] _SrcBlend ("SrcBlend", Float) = 1
-        [SubEnum(Preset, UnityEngine.Rendering.BlendMode)] _DstBlend ("DstBlend", Float) = 0
-        [SubToggle(Preset)] _ZWrite ("ZWrite ", Float) = 1
-        [SubEnum(Preset, UnityEngine.Rendering.CompareFunction)] _ZTest ("ZTest", Float) = 4 // 4 is LEqual
-        [SubEnum(Preset, RGBA, 15, RGB, 14)] _ColorMask ("ColorMask", Float) = 15 // 15 is RGBA (binary 1111)
-         [SubToggle(Preset,_RECEIVE_SHADOWS_OFF)] _RECEIVE_SHADOWS_OFF ("关闭阴影 ", Float) = 0
+        [Main(Preset, _, off, off)] _PresetGroup ("表面选项", float) = 0
+        [Preset(Preset,XHHY_BlendModePreset)] _BlendMode2 ("混合模式预设", float) = 0
+        [SubEnum(Preset, UnityEngine.Rendering.CullMode)] _Cull ("剔除模式", Float) = 1
+        [SubEnum(Preset, UnityEngine.Rendering.BlendMode)] _SrcBlend ("源混合", Float) = 1
+        [SubEnum(Preset, UnityEngine.Rendering.BlendMode)] _DstBlend ("目标混合", Float) = 0
+        [SubToggle(Preset)] _ZWrite ("深度写入", Float) = 1
+        [SubEnum(Preset, UnityEngine.Rendering.CompareFunction)] _ZTest ("深度测试", Float) = 4 // 4 is LEqual
+        [SubEnum(Preset, RGBA, 15, RGB, 14)] _ColorMask ("颜色遮罩", Float) = 15 // 15 is RGBA (binary 1111)
+         [SubToggle(Preset,_RECEIVE_SHADOWS_OFF)] _RECEIVE_SHADOWS_OFF ("关闭阴影", Float) = 0
         //  [SubToggle(Preset,_ALPHATEST_ON)] _ALPHATEST_ON ("_AlphaTest ", Float) = 0
-        [Sub(Preset)] _Cutoff("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
+        [Sub(Preset)] _Cutoff("透明度裁剪", Range(0.0, 1.0)) = 0.5
 
-        [Main(SurfaceInputs,_,off,off)] _SurfaceInputs("Surface Inputs", float) = 0
+        [Main(SurfaceInputs,_,off,off)] _SurfaceInputs("表面输入", float) = 0
 
-        [Tex(SurfaceInputs,_BaseColor)][NoScaleOffset][MainTexture] _BaseMap("Albedo", 2D) = "white" {}
-        [Sub(SurfaceInputs)][HideInInspector][HDR] _BaseColor("Color", Color) = (1,1,1,1)
-        [Sub(SurfaceInputs)]_ScaleOffset("ScaleOffset",Vector) = (1,1,0,0)
+        [Tex(SurfaceInputs,_BaseColor)][NoScaleOffset][MainTexture] _BaseMap("基础贴图 (Albedo)", 2D) = "white" {}
+        [Sub(SurfaceInputs)][HideInInspector][HDR] _BaseColor("基础颜色", Color) = (1,1,1,1)
+        [Sub(SurfaceInputs)]_ScaleOffset("UV 缩放偏移",Vector) = (1,1,0,0)
 
         //MSO
-        [SubTitle(SurfaceInputs,MSOTex)]
-        [Tex(SurfaceInputs)][NoScaleOffset] _MetallicGlossMap("Metallic", 2D) = "white" {}
-        [Sub(SurfaceInputs)] _Metallic("Metallic", Range(0.0, 1.0)) = 1
-        [Sub(SurfaceInputs)] _Metallic_Rain("Metallic_Rain", Range(0.0, 1.0)) = 1
-        [Sub(SurfaceInputs)] _Smoothness("Smoothness", Range(0.0, 1.0)) = 1
-        [Sub(SurfaceInputs)] _Smoothness_Rain("Smoothness_Rain", Range(0.0, 1.0)) = 1
-        [Sub(SurfaceInputs)] _OcclusionStrength("AO", Range(0.0, 1.0)) = 1.0
-        [Sub(SurfaceInputs)] _OcclusionStrength_Rain("AO_Rain", Range(0.0, 1.0)) = 1
+        [SubTitle(SurfaceInputs,Metal Smooth AO)]
+        [Tex(SurfaceInputs)][NoScaleOffset] _MetallicGlossMap("金属度贴图", 2D) = "white" {}
+        [Sub(SurfaceInputs)] _Metallic("金属度", Range(0.0, 1.0)) = 1
+        [Sub(SurfaceInputs)] _Metallic_Rain("金属度 (雨天)", Range(0.0, 1.0)) = 1
+        [Sub(SurfaceInputs)] _Smoothness("光滑度", Range(0.0, 1.0)) = 1
+        [Sub(SurfaceInputs)] _Smoothness_Rain("光滑度 (雨天)", Range(0.0, 1.0)) = 1
+        [Sub(SurfaceInputs)] _OcclusionStrength("环境光遮蔽 AO", Range(0.0, 1.0)) = 1.0
+        [Sub(SurfaceInputs)] _OcclusionStrength_Rain("环境光遮蔽 AO (雨天)", Range(0.0, 1.0)) = 1
 
 
         //法线
-        [SubTitle(SurfaceInputs,Normol)]
-        [Tex(SurfaceInputs)][NoScaleOffset] _BumpMap("Normal Map", 2D) = "bump" {}
-        [Sub(SurfaceInputs)] _BumpScale("NormolScale", Range(0,5)) = 1.0
+        [SubTitle(SurfaceInputs,Normal)]
+        [Tex(SurfaceInputs)][NoScaleOffset] _BumpMap("法线贴图", 2D) = "bump" {}
+        [Sub(SurfaceInputs)] _BumpScale("法线强度", Range(0,5)) = 1.0
 
 
         //自发光
         [SubTitle(SurfaceInputs,Emission)]
-        [SubToggle(SurfaceInputs, _EMISSION)]_EmissionToggle("IsEmission",float) = 0
-        [Tex(SurfaceInputs,_EmissionColor)] _EmissionMap("Emission", 2D) = "white" {}
-        [Sub(SurfaceInputs)][HideInInspector] [HDR] _EmissionColor("EmissionColor", Color) = (0,0,0)
+        [SubToggle(SurfaceInputs, _EMISSION)]_EmissionToggle("开启自发光",float) = 0
+        [Tex(SurfaceInputs,_EmissionColor)] _EmissionMap("自发光贴图", 2D) = "white" {}
+        [Sub(SurfaceInputs)][HideInInspector] [HDR] _EmissionColor("自发光颜色", Color) = (0,0,0)
 
 
         [Main(Eff,_,off,off)] _Eff ("特殊效果", float) = 0
         //透明
-        [SubTitle(Eff,Dither)]
-        [SubToggle(Eff,_NILOTOON_DITHER_FADEOUT)]_Dither("_Dither", Float) = 0
-        [Sub(Eff)] _DitherFadeoutAmount("_DitherFadeoutAmount", Range(0,1)) = 0
+        [SubTitle(Eff,Dither Fade)]
+        [SubToggle(Eff,_NILOTOON_DITHER_FADEOUT)]_Dither("开启抖动淡出", Float) = 0
+        [Sub(Eff)] _DitherFadeoutAmount("淡出程度", Range(0,1)) = 0
 
         // 溶解
         [SubTitle(Eff,Dissolve)]
-        [SubToggle(Eff,_NILOTOON_DISSOLVE)]_NtloToonDissolve("_NILOTOON_DISSOLVE", Float) = 0
-        [Sub(Eff)] _DissolveAmount("_DissolveAmount", Range(-1,1)) = 0
-        [Tex(Eff)] _DissolveThresholdMap("_DissolveThresholdMap", 2D) = "linearGrey" {}
-        [SubToggle(Eff, _)] _DissolveByVertexColor("_DissolveByVertexColor (Default Off)", Float) = 0
-        [Sub(Eff)] _DissolveBorderRange("_DissolveBorderRange", Range(0.001,1)) = 0.02
-        [Sub(Eff)] [HDR]_DissolveBorderTintColor("_DissolveBorderTintColor", Color) = (0,4,4,1)
-        [Sub(Eff)] _DissolveTopBorderRange("_DissolveTopBorderRange", Range(0.001,1)) = 0.02
-        [Sub(Eff)] [HDR]_DissolveTopBorderTintColor("_DissolveTopBorderTintColor", Color) = (0,4,4,1)
+        [SubToggle(Eff,_NILOTOON_DISSOLVE)]_NtloToonDissolve("开启溶解", Float) = 0
+        [Sub(Eff)] _DissolveAmount("溶解进度", Range(-1,1)) = 0
+        [Tex(Eff)] _DissolveThresholdMap("溶解阈值贴图", 2D) = "linearGrey" {}
+        [SubToggle(Eff, _)] _DissolveByVertexColor("按顶点色溶解 (默认关闭)", Float) = 0
+        [Sub(Eff)] _DissolveBorderRange("边缘宽度", Range(0.001,1)) = 0.02
+        [Sub(Eff)] [HDR]_DissolveBorderTintColor("边缘颜色", Color) = (0,4,4,1)
+        [Sub(Eff)] _DissolveTopBorderRange("顶部边缘宽度", Range(0.001,1)) = 0.02
+        [Sub(Eff)] [HDR]_DissolveTopBorderTintColor("顶部边缘颜色", Color) = (0,4,4,1)
 
         //特殊效果
-        [SubTitle(Eff,ColorEff)]
-        [Sub(Eff)] _PerCharEffectTintColor("_PerCharEffectTintColor", Color) = (1,1,1)
-        [Sub(Eff)] _PerCharEffectAddColor("_PerCharEffectAddColor", Color) = (0,0,0)
-        [Sub(Eff)] _PerCharEffectDesaturatePercentage("_PerCharEffectDesaturatePercentage", Range(0,1)) = 0
-        [Sub(Eff)] _PerCharEffectLerpColor("_PerCharEffectLerpColor", Color) = (1,1,0,0)
-        [Sub(Eff)] _PerCharacterRimLightIntensity("_PerCharacterRimLightIntensity", Range(0,100)) = 0
-        [Sub(Eff)] _PerCharEffectRimColor("_PerCharEffectRimColor", Color) = (0,0,0)
-        [Sub(Eff)] _PerCharEffectRimSharpnessPower("_PerCharEffectRimSharpnessPower", Float) = 4
+        [SubTitle(Eff,Per Character Color)]
+        [Sub(Eff)] _PerCharEffectTintColor("整体染色", Color) = (1,1,1)
+        [Sub(Eff)] _PerCharEffectAddColor("叠加颜色", Color) = (0,0,0)
+        [Sub(Eff)] _PerCharEffectDesaturatePercentage("去色程度", Range(0,1)) = 0
+        [Sub(Eff)] _PerCharEffectLerpColor("插值颜色", Color) = (1,1,0,0)
+        [Sub(Eff)] _PerCharacterRimLightIntensity("边光强度", Range(0,100)) = 0
+        [Sub(Eff)] _PerCharEffectRimColor("边光颜色", Color) = (0,0,0)
+        [Sub(Eff)] _PerCharEffectRimSharpnessPower("边光锐度", Float) = 4
 
         
        [Main(Outline,_,off,on)][PassSwitch(NiloToonOutline)] _Outline ("描边", float) = 0
  
         [Sub(Outline)] _OutlineColor("描边颜色", Color) = (0,0,0)
-         [Sub(Outline)]_OutlineWidth("描边宽度 (默认 1)", Range(0,32)) = 1
-         [Sub(Outline)]_OutlineWidthExtraMultiplier("描边宽度额外倍增 (默认 1)", Range(0,256)) = 1
+         [Sub(Outline)]_OutlineWidth("描边宽度（默认 1）", Range(0,32)) = 1
+         [Sub(Outline)]_OutlineWidthExtraMultiplier("描边宽度额外倍增（默认 1）", Range(0,256)) = 1
 
  //[Sub(OTHERWORLD)]_GIColor_OtherWorld("GIColor", Color) = (1,1,1,1)
         //  [Main(yuyuyu, _, off, off)] _PresetGroup("yuyuyuyu", float) = 0
@@ -140,7 +140,9 @@ Shader "Piu/Lit_Piu_TEST"
            // #pragma shader_feature_local _RECEIVE_SHADOWS_OFF   //关闭或开启接收阴影。
             #pragma shader_feature_local_fragment _ALPHATEST_ON     //alpha测试
             #pragma shader_feature_local_fragment _EMISSION     //是否开启自发光
-            #pragma _ENVIRONMENTREFLECTIONS_OFF //开启环境反射
+            // 声明 _ENVIRONMENTREFLECTIONS_OFF 关键字：未定义时 GlobalIllumination.hlsl 走环境反射分支
+            // 本 Shader 没有对应的 [ToggleOff] 属性，所以该关键字永远不启用 = 环境反射常开
+            #pragma shader_feature_local_fragment _ENVIRONMENTREFLECTIONS_OFF
 
             // Universal Pipeline keywords
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE
