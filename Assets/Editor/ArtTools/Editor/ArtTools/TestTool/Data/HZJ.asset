@@ -34,7 +34,7 @@ MonoBehaviour:
       data:
         labelName: "\u7BA1\u7EBF"
         objectRef:
-          label: Piu_URP_Forward+_Renderer
+          label: Piu_URP_Forward_Renderer
           targetObject: {fileID: 11400000, guid: e0b613ed20f5b364290d6b49863f2fa9,
             type: 2}
     - rid: 726387228621144065

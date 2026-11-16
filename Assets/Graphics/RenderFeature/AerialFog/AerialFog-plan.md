@@ -118,7 +118,7 @@ Pass 内部字段：`Material _material`、`AerialFogParams _params`、`RTHandle
 
 - [ ] **Step 2: 挂进 renderer 并确认排在 SwapAB 之前**
 
-用 `mcp__unity__manage_graphics`（`action: feature_add`, `target: Piu_URP_Forward+_Renderer`, `feature_type: AerialFogRenderFeature`），然后反射读 `m_RendererFeatures` 列出顺序。
+用 `mcp__unity__manage_graphics`（`action: feature_add`, `target: Piu_URP_Forward_Renderer`, `feature_type: AerialFogRenderFeature`），然后反射读 `m_RendererFeatures` 列出顺序。
 Expected: 列表里出现 `AerialFogRenderFeature`；若它在 `SwapABRenderFeature` 之后，用 `feature_reorder` 把它移到前面。
 
 - [ ] **Step 3: 勾上 Active 并把材质拖进去**
@@ -195,10 +195,10 @@ Expected: 切换瞬间浓度不跳变；从浓雾回薄雾的方向正确；连�
 ### Task 5: 清理旧壳与文档同步
 
 **Files:**
-- Modify: `Assets/Graphics/Setting/Piu_URP_Forward+_Renderer.asset`（移除两个 Feature 引用）
+- Modify: `Assets/Graphics/Setting/Piu_URP_Forward_Renderer.asset`（移除两个 Feature 引用）
 - Delete: `Assets/Graphics/RenderFeature/BlindFog/`（整个目录）
 - Delete: `Assets/Graphics/RenderFeature/SSFog/`（整个目录）
-- Modify: `Assets/Graphics/Setting/Piu_URP_Forward+_Renderer.md`（5.4 / 5.6 两节）
+- Modify: `Assets/Graphics/Setting/Piu_URP_Forward_Renderer.md`（5.4 / 5.6 两节）
 - Modify: `Assets/Graphics/RenderFeature/AerialFog/AerialFog-design.md`（第 10 节收尾）
 
 **Interfaces:**
@@ -217,7 +217,7 @@ Expected: 0 条 error；没有 "missing script" 警告。
 
 - [ ] **Step 3: 改管线文档**
 
-`Piu_URP_Forward+_Renderer.md` 的 5.4、5.6 两节改成"已被 `AerialFogRenderFeature` 取代，脚本与材质已删除"，并删掉第 2 节里提到 BlindFog、SSFog 的那半句。
+`Piu_URP_Forward_Renderer.md` 的 5.4、5.6 两节改成"已被 `AerialFogRenderFeature` 取代，脚本与材质已删除"，并删掉第 2 节里提到 BlindFog、SSFog 的那半句。
 
 - [ ] **Step 4: 设计文档收尾**
 

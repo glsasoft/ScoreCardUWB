@@ -150,7 +150,6 @@ Shader "Piu/Lit_Piu_TEST"
             #pragma multi_compile _ EVALUATE_SH_MIXED EVALUATE_SH_VERTEX
            // #pragma multi_compile_fragment _ _LIGHT_COOKIES
           //  #define _REFLECTION_PROBE_BOX_PROJECTION
-            // #pragma multi_compile _ _FORWARD_PLUS
 
               // Unity defined keywords
           //  #pragma multi_compile _ LIGHTMAP_SHADOW_MIXING

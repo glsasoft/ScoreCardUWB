@@ -80,7 +80,7 @@
 ### 5.3 渲染管线现状
 
 - URP 14.0.11 标准包，`Piu*` 私有接口不存在，`UrpBlitCompat.FinalBlit` 可用。
-- Renderer `Piu_URP_Forward+_Renderer`，模式 Forward，Intermediate Texture = **Always**。
+- Renderer `Piu_URP_Forward_Renderer`，模式 Forward，Intermediate Texture = **Always**。
 - 列表里有 `SwapAB`（`PiuFinalBlitRenderFeature`）在 `AfterRenderingPostProcessing` (600) 做唯一的 Final Blit。**关掉它画面会停在中间 RT 上。**
 - `m_RendererFeatures` 里已有 `BlindFogRenderFeature`（索引 5）和 `SSFogRenderFeature`（索引 7），都 `active = false`，材质为空，工程里没有配套 Shader。**用户已确认这是旧项目的方法，可以随便改或删。**
 - `Piu_URP_UI_Renderer` 上有一个 URP 自带的 `FullScreenPassRendererFeature`，关着。
@@ -393,9 +393,9 @@ Assets/Editor/
 
 覆盖率按 `(1 - exp(-τ)) · maxOpacity` 算，`τ = density · exp(-falloff · 18.06) · L · 1.805`，`L = 26`，`falloff = 0.06`。这张表是标定换算的依据，换场景后照同样方式反推。
 
-Feature 挂进 `Piu_URP_Forward+_Renderer`，位置在 `SwapABRenderFeature` 之前。
+Feature 挂进 `Piu_URP_Forward_Renderer`，位置在 `SwapABRenderFeature` 之前。
 
-实现完成后清理旧壳：从 `m_RendererFeatures` 移除 `BlindFogRenderFeature`（索引 5）和 `SSFogRenderFeature`（索引 7），删掉这两个脚本，同步改 `Piu_URP_Forward+_Renderer.md` 的 5.4 / 5.6 节。**清理放在 AerialFog 验证通过之后单独做**，不要和新功能混在一次提交里。
+实现完成后清理旧壳：从 `m_RendererFeatures` 移除 `BlindFogRenderFeature`（索引 5）和 `SSFogRenderFeature`（索引 7），删掉这两个脚本，同步改 `Piu_URP_Forward_Renderer.md` 的 5.4 / 5.6 节。**清理放在 AerialFog 验证通过之后单独做**，不要和新功能混在一次提交里。
 
 ## 8. 验证
 
@@ -452,7 +452,7 @@ Feature 挂进 `Piu_URP_Forward+_Renderer`，位置在 `SwapABRenderFeature` 之
 
 ## 10. 遗留问题
 
-- **`BlindFog` / `SSFog` 还没清理**。两个 Feature 仍在 `m_RendererFeatures` 索引 5 和 7 上，`active = false`，脚本和材质都还在。用户已确认可以删，但删除会改 `Piu_URP_Forward+_Renderer.asset` 并波及 `Piu_URP_Forward+_Renderer.md` 的 5.4 / 5.6 两节，所以留到 AerialFog 效果验收通过之后单独做一次。
+- **`BlindFog` / `SSFog` 还没清理**。两个 Feature 仍在 `m_RendererFeatures` 索引 5 和 7 上，`active = false`，脚本和材质都还在。用户已确认可以删，但删除会改 `Piu_URP_Forward_Renderer.asset` 并波及 `Piu_URP_Forward_Renderer.md` 的 5.4 / 5.6 两节，所以留到 AerialFog 效果验收通过之后单独做一次。
 - **`AerialFog.mat` 的 Shader 属性没有落盘**。所有参数由 Feature 每帧 `SetFloat` / `SetColor` 推过去，`.mat` 里存的是全零。这是刻意的（Inspector 改了立刻生效），但也意味着**单独把这个材质挂到别处不会有任何效果**，必须走 Feature。
 - **高度雾未做形态验证**，见 8.1。
 - **相机缩放要重标参数**。`FogStart` / `FogEnd` 是绝对米数，标定前提是相机离地 18 米。用户确认第一版按固定机位做，观战系统如果哪天加了推拉缩放，这两个数就全废。到时候给 Feature 加 `AutoFitToCameraHeight`。

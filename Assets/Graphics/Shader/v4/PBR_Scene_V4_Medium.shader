@@ -104,8 +104,7 @@ Shader "ShaderTemplate/PBR_Scene_V4_Medium"
             #pragma vertex vert
             #pragma fragment frag
 
-            #pragma multi_compile _ _FORWARD_PLUS
-            #pragma multi_compile _ _USE_FORWARD_PLUS
+            // 项目固定普通 Forward（URP m_RenderingMode = 0），不声明 _FORWARD_PLUS 变体
             // 中画质不开启阴影
             // #pragma multi_compile _ _MAIN_LIGHT_SHADOWS                  // 主光阴影
             // #pragma multi_compile _ _MAIN_LIGHT_CALCULATE_SHADOWS        // 主光投射阴影

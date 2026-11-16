@@ -153,8 +153,7 @@ Shader "ShaderTemplate/Toon_Character"
             #pragma vertex vert
             #pragma fragment frag
 
-            #pragma multi_compile _ _FORWARD_PLUS
-            #pragma multi_compile _ _USE_FORWARD_PLUS
+            // 项目固定普通 Forward（URP m_RenderingMode = 0），不声明 _FORWARD_PLUS 变体
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
             #pragma multi_compile _ _MAIN_LIGHT_CALCULATE_SHADOWS
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE

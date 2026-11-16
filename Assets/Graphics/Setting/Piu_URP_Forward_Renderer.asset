@@ -69,7 +69,7 @@ MonoBehaviour:
     colorFar: {r: 0.62, g: 0.7, b: 0.82, a: 1}
     skyFogAmount: 1
     sunInfluence: 0.5
-  renderPassEvent: 450
+  renderPassEvent: 1000
   debugMode: 0
 --- !u!114 &-6332787464191705935
 MonoBehaviour:
@@ -460,7 +460,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: de640fe3d0db1804a85f9fc8f5cadab6, type: 3}
-  m_Name: Piu_URP_Forward+_Renderer
+  m_Name: Piu_URP_Forward_Renderer
   m_EditorClassIdentifier: 
   debugShaders:
     debugReplacementPS: {fileID: 4800000, guid: cf852408f2e174538bcd9b7fda1c5ae7,
