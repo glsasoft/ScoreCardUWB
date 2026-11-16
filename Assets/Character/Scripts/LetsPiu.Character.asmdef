@@ -1,0 +1,19 @@
+{
+    "name": "LetsPiu.Character",
+    "rootNamespace": "",
+    "references": [
+        "GUID:8b5f9125caf5e274ab58f3863a77a2a6",
+        "GUID:458b1092fe9042e4cac78cbe0ead4baf",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:5c01796d064528144a599661eaab93a6"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

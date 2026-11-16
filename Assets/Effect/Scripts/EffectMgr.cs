@@ -110,9 +110,12 @@ namespace LetsPiu.Base
                 if (pool.Loader == null)
                     return;
 
-                var handle = pool.Loader.GetAsset(pool.Name);
-                pool.Prefab = handle.AssetObject as GameObject;
-                handle.Dispose();
+                if (pool.Prefab == null)
+                {
+                    var handle = pool.Loader.GetAsset(pool.Name);
+                    pool.Prefab = handle.AssetObject as GameObject;
+                    handle.Dispose();
+                }
 
                 // 加载完成前已经释放的请求，不再创建实例
                 if (!m_Playing.ContainsKey(playing.ID))
