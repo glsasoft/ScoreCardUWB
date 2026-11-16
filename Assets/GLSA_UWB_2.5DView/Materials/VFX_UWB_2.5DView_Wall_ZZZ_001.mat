@@ -8,27 +8,18 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: VFX_UWB_2.5DView_Wall_ZZZ_001
-  m_Shader: {fileID: 4800000, guid: 7184a95c20fc1a441a8815af4c795ccd, type: 3}
+  m_Shader: {fileID: 4800000, guid: 650dd9526735d5b46b79224bc6e94025, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _FX_LIGHT_MODE_UNLIT
-  - _HOUDINI_VAT_SOFTBODY
-  - _MASKMAP_ON
-  m_InvalidKeywords:
-  - _CUSTOMDATA
-  - _CUSTOMDATA_OFF
-  - _DISSOLVETEXAR_ON
-  - _DISTORTTEXAR_ON
-  - _FDISSOLVETEX_ON
-  - _FDISTORTTEX_ON
-  - _FLIPBOOKBLENDING_OFF
-  - _VTOTEXAR_ON
+  - _SURFACE_TYPE_TRANSPARENT
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3100
-  stringTagMap: {}
+  m_DoubleSidedGI: 1
+  m_CustomRenderQueue: 3000
+  stringTagMap:
+    RenderType: Transparent
   disabledShaderPasses:
   - NiloToonOutline
   - SRPDEFAULTUNLIT
@@ -41,7 +32,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: e2a70d0d19840544e869b3a134523cbe, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpTex:
@@ -81,8 +72,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: a1c28c138350b7348a1b4274b3db01f1, type: 3}
-        m_Scale: {x: 0.15, y: 0.2}
+        m_Texture: {fileID: 2800000, guid: e2a70d0d19840544e869b3a134523cbe, type: 3}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskMap:
         m_Texture: {fileID: 2800000, guid: e2a70d0d19840544e869b3a134523cbe, type: 3}
@@ -183,7 +174,7 @@ Material:
     - _W9ParticleShaderColorChannelFlag: 3
     - _W9ParticleShaderFlags: 8194
     - _W9ParticleShaderFlags1: 8650752
-    - _W9ParticleShaderGUIFoldToggle: 123
+    - _W9ParticleShaderGUIFoldToggle: 111
     - _W9ParticleShaderGUIFoldToggle1: 0
     - _W9ParticleShaderGUIFoldToggle2: 255
     - _W9ParticleShaderPNoiseBlendFlag: 0
@@ -195,6 +186,7 @@ Material:
     - _AlphaAll: 1
     - _AlphaClip: 0
     - _AlphaCutoff: 0.5
+    - _AlphaToMask: 0
     - _Autoplay: 0
     - _AutoplaySpeed: 1
     - _B_CAN_SPIN: 0
@@ -216,6 +208,7 @@ Material:
     - _BaseMapUVRotationSpeed: 0
     - _Blend: 0
     - _BlendMode: 0
+    - _BlendOp: 0
     - _BlinnPhongSpecularToggle: 0
     - _BumpMapMaskMode: 0
     - _BumpMapToggle: 0
@@ -233,7 +226,7 @@ Material:
     - _ColorMultiAlpha: 0
     - _Contrast: 1
     - _Contrast_Toggle: 0
-    - _Cull: 2
+    - _Cull: 0
     - _CullMode: 0
     - _CustomData: 0
     - _CustomData1W_HueShift_Toggle: 0
@@ -287,6 +280,7 @@ Material:
     - _Distortion_Choraticaberrat_WithNoise_Toggle: 1
     - _Dst: 10
     - _DstBlend: 10
+    - _DstBlendAlpha: 10
     - _EdgeFade: 0.05
     - _Emi_Distortion_intensity: 0
     - _EmissionEnabled: 0
@@ -375,6 +369,7 @@ Material:
     - _ProgramNoise_Toggle: 0
     - _ProgramNoise_Voronoi_Toggle: 0
     - _QueueBias: 0
+    - _QueueOffset: 0
     - _RGBAEncoded: 1
     - _RGBAHalf: 1
     - _RampColorBlendMode: 0
@@ -382,6 +377,7 @@ Material:
     - _RampColorToggle: 0
     - _ReFnl: 0
     - _RefractionIOR: 1.5
+    - _SampleGI: 0
     - _Saturability: 0
     - _Scr: 5
     - _ScreenDistortAlphaAdd: 0
@@ -396,6 +392,7 @@ Material:
     - _SoftParticlesEnabled: 0
     - _SpecialUVChannelMode: 0
     - _SrcBlend: 5
+    - _SrcBlendAlpha: 1
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilKeyIndex: 0
@@ -403,6 +400,7 @@ Material:
     - _StencilReadMask: 255
     - _StencilWithoutPlayerToggle: 0
     - _StencilWriteMask: 255
+    - _Surface: 1
     - _TWStrength: 1
     - _TexDistortion_intensity: 0.5
     - _TimeMode: 0
@@ -468,13 +466,13 @@ Material:
     - SaturabilityRangeVec: {r: 0, g: 1, b: 0, a: 0}
     - TexDistortionintensityRangeVec: {r: -1, g: 1, b: 0, a: 0}
     - _BaseBackColor: {r: 1, g: 1, b: 1, a: 1}
-    - _BaseColor: {r: 1.8490565, g: 0.4993425, b: 0.05808555, a: 1}
+    - _BaseColor: {r: 0, g: 1.8267901, b: 2.2588017, a: 1}
     - _BaseColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _BaseMapColorRefine: {r: 1, g: 1, b: 2, a: 1}
     - _BaseMapMaskMapOffset: {r: 0, g: 0, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: 0, b: 0, a: 0}
     - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0, g: 1.8267901, b: 2.2588017, a: 1}
     - _ColorA: {r: 1, g: 1, b: 1, a: 1}
     - _ColorBlendColor: {r: 1, g: 1, b: 1, a: 1}
     - _ColorBlendMapOffset: {r: 0, g: 0, b: 0, a: 0}
@@ -565,3 +563,16 @@ Material:
     - _VertexOffset_MaskMap_Vec: {r: 0, g: 0, b: 1, a: 0}
     - _VertexOffset_Vec: {r: 0, g: 0, b: 1, a: 0}
   m_BuildTextureStacks: []
+--- !u!114 &4678373071265392897
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7

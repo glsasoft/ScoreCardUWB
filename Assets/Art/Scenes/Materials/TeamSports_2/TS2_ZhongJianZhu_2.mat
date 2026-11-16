@@ -147,7 +147,7 @@ Material:
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _ColorMask: 15
-    - _Cull: 1
+    - _Cull: 2
     - _CullOff: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
@@ -180,6 +180,7 @@ Material:
     - _NtloToonDissolve: 0
     - _OcclusionStrength: 1
     - _OcclusionStrength_Rain: 1
+    - _Outline: 0
     - _OutlineOn: 0
     - _OutlineWidth: 1
     - _OutlineWidthExtraMultiplier: 1
