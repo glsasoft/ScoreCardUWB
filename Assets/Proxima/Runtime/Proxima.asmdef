@@ -12,9 +12,7 @@
         "proxima-websocket-sharp.dll"
     ],
     "autoReferenced": true,
-    "defineConstraints": [
-        "PROXIMA_ENABLED"
-    ],
+    "defineConstraints": [],
     "versionDefines": [
         {
             "name": "com.unity.modules.ai",
