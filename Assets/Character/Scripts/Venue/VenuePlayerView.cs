@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 namespace LetsPiu.Character
 {
@@ -22,11 +24,10 @@ namespace LetsPiu.Character
         Animator _animator;
         Renderer _tintTarget;
         Transform _status;
-        Transform _fill;
-        TextMesh _label;
+        TextMeshProUGUI _label;
         LineRenderer _tracer;
         Material _bodyMaterial;
-        Material _fillMaterial;
+        Image _fillImage;
         Material _tracerMaterial;
         readonly List<Material> _owned = new List<Material>(4);
 
@@ -48,7 +49,7 @@ namespace LetsPiu.Character
 
         Vector3 _velocity = Vector3.zero;
 
-        public void Bind(int id, Renderer tintTarget, float gaitReferenceSpeed, float statusHeight)
+        public void Bind(int id, Renderer tintTarget, float gaitReferenceSpeed, float statusHeight, float worldUiScale)
         {
             name = "Player_" + id;
             _tintTarget = tintTarget;
@@ -75,7 +76,7 @@ namespace LetsPiu.Character
                 }
             }
 
-            BuildStatus(statusHeight);
+            BuildStatus(statusHeight, worldUiScale);
             BuildTracer();
         }
 
@@ -87,8 +88,8 @@ namespace LetsPiu.Character
                 _team = team;
                 Color color = team == 0 ? TeamBlue : TeamRed;
                 SetColor(_bodyMaterial, color);
-                SetColor(_fillMaterial, color);
                 SetColor(_tracerMaterial, color);
+                _fillImage.color = color;
             }
             _shownHp = int.MinValue;
         }
@@ -126,9 +127,10 @@ namespace LetsPiu.Character
             Camera cam = Camera.main;
             if (cam != null && _status != null)
             {
-                Vector3 toCam = cam.transform.position - _status.position;
-                if (toCam.sqrMagnitude > 0.001f)
-                    _status.rotation = Quaternion.LookRotation(-toCam, Vector3.up);
+                //Vector3 toCam = cam.transform.position - _status.position;
+                //if (toCam.sqrMagnitude > 0.001f)
+                //    _status.rotation = Quaternion.LookRotation(-toCam, Vector3.up);
+                _status.transform.forward = cam.transform.forward;
             }
 
             if (_tracer != null && _tracer.enabled && Time.time >= _tracerUntil)
@@ -192,59 +194,49 @@ namespace LetsPiu.Character
             _shownHp = hp;
             _shownMax = maxHp;
             float ratio = maxHp > 0 ? Mathf.Clamp01(hp / (float)maxHp) : 0f;
-            if (_fill != null)
+            if (_fillImage != null)
             {
-                _fill.localScale = new Vector3(ratio, 1f, 1f);
-                _fill.localPosition = new Vector3((ratio - 1f) * 0.5f, 0f, 0.02f);
+                _fillImage.rectTransform.sizeDelta = new Vector2(100 * ratio, 10);
             }
             if (_label != null)
                 _label.text = dead ? _name + "  阵亡" : _name + "  " + Mathf.Max(0, hp);
         }
 
-        void BuildStatus(float height)
+        void BuildStatus(float height, float worldUiScale)
         {
             var root = new GameObject("Status");
             _status = root.transform;
             _status.SetParent(transform, false);
             _status.localPosition = new Vector3(0f, height, 0f);
+            _status.localScale = Vector3.one * worldUiScale / transform.lossyScale.x;
 
-            var back = MakeQuad("HpBack", new Color(0f, 0f, 0f, 0.55f), new Vector3(1.2f, 0.16f, 1f), out _);
-            back.SetParent(_status, false);
+            var back = new GameObject("HpBack", typeof(RectTransform));
+            back.AddComponent<Image>().color = Color.gray;
+            back.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 10);
+            back.transform.SetParent(_status, false);
 
-            _fill = MakeQuad("HpFill", TeamBlue, Vector3.one, out _fillMaterial);
-            _fill.SetParent(back, false);
+            var fill = new GameObject("HpFill", typeof(RectTransform));
+            _fillImage = fill.AddComponent<Image>();
+            _fillImage.color = TeamBlue;
+            _fillImage.transform.SetParent(back.transform, false);
+            var fillRectTrans = _fillImage.GetComponent<RectTransform>();
+            fillRectTrans.sizeDelta = new Vector2(100, 10);
+            fillRectTrans.anchorMin = new Vector2(0f, 0.5f);
+            fillRectTrans.anchorMax = new Vector2(0f, 0.5f);
+            fillRectTrans.pivot = new Vector2(0f, 0.5f);
+            fillRectTrans.anchoredPosition = Vector2.zero;
 
-            var textGo = new GameObject("Name");
+            var textGo = new GameObject("Name", typeof(RectTransform));
             textGo.transform.SetParent(_status, false);
-            textGo.transform.localPosition = new Vector3(0f, 0.28f, 0.02f);
-            _label = textGo.AddComponent<TextMesh>();
-            _label.font = BuiltinFont();
-            _label.fontSize = 64;
-            _label.characterSize = 0.35f;
-            _label.anchor = TextAnchor.MiddleCenter;
-            _label.alignment = TextAlignment.Center;
+            var textRectTrans = textGo.GetComponent<RectTransform>();
+            textRectTrans.sizeDelta = new Vector2(200, 40);
+            textRectTrans.anchoredPosition = new Vector2(0, 30);
+            _label = textGo.AddComponent<TextMeshProUGUI>();
+            _label.fontSize = 24;
+            _label.alignment = TextAlignmentOptions.Center;
+            _label.enableWordWrapping = false;
             _label.color = Color.white;
             _label.text = _name;
-        }
-
-        Transform MakeQuad(string quadName, Color color, Vector3 scale, out Material mat)
-        {
-            var go = GameObject.CreatePrimitive(PrimitiveType.Quad);
-            go.name = quadName;
-            Collider collider = go.GetComponent<Collider>();
-            if (collider != null)
-                Destroy(collider);
-            go.transform.localScale = scale;
-            var renderer = go.GetComponent<MeshRenderer>();
-            renderer.shadowCastingMode = ShadowCastingMode.Off;
-            renderer.receiveShadows = false;
-            mat = CreateUnlit(color);
-            if (mat != null)
-            {
-                renderer.sharedMaterial = mat;
-                _owned.Add(mat);
-            }
-            return go.transform;
         }
 
         void BuildTracer()

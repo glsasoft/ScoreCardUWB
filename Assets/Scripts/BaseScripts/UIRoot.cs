@@ -15,6 +15,8 @@ namespace LetsPiu
         Transform m_BottomEffectRoot;
         Transform m_TopEffectRoot;
 
+        Canvas m_WorldCanvas;
+
         public const int DEFAULT_UI_WIDTH = 1920;
         public const int DEFAULT_UI_HEIGHT = 1080;
         public const float DEFAULT_UI_ASPECT = 1920 / 1080f;
@@ -36,6 +38,8 @@ namespace LetsPiu
         public Transform bottomEffectRoot => m_BottomEffectRoot;
 
         public Transform topEffectRoot => m_TopEffectRoot;
+
+        public Canvas worldCanvas => m_WorldCanvas;
 
         public float uiScale
         {
@@ -72,6 +76,7 @@ namespace LetsPiu
             m_TopCanvas = transform.Find("TopRootCanvas").GetComponent<Canvas>();
             m_BottomEffectRoot = transform.Find("BottomUIEffect");
             m_TopEffectRoot = transform.Find("TopUIEffect");  
+            m_WorldCanvas = transform.Find("WorldCanvas").GetComponent<Canvas>();
             s_Root = this;
             GameObject.DontDestroyOnLoad(gameObject);
             m_RootCanvasCanvasScaler = m_RootCanvas.GetComponent<CanvasScaler>();

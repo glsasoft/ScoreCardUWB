@@ -69,12 +69,23 @@ namespace LetsPiu.Character
         double _serverToLocal;
         bool _clockJump;
 
+        float worldUiScale = 1;
+
         void Awake()
         {
             if (space == null)
                 space = GetComponent<VenueSpace>();
 
-            GameObject.Find("/Plane")?.GetComponent<MeshRenderer>()?.material.SetColor("_BaseColor", new Color(0.5f, 0.5f, 0.5f));
+            if (UIRoot.S.worldCanvas)
+            {
+                this.transform.SetParent(UIRoot.S.worldCanvas.transform);
+                var virtualCamera = GameObject.Find("/Virtual Camera");
+                float dis = (this.transform.position - virtualCamera.transform.position).magnitude;
+                Canvas rootCanvas = UIRoot.S.rootCanvas;
+                worldUiScale = dis / rootCanvas.planeDistance * rootCanvas.transform.localScale.x;
+            }
+
+            GameObject.Find("/Plane")?.GetComponent<MeshRenderer>()?.material.SetColor("_BaseColor", new Color(0.8f, 0.8f, 0.8f));
         }
 
         void OnEnable()
@@ -213,7 +224,7 @@ namespace LetsPiu.Character
             if (view == null)
                 view = go.AddComponent<VenuePlayerView>();
             Renderer tint = modelPrefab == null ? go.GetComponentInChildren<Renderer>() : null;
-            view.Bind(id, tint, gaitReferenceSpeed, statusHeight);
+            view.Bind(id, tint, gaitReferenceSpeed, statusHeight, worldUiScale);
 
             track = new Track { view = view };
             _tracks.Add(id, track);

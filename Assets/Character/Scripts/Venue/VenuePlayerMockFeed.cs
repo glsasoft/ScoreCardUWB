@@ -5,7 +5,7 @@ namespace LetsPiu.Character
 {
     /// <summary>
     /// 服务器没接上之前，在场馆坐标里走几个人，用来看客户端同步。
-    /// 接到真实数据后关掉这个组件，改由网络层调用 VenuePlayerSync.PushAll。
+    /// 接到真实数据后关掉或删掉这个组件，改由网络层调用 VenuePlayerSync.PushAll。
     /// </summary>
     [DisallowMultipleComponent]
     public class VenuePlayerMockFeed : MonoBehaviour
