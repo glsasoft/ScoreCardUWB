@@ -105,7 +105,7 @@ Material:
     - _Dissolve_Mask_Flip: 0
     - _Dissolve_Mask_Simple: 1
     - _Dissolve_Mask_Steepness: 3
-    - _Dissolve_Scroll_Speed: -0.75
+    - _Dissolve_Scroll_Speed: -0.3
     - _Dissolve_Simple_Enabled: 0
     - _Dissolve_Smooth_Steepness: 2
     - _Dissolve_Use_Flow_Texture: 0
@@ -130,10 +130,10 @@ Material:
     - _Flow_Mask_SS22: 0
     - _Flow_Offset_VS_Enabled: 0
     - _Flow_Scale_U: 2
-    - _Flow_Scroll_Speed: -0.75
+    - _Flow_Scroll_Speed: -0.4
     - _Flow_Texture_2_Negate: 0.25
     - _Flow_Texture_2_Scale_U: 2
-    - _Flow_Texture_2_Scroll_Speed: -0.5625
+    - _Flow_Texture_2_Scroll_Speed: -0.1
     - _Flow_Texture_2_Scroll_Speed_1: 0.5
     - _Flow_Texture_2_Scroll_Speed_Double: -0.25
     - _Global_Mask_Enabled: 0
@@ -156,7 +156,7 @@ Material:
     m_Colors:
     - _Dissolve_Mask_Scale: {r: 1, g: 1, b: 0, a: 0}
     - _Dissolve_Texture_Scale: {r: 2, g: 0.25, b: 0, a: 0}
-    - _Distortion_Scroll_Speed: {r: 0, g: -0.5625, b: 0, a: 0}
+    - _Distortion_Scroll_Speed: {r: 0, g: -0.3, b: 0, a: 0}
     - _Distortion_UV_Scale: {r: 5, g: 0.25, b: 0, a: 0}
     - _FinalColor: {r: 1, g: 1, b: 1, a: 1}
     - _RampColorTint: {r: 0.345098, g: 0.5019512, b: 1, a: 1}
