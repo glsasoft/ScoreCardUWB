@@ -14,6 +14,8 @@ namespace LetsPiu.Character
         static readonly int MoveXId = Animator.StringToHash("MoveX");
         static readonly int MoveZId = Animator.StringToHash("MoveZ");
         static readonly int MoveSpeedId = Animator.StringToHash("MoveSpeed");
+        static readonly float AnimationWalkSpeed = 1f;
+        static readonly float AnimationRunSpeed = 2f;
         static readonly Color TeamBlue = new Color(0.25f, 0.55f, 1f);
         static readonly Color TeamRed = new Color(1f, 0.35f, 0.3f);
 
@@ -31,29 +33,26 @@ namespace LetsPiu.Character
         bool _hasMoveX;
         bool _hasMoveZ;
         bool _hasMoveSpeed;
-        float _lastMoveX = float.NaN;
-        float _lastMoveZ = float.NaN;
-        float _lastMoveSpeed = float.NaN;
+        float _lastMoveX;
+        float _lastMoveZ;
+        float _lastMoveSpeed;
         int _dieState;
         int _idleState;
         bool _dead;
-        bool _hasPose;
         int _team = int.MinValue;
         int _shownHp = int.MinValue;
         int _shownMax = int.MinValue;
         string _name = "";
         float _gaitReferenceSpeed = 1.8f;
-        float _teleportDistance = 8f;
         float _tracerUntil;
 
         Vector3 _velocity = Vector3.zero;
 
-        public void Bind(int id, Renderer tintTarget, float gaitReferenceSpeed, float teleportDistance, float statusHeight)
+        public void Bind(int id, Renderer tintTarget, float gaitReferenceSpeed, float statusHeight)
         {
             name = "Player_" + id;
             _tintTarget = tintTarget;
             _gaitReferenceSpeed = Mathf.Max(0.1f, gaitReferenceSpeed);
-            _teleportDistance = teleportDistance;
             _animator = GetComponentInChildren<Animator>();
             if (_animator != null)
             {
@@ -99,22 +98,13 @@ namespace LetsPiu.Character
             float dt = Time.deltaTime;
             Vector3 delta = worldPos - transform.position;
             delta.y = 0f;
-            Vector3 targetVelocity = dt > 0.0001f ? delta / dt : Vector3.zero;
-            _velocity = Vector3.Lerp(targetVelocity, _velocity, Mathf.Exp(-4 * dt));
-            bool teleport = !_hasPose || delta.sqrMagnitude > _teleportDistance * _teleportDistance;
-            float speed = 0f;
-            Vector3 local = Vector3.zero;
-            if (!teleport)
-            {
-                speed = _velocity.magnitude;
-                local = Quaternion.Inverse(worldRot) * _velocity;
-            }
+            _velocity = Vector3.Lerp(delta / dt, _velocity, Mathf.Exp(-4 * dt));
+            Vector3 localVelocity = Quaternion.Inverse(worldRot) * _velocity;
 
             transform.SetPositionAndRotation(worldPos, worldRot);
-            _hasPose = true;
 
             bool dead = hp <= 0;
-            ApplyAnimator(speed, local, dead);
+            ApplyAnimator(localVelocity, dead);
             ApplyStatus(hp, maxHp, dead);
             if (_tintTarget != null && _animator == null)
                 _tintTarget.transform.localRotation = dead ? Quaternion.Euler(80f, 0f, 0f) : Quaternion.identity;
@@ -154,7 +144,7 @@ namespace LetsPiu.Character
             }
         }
 
-        void ApplyAnimator(float speed, Vector3 local, bool dead)
+        void ApplyAnimator(Vector3 localVelocity, bool dead)
         {
             if (_animator == null)
                 return;
@@ -171,23 +161,20 @@ namespace LetsPiu.Character
             }
 
             if (_dead && _idleState != 0)
-                _animator.CrossFade(_idleState, 0.15f, 0);
+                _animator.CrossFade(_idleState, 0.1f, 0);
             _dead = false;
 
-            if (speed < 0.15f)
-            {
-                //if (_hasMoveX && !Mathf.Approximately(0, _lastMoveX)) _animator.SetFloat(MoveXId, 0f);
-                if (_hasMoveZ && !Mathf.Approximately(0, _lastMoveZ)) _animator.SetFloat(MoveZId, 0f);
-                if (_hasMoveSpeed && !Mathf.Approximately(0, _lastMoveSpeed)) _animator.SetFloat(MoveSpeedId, 0f);
-                _lastMoveX = 0f;
-                _lastMoveZ = 0f;
-                _lastMoveSpeed = 0f;
-                return;
-            }
+            float speed = localVelocity.magnitude;
+            Vector3 aniVelocity = Vector3.zero;
+            if (speed < 0.01f)
+                speed = 0f;
+            else
+                aniVelocity = localVelocity / _gaitReferenceSpeed;
 
-            float moveX = Mathf.Clamp(local.x / _gaitReferenceSpeed, -2, 2);
-            float moveZ = Mathf.Clamp(local.z / _gaitReferenceSpeed, -1, 2);
-            float moveSpeed = speed / this.transform.localScale.x;
+            float t = Mathf.Exp(-4 * Time.deltaTime);
+            float moveX = Mathf.Lerp(Mathf.Clamp(aniVelocity.x, -AnimationRunSpeed, AnimationRunSpeed), _lastMoveX, t);
+            float moveZ = Mathf.Lerp(Mathf.Clamp(aniVelocity.z, -AnimationWalkSpeed, AnimationRunSpeed), _lastMoveZ, t);
+            float moveSpeed = Mathf.Lerp(speed / _animator.transform.lossyScale.x, _lastMoveSpeed, t);
 
             //if (_hasMoveX && !Mathf.Approximately(moveX, _lastMoveX)) _animator.SetFloat(MoveXId, moveX);
             if (_hasMoveZ && !Mathf.Approximately(moveZ, _lastMoveZ)) _animator.SetFloat(MoveZId, moveZ);
