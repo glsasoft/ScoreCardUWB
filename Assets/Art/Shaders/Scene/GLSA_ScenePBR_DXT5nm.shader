@@ -214,6 +214,19 @@ Shader "GLSA/Scene/PBR_EnvStandard"
             // URP asset 里的 Soft Shadow Quality（Low/Medium/High）对这个材质不生效。
             #pragma multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
             #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
+
+            // ---- 烘焙 GI（lightmap）----
+            // 少了这四行，物体勾了 Static、场景烘了光照贴图也进不来：
+            // bakedGI 只会走 SampleSH 拿探针球谐，看起来跟没烘一样。
+            //   LIGHTMAP_ON            : 有静态光照贴图
+            //   DIRLIGHTMAP_COMBINED   : 方向性光照贴图（Baked Directional）
+            //   LIGHTMAP_SHADOW_MIXING : 烘焙阴影和实时阴影混合（Mixed 光照）
+            //   SHADOWS_SHADOWMASK     : Shadowmask 模式的烘焙阴影遮罩
+            #pragma multi_compile _ LIGHTMAP_ON
+            #pragma multi_compile _ DIRLIGHTMAP_COMBINED
+            #pragma multi_compile _ LIGHTMAP_SHADOW_MIXING
+            #pragma multi_compile _ SHADOWS_SHADOWMASK
+
             // 主光 cookie（方向光挂的云影贴图）。
             // 少了这一行，URP 的 RealtimeLights.hlsl 里 #if defined(_LIGHT_COOKIES) 永远不成立，
             // SampleMainLightCookie 整段被编译掉——灯上挂了 cookie 也收不到，而且不会有任何报错。
@@ -230,6 +243,8 @@ Shader "GLSA/Scene/PBR_EnvStandard"
                 float3 normalOS   : NORMAL;
                 float4 tangentOS  : TANGENT;
                 float2 uv         : TEXCOORD0;
+                // 烘焙光照贴图用的是第二套 UV（Unity 烘焙时生成的 lightmap UV）
+                float4 uv1        : TEXCOORD1;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -242,6 +257,8 @@ Shader "GLSA/Scene/PBR_EnvStandard"
                 half4  tangentWS  : TEXCOORD3;
                 half3  viewDirWS  : TEXCOORD4;
                 half   fogFactor  : TEXCOORD5;
+                // LIGHTMAP_ON 时 xy = lightmap UV；否则 xyz = 顶点球谐（探针 GI）
+                float4 lightmapUVOrVertexSH : TEXCOORD6;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
                 UNITY_VERTEX_OUTPUT_STEREO
             };
@@ -263,6 +280,9 @@ Shader "GLSA/Scene/PBR_EnvStandard"
                 output.viewDirWS  = GetWorldSpaceViewDir(posInputs.positionWS);
                 output.uv         = input.uv;
                 output.fogFactor  = ComputeFogFactor(posInputs.positionCS.z);
+                // 两条都写上，宏内部按 LIGHTMAP_ON 各自决定走哪个
+                OUTPUT_LIGHTMAP_UV(input.uv1, unity_LightmapST, output.lightmapUVOrVertexSH.xy);
+                OUTPUT_SH(output.normalWS, output.lightmapUVOrVertexSH.xyz);
                 return output;
             }
 
@@ -311,9 +331,24 @@ Shader "GLSA/Scene/PBR_EnvStandard"
                 inputData.shadowCoord    = TransformWorldToShadowCoord(input.positionWS);
                 inputData.fogCoord       = input.fogFactor;
                 inputData.vertexLighting = half3(0, 0, 0);
-                inputData.bakedGI        = SampleSH(normalWS);
+
+                // 烘焙 GI：烘过 lightmap 就直接吃贴图（方向性贴图由 SampleLightmap 内部按
+                // DIRLIGHTMAP_COMBINED 处理），没烘过才退回探针球谐。
+                #ifdef LIGHTMAP_ON
+                    inputData.bakedGI = SampleLightmap(input.lightmapUVOrVertexSH.xy, normalWS);
+                #else
+                    inputData.bakedGI = SampleSH(normalWS);
+                #endif
+
                 inputData.normalizedScreenSpaceUV = GetNormalizedScreenSpaceUV(input.positionCS);
-                inputData.shadowMask     = half4(1, 1, 1, 1);
+
+                // Shadowmask 模式的烘焙阴影：只有 Mixed 光照 + Shadowmask 时才真有值，
+                // 其余情况保持全白（不遮）。
+                #if defined(LIGHTMAP_ON) && defined(SHADOWS_SHADOWMASK)
+                    inputData.shadowMask = SAMPLE_SHADOWMASK(input.lightmapUVOrVertexSH.xy);
+                #else
+                    inputData.shadowMask = half4(1, 1, 1, 1);
+                #endif
 
                 // ---- SurfaceData ----
                 SurfaceData surfaceData      = (SurfaceData)0;
@@ -327,6 +362,14 @@ Shader "GLSA/Scene/PBR_EnvStandard"
                 surfaceData.specular         = half3(0, 0, 0);
                 surfaceData.clearCoatMask    = 0;
                 surfaceData.clearCoatSmoothness = 0;
+
+                // SSAO：只有 URP Renderer 里打开了 Screen Space Ambient Occlusion，
+                // _SCREEN_SPACE_OCCLUSION 关键字才会生效；没开的话这段整个被编译掉，零开销。
+                // 不开这一段的话，上面那句 multi_compile 等于白声明，SSAO 永远进不来。
+                #if defined(_SCREEN_SPACE_OCCLUSION)
+                    AmbientOcclusionFactor aoFactor = GetScreenSpaceAmbientOcclusion(inputData.normalizedScreenSpaceUV);
+                    surfaceData.occlusion = min(surfaceData.occlusion, aoFactor.indirectAmbientOcclusion);
+                #endif
 
                 half4 color = UniversalFragmentPBR(inputData, surfaceData);
                 color.rgb = MixFog(color.rgb, inputData.fogCoord);

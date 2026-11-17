@@ -182,6 +182,10 @@ namespace BaChang.Tools
             public string rmoTex;
             public int normalMode;   // 0 = RGB, 1 = 原始 DXT5nm
             public bool hasNormal;
+            /// 纯色材质的基础色（线性空间，Blender 端给的 Principled Base Color）。
+            /// 只有基础色**没接贴图**时才有值；接了贴图的材质这里是 null，
+            /// 免得把 Blender 里那个无意义的默认 0.8 灰色乘到贴图上。
+            public float[] baseColor;
         }
 
         [Serializable]
@@ -284,18 +288,10 @@ namespace BaChang.Tools
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
             // ---- 3. 摆
+            // 摆放矩阵统一走 BuildPlacementMatrix：P = F·B·S·R90X，det(P) = +1。
             // F = 交换 y/z（Blender Z-up <-> Unity Y-up），det(F) = -1。
             // S = 只翻 X，det(S) = -1。FBX 从右手系导到左手系，顶点 X 已被取反。
             // R90X = 抵消 FBX 模型根自带的 270°X（C 的逆）。
-            // 最终 P = F·B·S·R90X，det(P) = +1，位置/尺寸与 Blender 逐位对齐。
-            Matrix4x4 flipYZ = Matrix4x4.identity;
-            flipYZ.m11 = 0; flipYZ.m12 = 1;
-            flipYZ.m21 = 1; flipYZ.m22 = 0;
-
-            Matrix4x4 mirrorX = Matrix4x4.identity;
-            mirrorX.m00 = -1f;
-
-            Matrix4x4 rot90X = Matrix4x4.Rotate(Quaternion.Euler(90f, 0f, 0f));
 
             var groups = new Dictionary<string, Transform>();
             var prefabCache = new Dictionary<string, GameObject>();
@@ -321,74 +317,13 @@ namespace BaChang.Tools
                             string.Format(CultureInfo.InvariantCulture, "{0}/{1}  {2}", i, manifest.instances.Length, e.name),
                             0.1f + 0.85f * i / manifest.instances.Length);
 
-                    GameObject prefab;
-                    if (!prefabCache.TryGetValue(e.fbx, out prefab))
-                    {
-                        string assetPath = fbxAssetDir + "/" +
-                            Path.GetFileNameWithoutExtension(e.fbx) + ".fbx";
-                        prefab = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
-                        prefabCache[e.fbx] = prefab;
-                    }
-                    if (prefab == null)
+                    GameObject inst;
+                    if (!TrySpawnInstance(e, rootT, groups, ref groupCount,
+                                          matMap, fbxAssetDir, prefabCache, out inst))
                     {
                         failed++;
                         if (missing.Count < 12) missing.Add(e.fbx);
                         continue;
-                    }
-
-                    var inst = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
-                    var child = inst.transform;
-
-                    // 只有真正带分组（且分组名不等于实例名）时才多插一层
-                    Transform parentT = rootT;
-                    string gname = string.IsNullOrEmpty(e.group) ? null : e.group;
-                    if (gname != null && gname != e.name)
-                    {
-                        Transform groupT;
-                        if (!groups.TryGetValue(gname, out groupT))
-                        {
-                            var g = new GameObject(gname);
-                            groupT = g.transform;
-                            groupT.SetParent(rootT, false);
-                            groups[gname] = groupT;
-                            groupCount++;
-                        }
-                        parentT = groupT;
-                    }
-
-                    Vector3 bp = ToVec3(e.bPos);
-                    Quaternion bq = ToQuat(e.bRot);
-                    Vector3 bs = ToVec3(e.bScale, Vector3.one);
-                    Matrix4x4 B = Matrix4x4.TRS(bp, bq, bs);
-                    Matrix4x4 P = flipYZ * B * mirrorX * rot90X;
-
-                    // 不建 holder 空节点，把摆放矩阵直接并进 FBX 实例根（层级少一层）。
-                    // FBX 根自带的 270°X + 100 倍轴校仍是它的 local 的一部分，靠左乘 P 覆盖。
-                    child.SetParent(parentT, false);
-                    Matrix4x4 C = Matrix4x4.TRS(child.localPosition, child.localRotation, child.localScale);
-                    ApplyMatrix(child, P * C);
-
-                    // 材质回填：按 slot 顺序对齐 manifest 里的材质名
-                    if (matMap.Count > 0 && e.materials != null)
-                    {
-                        var rends = inst.GetComponentsInChildren<MeshRenderer>(true);
-                        foreach (var rr in rends)
-                        {
-                            var slots = rr.sharedMaterials;
-                            bool changed = false;
-                            for (int si = 0; si < slots.Length && si < e.materials.Length; si++)
-                            {
-                                string mname = e.materials[si];
-                                if (string.IsNullOrEmpty(mname)) continue;
-                                Material got;
-                                if (matMap.TryGetValue(mname, out got) && got != null && slots[si] != got)
-                                {
-                                    slots[si] = got;
-                                    changed = true;
-                                }
-                            }
-                            if (changed) rr.sharedMaterials = slots;
-                        }
                     }
 
                     // 累计整体包围盒，给相机取景用
@@ -499,6 +434,118 @@ namespace BaChang.Tools
             t.localScale = new Vector3(sx, sy, sz);
         }
 
+        /// <summary>
+        /// 实例化一个 FBX prefab 并按清单摆好：挂分组 → 套 P·C → 回填材质。
+        /// ImportInto 和 ImportAddedObjects 共用，保证两条路的摆放逐位一致。
+        /// 返回 false = FBX 资产没加载到（没拷进来，或者 Unity 还没导入完）。
+        /// </summary>
+        static bool TrySpawnInstance(InstanceEntry e, Transform rootT,
+                                     Dictionary<string, Transform> groups, ref int groupCount,
+                                     Dictionary<string, Material> matMap, string fbxAssetDir,
+                                     Dictionary<string, GameObject> prefabCache,
+                                     out GameObject inst)
+        {
+            inst = null;
+            if (e == null || string.IsNullOrEmpty(e.fbx)) return false;
+
+            GameObject prefab;
+            if (!prefabCache.TryGetValue(e.fbx, out prefab))
+            {
+                string assetPath = fbxAssetDir + "/" +
+                    Path.GetFileNameWithoutExtension(e.fbx) + ".fbx";
+                prefab = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
+                prefabCache[e.fbx] = prefab;
+            }
+            if (prefab == null) return false;
+
+            inst = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
+            if (inst == null) return false;
+            var child = inst.transform;
+
+            // 只有真正带分组（且分组名不等于实例名）时才多插一层
+            Transform parentT = rootT;
+            string gname = string.IsNullOrEmpty(e.group) ? null : e.group;
+            if (gname != null && gname != e.name)
+            {
+                Transform groupT;
+                if (!groups.TryGetValue(gname, out groupT) || groupT == null)
+                {
+                    // 往已经摆过一次的场景里加东西时，分组节点得复用现成的，
+                    // 否则每点一次按钮就多一层同名空节点。
+                    groupT = FindGroupNode(rootT, gname);
+                    if (groupT == null)
+                    {
+                        var g = new GameObject(gname);
+                        groupT = g.transform;
+                        groupT.SetParent(rootT, false);
+                        groupCount++;
+                    }
+                    groups[gname] = groupT;
+                }
+                parentT = groupT;
+            }
+
+            Matrix4x4 B = Matrix4x4.TRS(ToVec3(e.bPos), ToQuat(e.bRot), ToVec3(e.bScale, Vector3.one));
+            Matrix4x4 P = BuildPlacementMatrix(B);
+
+            // 不建 holder 空节点，把摆放矩阵直接并进 FBX 实例根（层级少一层）。
+            // FBX 根自带的 270°X + 100 倍轴校仍是它的 local 的一部分，靠左乘 P 覆盖。
+            child.SetParent(parentT, false);
+            Matrix4x4 C = Matrix4x4.TRS(child.localPosition, child.localRotation, child.localScale);
+            ApplyMatrix(child, P * C);
+
+            ApplyInstanceMaterials(inst, e, matMap);
+            return true;
+        }
+
+        /// <summary>
+        /// 材质回填：按 slot 顺序对齐 manifest 里的材质名。
+        /// FBX 已经 remap 到外部 .mat 时这里基本什么都不做，是给 remap 漏掉的情况兜底。
+        /// </summary>
+        static void ApplyInstanceMaterials(GameObject inst, InstanceEntry e,
+                                           Dictionary<string, Material> matMap)
+        {
+            if (inst == null || e == null || e.materials == null) return;
+            if (matMap == null || matMap.Count == 0) return;
+
+            var rends = inst.GetComponentsInChildren<MeshRenderer>(true);
+            foreach (var rr in rends)
+            {
+                var slots = rr.sharedMaterials;
+                bool changed = false;
+                for (int si = 0; si < slots.Length && si < e.materials.Length; si++)
+                {
+                    string mname = e.materials[si];
+                    if (string.IsNullOrEmpty(mname)) continue;
+                    Material got;
+                    if (matMap.TryGetValue(mname, out got) && got != null && slots[si] != got)
+                    {
+                        slots[si] = got;
+                        changed = true;
+                    }
+                }
+                if (changed) rr.sharedMaterials = slots;
+            }
+        }
+
+        /// <summary>
+        /// 在已有根节点下按名字找分组节点。
+        /// 必须排除 mesh 实例本身：manifest 的 group 就是顶级物体名，分组名和物体名撞车时
+        /// 认错了会把新物体挂到某个 mesh 底下，跟着人家的变换一起动。
+        /// </summary>
+        static Transform FindGroupNode(Transform rootT, string gname)
+        {
+            if (rootT == null || string.IsNullOrEmpty(gname)) return null;
+            for (int i = 0; i < rootT.childCount; i++)
+            {
+                var c = rootT.GetChild(i);
+                if (c.name != gname) continue;
+                if (c.GetComponent<MeshFilter>() == null && c.GetComponent<MeshRenderer>() == null)
+                    return c;
+            }
+            return null;
+        }
+
         /// 一张贴图想要什么 meta。同一张图可能既被当基础色又被当法线，得合并需求。
         struct TexWant
         {
@@ -533,6 +580,11 @@ namespace BaChang.Tools
             normalFixed = 0;
             int changed = 0;
 
+            // 批量编辑里不能调 SaveAndReimport —— 它在 StartAssetEditing 期间是延迟的，
+            // 一批几百张图连着调很容易只生效一部分，法线图还按默认 sRGB 进来。
+            // 正确顺序：批内只改 importer 设置 → 出批 → 再逐个 ImportAsset。
+            var pending = new List<string>();
+
             AssetDatabase.StartAssetEditing();
             try
             {
@@ -566,7 +618,8 @@ namespace BaChang.Tools
                     }
 
                     if (!dirty) continue;
-                    importer.SaveAndReimport();
+                    EditorUtility.SetDirty(importer);
+                    pending.Add(kv.Key);
                     changed++;
                 }
             }
@@ -574,6 +627,14 @@ namespace BaChang.Tools
             {
                 AssetDatabase.StopAssetEditing();
             }
+
+            for (int i = 0; i < pending.Count; i++)
+            {
+                if (i % 20 == 0 && pending.Count > 20)
+                    EditorUtility.DisplayProgressBar("贴图导入设置", pending[i], (float)i / pending.Count);
+                AssetDatabase.ImportAsset(pending[i], ImportAssetOptions.ForceUpdate);
+            }
+            EditorUtility.ClearProgressBar();
 
             return changed;
         }
@@ -661,17 +722,49 @@ namespace BaChang.Tools
                     if (!string.IsNullOrEmpty(t)) texNames.Add(Path.GetFileName(t));
             }
 
+            // 贴图源目录不在 + 清单里又确实引用了贴图 = 必然是白模。
+            // 以前这里一声不响地跳过，最后只在场景里看到一片白，根本不知道哪一步断的。
+            bool srcTexMissing = !Directory.Exists(srcTexAbs);
+            if (srcTexMissing && texNames.Count > 0)
+                Debug.LogError("[BlenderSceneImporter] Blender 导出目录里根本没有 textures/:\n  " + srcTexAbs +
+                               "\n清单引用了 " + texNames.Count + " 张贴图，一张都拷不到 —— 材质会全白。\n" +
+                               "先在 Blender 里重新导出一次（新版插件会把打包进 .blend 的贴图也落盘）。");
+
+            int copiedTex = 0, noSrcTex = 0;
+            var noSrcTexNames = new List<string>();
             foreach (var n in texNames)
             {
                 string s = Path.Combine(srcTexAbs, n);
                 string d = Path.Combine(dstTexAbs, n);
-                if (!File.Exists(s)) continue;
+                if (!File.Exists(s))
+                {
+                    // 目标里已经有同名的也能用（上次导过的），那就不算缺
+                    if (!File.Exists(d))
+                    {
+                        noSrcTex++;
+                        if (noSrcTexNames.Count < 10) noSrcTexNames.Add(n);
+                    }
+                    continue;
+                }
                 if (!File.Exists(d) || new FileInfo(s).LastWriteTimeUtc > new FileInfo(d).LastWriteTimeUtc)
+                {
                     File.Copy(s, d, true);
+                    copiedTex++;
+                }
             }
+
+            if (noSrcTex > 0)
+                Debug.LogError(string.Format(CultureInfo.InvariantCulture,
+                    "[BlenderSceneImporter] {0} 张贴图在源目录和目标目录里都找不到，这些材质会缺图（白模）: {1}{2}",
+                    noSrcTex, string.Join(", ", noSrcTexNames.ToArray()),
+                    noSrcTex > noSrcTexNames.Count ? " ..." : ""));
 
             if (texNames.Count > 0)
                 AssetDatabase.Refresh(ImportAssetOptions.ImportRecursive | ImportAssetOptions.ForceSynchronousImport);
+
+            // Unity 的资产路径大小写敏感，Blender 写出来的名字和实际落盘差一个字母就 Load 到 null，
+            // 表现同样是白模。建一张「文件名 → 资产路径」的表兜底。
+            var texLookup = BuildTexLookup(texAssetDir);
 
             // ---- 贴图 meta：基础色吃 sRGB，法线 / SMO 是数据图必须线性。
             //      法线的类型和压缩格式按 normalDx5 切（NormalMap / Default+DXT5）。
@@ -703,6 +796,8 @@ namespace BaChang.Tools
 
             var usedNames = new HashSet<string>();
             bool warnedDx5Fallback = false;
+            int wantBase = 0, wantNormal = 0, wantRmo = 0;
+            int boundBase = 0, boundNormal = 0, boundRmo = 0;
             foreach (var me in manifest.materials)
             {
                 if (string.IsNullOrEmpty(me.name)) continue;
@@ -729,14 +824,32 @@ namespace BaChang.Tools
                 Texture2D Load(string rel)
                 {
                     if (string.IsNullOrEmpty(rel)) return null;
-                    return AssetDatabase.LoadAssetAtPath<Texture2D>(texAssetDir + "/" + Path.GetFileName(rel));
+                    string fn = Path.GetFileName(rel);
+                    string p;
+                    if (texLookup.TryGetValue(fn, out p))
+                        return AssetDatabase.LoadAssetAtPath<Texture2D>(p);
+                    // 表里没有就退回直拼（老版本没有表也能跑）
+                    return AssetDatabase.LoadAssetAtPath<Texture2D>(texAssetDir + "/" + fn);
                 }
+
+                if (me.baseTex != null) wantBase++;
+                if (me.normalTex != null) wantNormal++;
+                if (me.rmoTex != null) wantRmo++;
 
                 var bt = Load(me.baseTex);
                 if (bt != null)
                 {
                     mat.SetTexture("_BaseMap", bt);
                     mat.SetTexture("_MainTex", bt);
+                    boundBase++;
+                }
+                else if (me.baseColor != null && me.baseColor.Length >= 3)
+                {
+                    // 纯色材质：Blender 里基础色没接贴图，把那个颜色带过来，
+                    // 否则 Unity 这边只有白色，整场景会显得比 Blender 亮一截。
+                    mat.SetColor("_BaseColor", new Color(
+                        me.baseColor[0], me.baseColor[1], me.baseColor[2],
+                        me.baseColor.Length > 3 ? me.baseColor[3] : 1f));
                 }
 
                 if (glsa)
@@ -752,14 +865,22 @@ namespace BaChang.Tools
                     {
                         mat.SetTexture("_NRMTex", nt);
                         mat.SetFloat("_NormalMode", normalDx5 ? 1f : 2f);
+                        mat.SetFloat("_UseNormalMap", 1f);
+                        boundNormal++;
                     }
                     else
                     {
                         mat.SetFloat("_NormalMode", 0f);
+                        // 没图就显式关掉，别让 shader 拿着 gray 默认图 + NormalScale 乱来
+                        mat.SetFloat("_UseNormalMap", 0f);
                     }
 
                     var rt = Load(me.rmoTex);
-                    if (rt != null) mat.SetTexture("_SMO", rt);
+                    if (rt != null)
+                    {
+                        mat.SetTexture("_SMO", rt);
+                        boundRmo++;
+                    }
 
                     // 贴图已经带了这些，标量拉满，免得二次衰减
                     mat.SetFloat("_Metallic", 1f);
@@ -800,7 +921,10 @@ namespace BaChang.Tools
 
                     var rt = Load(me.rmoTex);
                     if (rt != null)
+                    {
                         mat.SetTexture("_OcclusionMap", rt);
+                        boundRmo++;
+                    }
 
                     if (me.alpha == "mask")
                     {
@@ -818,7 +942,37 @@ namespace BaChang.Tools
             }
 
             AssetDatabase.SaveAssets();
+
+            // 一条汇总：绑上几张、清单里要几张、拷了几张。
+            // 白模的时候看这一行就能分清是「清单没给路径」还是「给了路径但图上没到」。
+            Debug.Log(string.Format(CultureInfo.InvariantCulture,
+                "[BlenderSceneImporter] 材质 {0} 个 / 贴图 引用 {1}·拷入 {2} / 绑上 base {3}/{4} normal {5}/{6} rmo {7}/{8}",
+                built, texNames.Count, copiedTex,
+                boundBase, wantBase, boundNormal, wantNormal, boundRmo, wantRmo));
+
+            if (built > 0 && wantBase > 0 && boundBase == 0)
+                Debug.LogError("[BlenderSceneImporter] " + built + " 个材质一条 base 贴图都没绑上 —— 场景必然是白模。\n" +
+                               "先确认 Blender 导出目录的 textures/ 里有文件，再看清单里的 baseTex 是不是全是 null。\n" +
+                               "（老版 Blender 插件只认磁盘上的外部贴图，打包进 .blend 的图会全部漏掉。）");
+
             return map;
+        }
+
+        /// 在 Textures 目录里建「文件名 → 资产路径」表，键不分大小写。
+        /// Unity 的资产路径大小写敏感：Blender 写出来是 Wall_A.png、落盘是 wall_a.png，
+        /// 直接拼路径 Load 就是 null，材质看着像没贴图。
+        static Dictionary<string, string> BuildTexLookup(string texAssetDir)
+        {
+            var d = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            if (!AssetDatabase.IsValidFolder(texAssetDir)) return d;
+
+            foreach (var g in AssetDatabase.FindAssets("t:Texture2D", new[] { texAssetDir }))
+            {
+                string p = AssetDatabase.GUIDToAssetPath(g);
+                string f = Path.GetFileName(p);
+                if (!string.IsNullOrEmpty(f) && !d.ContainsKey(f)) d[f] = p;
+            }
+            return d;
         }
 
         // ============================================================ 模型导入设置
@@ -886,12 +1040,24 @@ namespace BaChang.Tools
                     if (fbxCount % 50 == 0)
                         EditorUtility.DisplayProgressBar("设置 FBX 导入项", fbxPath, (float)gi / fbxPaths.Count);
 
-                    // 先记下内部材质名（多材质模型会有多个槽）
+                    // 先记下内部材质名（多材质模型会有多个槽）。
+                    // 注意：materialLocation 一旦是 External，FBX 里就没有 Material 子资产了，
+                    // 这个循环会拿到空表，重导时材质就一条都对不上。所以再补一条退路：
+                    // 从外部对象映射（存在 .meta 里，重导不会丢）里把名字捞回来。
                     var srcMatNames = new List<string>();
                     foreach (var a in AssetDatabase.LoadAllAssetsAtPath(fbxPath))
                     {
                         var m = a as Material;
                         if (m != null && !srcMatNames.Contains(m.name)) srcMatNames.Add(m.name);
+                    }
+                    if (srcMatNames.Count == 0)
+                    {
+                        foreach (var kv in mi.GetExternalObjectMap())
+                        {
+                            if (kv.Key.type == typeof(Material) && !string.IsNullOrEmpty(kv.Key.name)
+                                && !srcMatNames.Contains(kv.Key.name))
+                                srcMatNames.Add(kv.Key.name);
+                        }
                     }
 
                     mi.animationType = ModelImporterAnimationType.None;
@@ -910,7 +1076,11 @@ namespace BaChang.Tools
                         string srcName = srcMatNames[si];
                         var mat = FindMaterial(matMap, srcName);
                         if (mat == null)
-                            mat = AssetDatabase.LoadAssetAtPath<Material>(matAssetDir + "/" + srcName + ".mat");
+                            // .mat 的文件名是 Sanitize 过的，这里也得过一遍，否则带冒号/斜杠的名字找不到
+                            mat = AssetDatabase.LoadAssetAtPath<Material>(
+                                matAssetDir + "/" + Sanitize(srcName) + ".mat");
+                        if (mat == null)
+                            mat = FindMaterialByFileName(matAssetDir, srcName);
 
                         if (mat == null)
                         {
@@ -955,6 +1125,106 @@ namespace BaChang.Tools
                 if (kv.Value != null && kv.Value.name == name) return kv.Value;
             }
             return null;
+        }
+
+        /// 兜底：按 Sanitize 后的文件名在 Materials 目录里找 .mat（不分大小写）。
+        /// Blender 的材质名可能带空格/全角符号，.mat 文件名是 Sanitize 过的，
+        /// 对不上就会「无对应材质」，FBX 拖进场景是灰的。
+        static Material FindMaterialByFileName(string matAssetDir, string name)
+        {
+            if (string.IsNullOrEmpty(name) || !AssetDatabase.IsValidFolder(matAssetDir)) return null;
+            string want = Sanitize(name);
+            if (string.IsNullOrEmpty(want)) return null;
+
+            foreach (var g in AssetDatabase.FindAssets("t:Material", new[] { matAssetDir }))
+            {
+                string p = AssetDatabase.GUIDToAssetPath(g);
+                if (string.Equals(Path.GetFileNameWithoutExtension(p), want, StringComparison.OrdinalIgnoreCase))
+                    return AssetDatabase.LoadAssetAtPath<Material>(p);
+            }
+            return null;
+        }
+
+        // ============================================================ 只重建材质
+
+        /// 只重建「材质 + 贴图」，**不动场景、不动 FBX**。
+        ///
+        /// 白模基本都出在这一步：贴图没落盘，或者落了但没绑上。
+        /// 重跑这个方法比整场重导快得多，而且场景里的摆放、层级、Prefab 覆盖全都不动，
+        /// 已经修好的位置不会被再摆一遍。
+        ///
+        /// remapFbx = true 时连 FBX 的外部材质映射一起刷（慢，会给每个 FBX 存一次导入设置）；
+        /// 场景里的实例本来就是直接引用 Materials/*.mat 的 GUID，光是换 .mat 的内容就夠了，
+        /// 所以默认不开。
+        public static void RebuildMaterials(string srcRoot, string outAssetRoot, string sceneName,
+                                            bool normalDx5 = false, bool remapFbx = false)
+        {
+            string manifestPath = Path.Combine(srcRoot, "scene_transform.json");
+            if (!File.Exists(manifestPath))
+            {
+                Debug.LogError("[BlenderSceneImporter] 找不到清单: " + manifestPath);
+                if (!quiet) EditorUtility.DisplayDialog("找不到清单", "没有找到:\n" + manifestPath, "好");
+                return;
+            }
+
+            Manifest manifest;
+            try { manifest = JsonUtility.FromJson<Manifest>(File.ReadAllText(manifestPath)); }
+            catch { manifest = null; }
+            if (manifest == null || manifest.materials == null || manifest.materials.Length == 0)
+            {
+                Debug.LogError("[BlenderSceneImporter] 清单里没有 materials。");
+                if (!quiet) EditorUtility.DisplayDialog("清单没有材质", "scene_transform.json 里没有 materials。", "好");
+                return;
+            }
+
+            string name = Sanitize(sceneName);
+            if (string.IsNullOrEmpty(name)) name = Sanitize(manifest.sourceScene);
+            if (string.IsNullOrEmpty(name)) name = "BlenderScene";
+
+            string outAssetDir = (outAssetRoot.TrimEnd('/', '\\') + "/" + name).Replace('\\', '/');
+            if (!AssetDatabase.IsValidFolder(outAssetDir))
+            {
+                Debug.LogError("[BlenderSceneImporter] 目标目录不存在，先完整导入一次: " + outAssetDir);
+                if (!quiet) EditorUtility.DisplayDialog("找不到目标目录",
+                    "没有:\n" + outAssetDir + "\n\n先完整导入一次。", "好");
+                return;
+            }
+
+            int matBuilt = 0;
+            var matMap = BuildMaterials(manifest, outAssetDir, srcRoot, normalDx5, ref matBuilt);
+
+            if (remapFbx)
+                ApplyModelImportSettings(outAssetDir + "/FBX", outAssetDir + "/Materials", matMap);
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            // 回头数一下场景里还有多少材质球是空的，直接把结果说出来，不用自己翻
+            int empty = 0, total = 0;
+            var scene = EditorSceneManager.GetActiveScene();
+            if (scene.IsValid() && scene.isLoaded)
+            {
+                foreach (var root in scene.GetRootGameObjects())
+                {
+                    foreach (var r in root.GetComponentsInChildren<MeshRenderer>(true))
+                    {
+                        foreach (var m in r.sharedMaterials)
+                        {
+                            total++;
+                            if (m == null) { empty++; continue; }
+                            if (m.HasProperty("_BaseMap") && m.GetTexture("_BaseMap") == null) empty++;
+                        }
+                    }
+                }
+            }
+
+            Debug.Log(string.Format(CultureInfo.InvariantCulture,
+                "[BlenderSceneImporter] 重建材质完成: {0} 个 .mat / 场景材质槽 {1} 个，其中没基础色贴图的 {2} 个\n  目录: {3}",
+                matBuilt, total, empty, outAssetDir));
+
+            if (!quiet) EditorUtility.DisplayDialog("材质重建完成",
+                "材质 " + matBuilt + " 个\n场景材质槽 " + total + " 个（没基础贴图 " + empty + " 个）" +
+                "\n\n目录:\n" + outAssetDir, "好");
         }
 
         // ============================================================ 增量更新
@@ -1184,6 +1454,243 @@ namespace BaChang.Tools
             return null;
         }
 
+        // ============================================================ 导入新增物体
+
+        /// <summary>
+        /// 只把清单里「当前场景上还没有的」物体加进**当前打开的场景**：
+        /// 不新建场景、不动已有实例的位置和材质、不建相机和灯。
+        ///
+        /// 用法：Blender 里新建物体 → N 面板「导出选中」→ Unity 点这个按钮。
+        ///
+        /// 「已经有了」按实例名判定（Blender 物体名）。本方法建出来的实例会把 GameObject
+        /// 名字显式设成清单里的 name，所以同一个清单重复点按钮不会重复加。
+        ///
+        /// 返回真正加进来的实例数。
+        /// </summary>
+        public static int ImportAddedObjects(string srcRoot, string outAssetRoot, string sceneName,
+                                             bool normalDx5 = false)
+        {
+            string manifestPath = Path.Combine(srcRoot, "scene_transform.json");
+            string srcFbx = Path.Combine(srcRoot, "fbx");
+
+            if (!File.Exists(manifestPath) || !Directory.Exists(srcFbx))
+            {
+                Debug.LogWarning("[BlenderSceneImporter] 找不到清单或 fbx 目录: " + srcRoot);
+                if (!quiet) EditorUtility.DisplayDialog("没有可用的导出", "找不到:\n" + manifestPath, "好");
+                return 0;
+            }
+
+            Manifest manifest;
+            try { manifest = JsonUtility.FromJson<Manifest>(File.ReadAllText(manifestPath)); }
+            catch { manifest = null; }
+            if (manifest == null || manifest.instances == null || manifest.instances.Length == 0)
+            {
+                Debug.LogWarning("[BlenderSceneImporter] 清单读不出来或没有 instances。");
+                if (!quiet) EditorUtility.DisplayDialog("清单为空", "scene_transform.json 里没有 instances。", "好");
+                return 0;
+            }
+
+            var scene = EditorSceneManager.GetActiveScene();
+            if (!scene.IsValid() || !scene.isLoaded)
+            {
+                Debug.LogWarning("[BlenderSceneImporter] 当前没有打开的场景。");
+                return 0;
+            }
+            bool sceneWasDirty = scene.isDirty;
+
+            string name = Sanitize(sceneName);
+            if (string.IsNullOrEmpty(name)) name = Sanitize(manifest.sourceScene);
+            if (string.IsNullOrEmpty(name)) name = "BlenderScene";
+
+            string outAssetDir = (outAssetRoot.TrimEnd('/', '\\') + "/" + name).Replace('\\', '/');
+            string fbxAssetDir = outAssetDir + "/FBX";
+            string matAssetDir = outAssetDir + "/Materials";
+
+            if (!AssetDatabase.IsValidFolder(fbxAssetDir))
+            {
+                Debug.LogWarning("[BlenderSceneImporter] 目标场景目录里没有 FBX 文件夹: " + fbxAssetDir);
+                if (!quiet) EditorUtility.DisplayDialog("找不到目标目录",
+                    "没有:\n" + fbxAssetDir +
+                    "\n\n先用「导入 Blender 场景」完整导入一次，新物体才有地方放。", "好");
+                return 0;
+            }
+
+            // ---- 1. 当前场景里已经有什么（全场景按名字收，不只 Imported 根下面）
+            var existing = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var root in scene.GetRootGameObjects())
+            {
+                foreach (var t in root.GetComponentsInChildren<Transform>(true))
+                {
+                    if (!string.IsNullOrEmpty(t.name)) existing.Add(t.name);
+                }
+            }
+
+            var added = new List<InstanceEntry>();
+            int skipped = 0;
+            foreach (var e in manifest.instances)
+            {
+                if (e == null || string.IsNullOrEmpty(e.name)) continue;
+
+                // 老的全量导入是并行导出的，FBX 根名 = 物体名，所以 name 和 data 名都得比一次
+                string dataName = string.IsNullOrEmpty(e.fbx)
+                    ? null : Path.GetFileNameWithoutExtension(e.fbx);
+                if (existing.Contains(e.name) ||
+                    (!string.IsNullOrEmpty(dataName) && existing.Contains(dataName)))
+                {
+                    skipped++;
+                    continue;
+                }
+                added.Add(e);
+            }
+
+            if (added.Count == 0)
+            {
+                Debug.Log(string.Format(CultureInfo.InvariantCulture,
+                    "[BlenderSceneImporter] 清单里 {0} 个实例当前场景都已经有了（跳过 {1} 个），没有新物体可加。",
+                    manifest.instances.Length, skipped));
+                if (!quiet) EditorUtility.DisplayDialog("没有新物体",
+                    "清单里的 " + manifest.instances.Length + " 个实例，当前场景里都已经有了。\n\n" +
+                    "要重新加，先把场景里对应的物体删掉；或者回 Blender 新建物体再「导出选中」一次。", "好");
+                return 0;
+            }
+
+            // ---- 2. 只拷新物体用到的 FBX
+            var needFbx = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var e in added)
+                if (!string.IsNullOrEmpty(e.fbx)) needFbx.Add(Path.GetFileName(e.fbx));
+
+            string fbxAbsDir = Path.Combine(ProjectRoot, fbxAssetDir.Replace('/', Path.DirectorySeparatorChar));
+            Directory.CreateDirectory(fbxAbsDir);
+
+            var copied = new List<string>();
+            var missingSrcFbx = new List<string>();
+            foreach (var f in needFbx)
+            {
+                string s = Path.Combine(srcFbx, f);
+                if (!File.Exists(s)) { missingSrcFbx.Add(f); continue; }
+
+                string d = Path.Combine(fbxAbsDir, f);
+                bool need = !File.Exists(d) ||
+                            new FileInfo(s).LastWriteTimeUtc > new FileInfo(d).LastWriteTimeUtc;
+                if (!need) continue;
+
+                File.Copy(s, d, true);
+                copied.Add(fbxAssetDir + "/" + f);
+            }
+
+            if (copied.Count > 0)
+                AssetDatabase.Refresh(ImportAssetOptions.ImportRecursive | ImportAssetOptions.ForceSynchronousImport);
+
+            // ---- 3. 材质 + 导入设置
+            // BuildMaterials 只认清单里出现的材质，老材质原样不动（重名的会按清单重写一遍设置）。
+            int matBuilt = 0;
+            var matMap = BuildMaterials(manifest, outAssetDir, srcRoot, normalDx5, ref matBuilt);
+            // 只给新拷进来的 FBX 设导入项：整个 FBX 目录扫一遍会把几百个老文件也 SaveAndReimport。
+            if (copied.Count > 0) ApplyModelImportSettings(copied, matAssetDir, matMap);
+
+            // ---- 4. 找（或建）统一父级
+            Transform rootT = null;
+            string expectRootName = name + "_Imported";
+            foreach (var r in scene.GetRootGameObjects())
+            {
+                if (r.name == expectRootName) { rootT = r.transform; break; }
+            }
+            if (rootT == null)
+            {
+                // 场景名和当初导入时填的不一样时兜一下：场景里只有一个 *_Imported 根就认它
+                Transform sole = null;
+                int roots = 0;
+                foreach (var r in scene.GetRootGameObjects())
+                {
+                    if (r.name.EndsWith("_Imported", StringComparison.Ordinal))
+                    {
+                        sole = r.transform;
+                        roots++;
+                    }
+                }
+                if (roots == 1) rootT = sole;
+            }
+            if (rootT == null)
+            {
+                var go = new GameObject(expectRootName);
+                Undo.RegisterCreatedObjectUndo(go, "S2U 新建导入根节点");
+                rootT = go.transform;
+                Debug.LogWarning("[BlenderSceneImporter] 当前场景里没有 " + expectRootName +
+                                 "，新建了一个，新物体都收在里面。");
+            }
+
+            // ---- 5. 摆
+            var groups = new Dictionary<string, Transform>(StringComparer.Ordinal);
+            var prefabCache = new Dictionary<string, GameObject>();
+            var placedObjects = new List<GameObject>();
+            int groupCount = 0, placed = 0, failed = 0;
+            var missing = new List<string>();
+
+            try
+            {
+                for (int i = 0; i < added.Count; i++)
+                {
+                    var e = added[i];
+                    if (i % 20 == 0)
+                        EditorUtility.DisplayProgressBar("导入新物体",
+                            string.Format(CultureInfo.InvariantCulture, "{0}/{1}  {2}", i, added.Count, e.name),
+                            (float)i / Mathf.Max(1, added.Count));
+
+                    GameObject inst;
+                    if (!TrySpawnInstance(e, rootT, groups, ref groupCount,
+                                          matMap, fbxAssetDir, prefabCache, out inst))
+                    {
+                        failed++;
+                        if (missing.Count < 12) missing.Add(e.fbx);
+                        continue;
+                    }
+
+                    // 少于 150 个物体时 Blender 走 probe 路径导出，FBX 根节点名全是 __s2u_export_probe。
+                    // 照搬就会在场景里堆一堆同名物体，下次再点这个按钮也认不出「已经有了」。
+                    inst.name = e.name;
+                    Undo.RegisterCreatedObjectUndo(inst, "S2U 导入新物体");
+
+                    placedObjects.Add(inst);
+                    placed++;
+                }
+            }
+            finally
+            {
+                EditorUtility.ClearProgressBar();
+            }
+
+            if (placedObjects.Count > 0) Selection.objects = placedObjects.ToArray();
+            if (placed > 0) EditorSceneManager.MarkSceneDirty(scene);
+
+            // 导入前场景本来就是干净的才自动保存，免得替用户保存一堆没想保存的临时改动
+            bool saved = false;
+            if (placed > 0 && !sceneWasDirty && !string.IsNullOrEmpty(scene.path))
+            {
+                EditorSceneManager.SaveScene(scene);
+                saved = true;
+            }
+
+            Debug.Log(string.Format(CultureInfo.InvariantCulture,
+                "[BlenderSceneImporter] 导入新物体: 新增 {0} 个 / 跳过已存在 {1} 个 / 新拷 FBX {2} 个 / 材质 {3} 个 / " +
+                "失败 {4} 个 / 分组 {5} 个\n  根: {6}\n  场景: {7} {8}",
+                placed, skipped, copied.Count, matBuilt, failed, groupCount,
+                rootT.name, scene.path, saved ? "(已保存)" : "(未保存)"));
+            if (missing.Count > 0)
+                Debug.LogWarning("[BlenderSceneImporter] 这些 FBX 没加载到: " + string.Join(", ", missing.ToArray()));
+            if (missingSrcFbx.Count > 0)
+                Debug.LogWarning("[BlenderSceneImporter] 源目录里缺这些 FBX，对应物体加不进来: "
+                                 + string.Join(", ", missingSrcFbx.ToArray()));
+
+            if (!quiet) EditorUtility.DisplayDialog("导入新物体完成",
+                "新增 " + placed + " 个物体" + (skipped > 0 ? "（跳过已有的 " + skipped + " 个）" : "") +
+                "\n新拷 FBX " + copied.Count + " 个   失败 " + failed + " 个" +
+                "\n\n收进:\n" + rootT.name +
+                "\n\n" + (saved ? "场景已保存" : "场景已标脏，记得 Ctrl+S"),
+                "好");
+
+            return placed;
+        }
+
         // ============================================================ 窗口
 
         Vector2 _scroll;
@@ -1352,6 +1859,24 @@ namespace BaChang.Tools
 
             bool canImport = _manifest != null;
 
+            // ---------------------------------------------------- 只重建材质（白模救急）
+            EditorGUILayout.LabelField("⑤.5 只重建材质与贴图（不动场景）", EditorStyles.boldLabel);
+            using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
+            {
+                if (BeginnerMode)
+                    EditorGUILayout.LabelField(
+                        "场景里材质球发白的就用这个：重拷 textures/、重写 .mat，场景摆放和 FBX 全都不动。",
+                        EditorStyles.wordWrappedMiniLabel);
+
+                using (new EditorGUI.DisabledScope(!canImport))
+                {
+                    if (GUILayout.Button("只重建材质与贴图", GUILayout.Height(26)))
+                        DoRebuildMaterials();
+                }
+            }
+
+            EditorGUILayout.Space(10);
+
             // ---------------------------------------------------- 增量更新
             EditorGUILayout.LabelField("⑥ 增量更新（不动场景）", EditorStyles.boldLabel);
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
@@ -1375,6 +1900,30 @@ namespace BaChang.Tools
                 {
                     if (GUILayout.Button("只更新网格", GUILayout.Height(26)))
                         DoUpdateMeshes();
+                }
+            }
+
+            EditorGUILayout.Space(10);
+
+            // ---------------------------------------------------- 导入新物体
+            EditorGUILayout.LabelField("⑦ 导入新物体（加到当前场景）", EditorStyles.boldLabel);
+            using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
+            {
+                if (BeginnerMode)
+                {
+                    EditorGUILayout.LabelField(
+                        "Blender 里新建物体 → N 面板「导出选中」→ 回来点这个。只把当前场景还没有的物体加进来，" +
+                        "已有物体、相机、灯、摆放全都不动。",
+                        EditorStyles.wordWrappedMiniLabel);
+                    EditorGUILayout.LabelField(
+                        "按实例名认重，所以同一个清单重复点也不会加两遍。",
+                        EditorStyles.wordWrappedMiniLabel);
+                }
+
+                using (new EditorGUI.DisabledScope(!canImport))
+                {
+                    if (GUILayout.Button("导入新物体", GUILayout.Height(26)))
+                        DoImportAdded();
                 }
             }
 
@@ -1455,6 +2004,20 @@ namespace BaChang.Tools
         void DoUpdateMeshes()
         {
             UpdateChangedMeshes(ResolveSrcRoot(), OutRoot, SceneName, OnlyUpdateSelected);
+            ReloadManifest();
+        }
+
+        /// 只把清单里当前场景还没有的物体加进来，不重建场景
+        void DoImportAdded()
+        {
+            ImportAddedObjects(ResolveSrcRoot(), OutRoot, SceneName, NormalDx5);
+            ReloadManifest();
+        }
+
+        /// 白模救急：只重做材质和贴图，场景不动
+        void DoRebuildMaterials()
+        {
+            RebuildMaterials(ResolveSrcRoot(), OutRoot, SceneName, NormalDx5);
             ReloadManifest();
         }
     }
