@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: "\u6D53\u96FE"
   parameters:
-    fogStart: 15.5
-    fogEnd: 26
+    fogStart: 85
+    fogEnd: 110
     fogCurve: 1.5
     density: 0.098
     heightFalloff: 0.06

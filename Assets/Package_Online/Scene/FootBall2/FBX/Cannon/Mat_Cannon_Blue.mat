@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: mat_Cannon
+  m_Name: Mat_Cannon_Blue
   m_Shader: {fileID: 4800000, guid: d92c74fb97ca1bd4a940217731742700, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
