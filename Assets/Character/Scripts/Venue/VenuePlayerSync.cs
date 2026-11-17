@@ -48,9 +48,6 @@ namespace LetsPiu.Character
         [Tooltip("多久没收到这个玩家就从场景里拿走。")]
         public float removeAfterSeconds = 2f;
 
-        [Tooltip("相邻两帧位移超过这个距离就直接闪现，避免穿过场馆。单位是场景单位。")]
-        public float teleportDistance = 8f;
-
         [Tooltip("多少米每秒对应角色动画里的走步。跑步大约是这个值的两倍。")]
         public float gaitReferenceSpeed = 1.8f;
 
@@ -216,7 +213,7 @@ namespace LetsPiu.Character
             if (view == null)
                 view = go.AddComponent<VenuePlayerView>();
             Renderer tint = modelPrefab == null ? go.GetComponentInChildren<Renderer>() : null;
-            view.Bind(id, tint, gaitReferenceSpeed, teleportDistance, statusHeight);
+            view.Bind(id, tint, gaitReferenceSpeed, statusHeight);
 
             track = new Track { view = view };
             _tracks.Add(id, track);

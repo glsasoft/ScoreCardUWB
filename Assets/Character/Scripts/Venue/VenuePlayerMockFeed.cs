@@ -190,7 +190,7 @@ namespace LetsPiu.Character
             Vector3 b = Corner(0.5f, -0.5f, venue);
             Vector3 c = Corner(0.5f, 0.5f, venue);
             Vector3 d = Corner(-0.5f, 0.5f, venue);
-            Gizmos.color = new Color(1f, 0.85f, 0.2f, 0.9f);
+            Gizmos.color = Color.cyan;
             Gizmos.DrawLine(a, b);
             Gizmos.DrawLine(b, c);
             Gizmos.DrawLine(c, d);

@@ -156,8 +156,8 @@ MonoBehaviour:
   playing: 1
   sync: {fileID: 0}
   playerCount: 4
-  areaLength: 200
-  areaWidth: 100
+  areaLength: 510
+  areaWidth: 510
   moveSpeed: 20
   sendInterval: 0.1
   maxHp: 100
@@ -177,7 +177,6 @@ MonoBehaviour:
   modelPrefab: {fileID: 717335622}
   interpolationDelay: 0.12
   removeAfterSeconds: 2
-  teleportDistance: 50
   gaitReferenceSpeed: 10
   modelYawOffset: 0
   statusHeight: 2.15
