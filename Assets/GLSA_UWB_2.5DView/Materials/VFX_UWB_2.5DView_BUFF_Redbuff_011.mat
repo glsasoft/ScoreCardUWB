@@ -200,7 +200,7 @@ Material:
     - _FinalOpacityExp: 1
     - _FinalOpacityExp1: 1
     - _FinalOpacityPower: 1
-    - _FinalPower: 40
+    - _FinalPower: 10.7
     - _Float4: 0.25
     - _MainMaskExp: 1
     - _MainMaskScaleU: 1
