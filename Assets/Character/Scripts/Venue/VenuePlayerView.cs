@@ -48,6 +48,7 @@ namespace LetsPiu.Character
         float _tracerUntil;
 
         Vector3 _velocity = Vector3.zero;
+        bool _hasPose;
 
         public void Bind(int id, Renderer tintTarget, float gaitReferenceSpeed, float statusHeight, float worldUiScale)
         {
@@ -99,14 +100,25 @@ namespace LetsPiu.Character
             float dt = Time.deltaTime;
             Vector3 delta = worldPos - transform.position;
             delta.y = 0f;
-            _velocity = Vector3.Lerp(delta / dt, _velocity, Mathf.Exp(-4 * dt));
-            Vector3 localVelocity = Quaternion.Inverse(worldRot) * _velocity;
+            // 刚创建时物体还在出生点，这一下是摆到场上，不是在跑。拿这段距离除以帧时间会得到很大的速度，并且要衰减一会儿。
+            if (!_hasPose || dt < 0.0001f)
+            {
+                _hasPose = true;
+                _velocity = Vector3.zero;
+            }
+            else
+            {
+                Vector3 instant = delta / dt;
+                _velocity = Vector3.Lerp(instant, _velocity, Mathf.Exp(-4f * dt));
+            }
 
             transform.SetPositionAndRotation(worldPos, worldRot);
 
+            Vector3 localVelocity = Quaternion.Inverse(worldRot) * _velocity;
             bool dead = hp <= 0;
             ApplyAnimator(localVelocity, dead);
             ApplyStatus(hp, maxHp, dead);
+
             if (_tintTarget != null && _animator == null)
                 _tintTarget.transform.localRotation = dead ? Quaternion.Euler(80f, 0f, 0f) : Quaternion.identity;
         }
