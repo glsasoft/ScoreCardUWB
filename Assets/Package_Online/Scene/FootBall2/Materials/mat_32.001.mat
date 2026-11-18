@@ -11,7 +11,8 @@ Material:
   m_Shader: {fileID: 4800000, guid: d92c74fb97ca1bd4a940217731742700, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _ALPHATEST_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -24,7 +25,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 00b1ed825e40dc846b176e9470ccb93d, type: 3}
+        m_Texture: {fileID: 2800000, guid: bcaefaad41e58ed489f2d5fc0b4bee92, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NRMTex:
@@ -37,7 +38,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AlphaClip: 0
+    - _AlphaClip: 1
     - _AoeSelect: 0
     - _BumpScale: 1
     - _Cull: 2

@@ -14,6 +14,9 @@
 //    3. Pass 状态从 "Blend 0 Zero Zero / Blend 1 Zero Zero" 改成 "Blend [_SrcBlend] [_DstBlend]"
 //       原版走 MRT 双目标，那两个 Zero Zero 直接照抄在普通 URP 单目标管线里会渲成纯黑
 //    4. 补一个 DepthOnly Pass（原版没有，但 URP 开 _CameraDepthTexture 时需要）
+//    5. 新增 _MainLightTintStrength（主光源染色强度，默认 1）
+//       原版参数表里没有这一项，是本项目扩展：让这支 Unlit 面片能跟着主光源颜色走，
+//       夜景 / 黄昏时远景不至于和场景打光脱节。不占用原版任何参数名。
 //
 //  原版有、这里保留但代码不采样：_MainTex（和 _BaseMap 是同一个槽的两个名字，原版遗留别名）
 //  原版有、这里保留但代码不读：_ColorMask0 / _ColorMask1（MRT 写入掩码，单目标用不上）
@@ -42,6 +45,12 @@ Shader "GLSA/Scene/EnvUnlit"
         // ---------- Albedo ----------
         [Header(Albedo)] _BaseColor ("Albedo Color", Color) = (1,1,1,1)
         _BaseMap ("Albedo Map", 2D) = "white" { }
+
+        // ---------- 主光源染色（本项目新增，不属于原版参数表）----------
+        // 0 = 完全不吃灯（原版行为），1 = 整块颜色乘以主光源颜色（颜色已含灯的强度）。
+        // 远景面片是 Unlit，本来和场景打光毫无关系，换时间 / 换氛围时最容易露馅，
+        // 就是靠这一个乘数把它拉回和周围同一个色温。
+        [Header(Main Light Tint)] _MainLightTintStrength ("Main Light Tint", Range(0, 1)) = 1
 
         // ---------- 远景三件套（原版就是这个顺序，没有 Header）----------
         _GlowIntensity ("_GlowIntensity", Range(0, 1)) = 1
@@ -88,6 +97,7 @@ Shader "GLSA/Scene/EnvUnlit"
             float  _Cutoff;
             float  _Cull;
             float  _GlowIntensity;
+            float  _MainLightTintStrength;
             float  _FresnelPower;
             float  _FresnelClamp;
             float  _FogDensityOffset;
@@ -205,6 +215,23 @@ Shader "GLSA/Scene/EnvUnlit"
                 half fresnel = GLSA_FresnelFactor(input.normalWS, input.viewDirWS);
                 col.rgb *= (1.0h - fresnel * 0.5h);            // 默认：边缘压暗，伪造体积
                 // col.rgb += fresnel * _BaseColor.rgb;        // 想要边缘亮边就换这一行
+
+                // ---- 主光源染色（本项目新增）----
+                // _MainLightColor 由 URP 每帧写入（定义在 Input.hlsl:103，Core.hlsl 第 19 行已包含），
+                // 值等于 VisibleLight.finalColor = 主方向光的 color * intensity，已经在激活色彩空间里，
+                // 和 albedo 直接相乘不会偏色。参数只在「完全不吃灯」和「完全乘灯色」之间插值，0 就是原版行为。
+                half3 mainLightColor = _MainLightColor.rgb;
+
+                // 兜底：场景里没有方向光时 URP 写的是 k_DefaultLightColor = black，
+                // 直接乘会把整块远景压成纯黑，很难查。这里只在"真的是 0"时回落到白，
+                // 灯强度正常的场景（哪怕夜景 0.02）不会误触。
+                half mainLightLum = dot(mainLightColor, half3(0.2126h, 0.7152h, 0.0722h));
+                mainLightColor = mainLightLum > 1e-4h ? mainLightColor : half3(1.0h, 1.0h, 1.0h);
+
+                col.rgb *= lerp(half3(1.0h, 1.0h, 1.0h), mainLightColor, (half)_MainLightTintStrength);
+                // 只想跟着色相走、不想跟着灯变暗，把上面一行换成下面两行：
+                // half3 mainLightTint = mainLightColor / max(max(mainLightColor.r, mainLightColor.g), max(mainLightColor.b, 1e-4h));
+                // col.rgb *= lerp(1.0h, mainLightTint, (half)_MainLightTintStrength);
 
                 // ---- 雾 ----
                 // 项目的所有场景 m_Fog 都是 0，内置雾本来就不跑。这里留两条互斥的路，

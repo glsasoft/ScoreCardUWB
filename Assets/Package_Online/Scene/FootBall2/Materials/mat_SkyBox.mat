@@ -28,7 +28,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 50c63968784a2c547b0ef690ebd6a130, type: 3}
+        m_Texture: {fileID: 2800000, guid: 4a8b881cf4f23ba4a83bc93914cb6f9a, type: 3}
         m_Scale: {x: -5, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -64,6 +64,7 @@ Material:
     - _FresnelPower: 0.85
     - _GlowIntensity: 1
     - _LerpWeight: 0
+    - _MainLightTintStrength: 1
     - _Metallic: 1
     - _Mode: 0
     - _NormalFlipY: 0
