@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: bb830807b6b864f48a8d8a4e6b509e00
+guid: 36d44fd7080b88643a7d7d091a7fdb41
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,13 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: BC_T_ShangJing_1
-    second: {fileID: 2100000, guid: f5509d8a2e7b54945abdd48f3dec5335, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: BC_TanWei_1
-    second: {fileID: 2100000, guid: 1092d978fa857f84da4117337b9d4433, type: 2}
+      name: "\u5C4F\u5E551"
+    second: {fileID: 2100000, guid: 3820e3a3eba662f4386e276fc72c0480, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

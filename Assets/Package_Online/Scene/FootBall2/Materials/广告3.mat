@@ -24,7 +24,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: aae803f87bda5fc4c8c91732998fffbc, type: 3}
+        m_Texture: {fileID: 2800000, guid: 1e8b18fe7e590f54ebc9a294347ae815, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NRMTex:
@@ -32,7 +32,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SMO:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 1e8b18fe7e590f54ebc9a294347ae815, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -44,7 +44,7 @@ Material:
     - _Cutoff: 0.5
     - _DXT5nmSwap: 0
     - _DstBlend: 0
-    - _EmissionSize: 1
+    - _EmissionSize: 2.21
     - _LerpWeight: 0
     - _Metallic: 1
     - _Mode: 0

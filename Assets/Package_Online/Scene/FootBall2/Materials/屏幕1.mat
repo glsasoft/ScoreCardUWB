@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: "\u5C4F\u5E551"
-  m_Shader: {fileID: 4800000, guid: d92c74fb97ca1bd4a940217731742700, type: 3}
+  m_Shader: {fileID: 4800000, guid: 3c11b1544807ace4cb82c2ef79f7f69b, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -27,6 +27,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 51bedf3bc0f03364d95aaab13b2152cd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 6d9ab090b27787a45867427026f390af, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _NRMTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -39,27 +43,60 @@ Material:
     m_Floats:
     - _AlphaClip: 0
     - _AoeSelect: 0
+    - _Brightness: 1.6
     - _BumpScale: 1
+    - _ChromaBleed: 0.233
+    - _ChromaBlur: 0.0065
+    - _ChromaShift: 0.0024
+    - _Cols: 5
     - _Cull: 2
     - _Cutoff: 0.5
     - _DXT5nmSwap: 0
+    - _Desaturate: 0
     - _DstBlend: 0
     - _EmissionSize: 3.68
+    - _FPS: 12
+    - _Flicker: 0.05
+    - _FlickerSpeed: 1.4
+    - _FrameIndex: 0
+    - _HeadBright: 0.101
+    - _HeadShift: 0.0125
+    - _HeadSpeed: 0.145
+    - _HeadWidth: 0.126
+    - _JitterRowFreq: 128
+    - _JitterSpeed: 2
+    - _JitterStrength: 0.001
+    - _JumpChance: 0.12
+    - _JumpSpeed: 5
+    - _JumpStrength: 0.018
     - _LerpWeight: 0
     - _Metallic: 1
+    - _MipBias: -0.5
     - _Mode: 0
+    - _NoiseSpeed: 10
+    - _NoiseStrength: 0.067
     - _NormalFlipY: 0
     - _NormalMode: 0
     - _OcclusionStrength: 1
     - _QueueOffset: 0
+    - _Rows: 6
+    - _ScanlineCount: 200
+    - _ScanlineStrength: 0.16
     - _Smoothness: 1
     - _SrcBlend: 1
+    - _StartFrame: 0
     - _Tutorial: 0
+    - _UseExternalFrame: 0
     - _UseNormalMap: 0
+    - _Vignette: 0
+    - _VignettePower: 0.5
     - _ZWrite: 1
     m_Colors:
     - _AoeSelectColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _DistanceFade: {r: 200, g: 300, b: 0, a: 0}
     - _LerpColor: {r: 1, g: 1, b: 1, a: 1}
+    - _NoiseDensity: {r: 1024, g: 576, b: 0, a: 0}
+    - _Tint: {r: 1, g: 1, b: 1, a: 1}
     - _TutorialColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

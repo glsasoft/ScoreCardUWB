@@ -1,0 +1,217 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: "\u8D34\u56FE\u8FDC\u666Flight"
+  m_Shader: {fileID: 4800000, guid: f45207aa8f9b2f349a63470c9b6ecf0c, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _AERIALFOG_ON
+  - _ALPHATEST_ON
+  - _DISSOLVETEXAR_ON
+  - _DISTORTTEXAR_ON
+  - _MASKTEXAR_ON
+  - _VTOTEXAR_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: a6b28e80fb1f04949bd3344828631522, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DissolveTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DistortTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: a6b28e80fb1f04949bd3344828631522, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Mask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NRMTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SMO:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _VTOTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AN_Fading: 1
+    - _AN_LuminanceJitterThreshold: 0.8
+    - _AN_Speed: 0.5
+    - _AlphaClip: 1
+    - _AlphaCutoff: 0.5
+    - _AoeSelect: 0
+    - _BlendMode: 1
+    - _BumpScale: 1
+    - _ColorMask: 15
+    - _ColorMask0: 15
+    - _ColorMask1: 15
+    - _Cull: 2
+    - _CullMode: 0
+    - _CustomDissolve: 0
+    - _CustomMainTex: 0
+    - _CustomVTO: 0
+    - _Cutoff: 0.5
+    - _DXT5nmSwap: 0
+    - _DepthFade: 1
+    - _Desaturate: 0
+    - _DissolveFactor: 0
+    - _DissolveSoft: 0.1
+    - _DissolveTexAR: 1
+    - _DissolveTexUSpeed: 0
+    - _DissolveTexVSpeed: 0
+    - _DissolveWide: 0.05
+    - _DistortDissolveTex: 0
+    - _DistortFactor: 0
+    - _DistortMainTex: 0
+    - _DistortMaskTex: 0
+    - _DistortTexAR: 1
+    - _DistortTexUSpeed: 0
+    - _DistortTexVSpeed: 0
+    - _Dst: 1
+    - _DstBlend: 0
+    - _EmissionSize: 1
+    - _EnableAnalogNoise: 0
+    - _EnableImageBlock: 0
+    - _EnableLineBlock: 0
+    - _EnableRGBSplit: 0
+    - _EnableScanLineJitter: 0
+    - _EnableScreenShake: 0
+    - _EnableWaveJitter: 0
+    - _FDepth: 0
+    - _FDissolveTex: 0
+    - _FDistortTex: 0
+    - _FFnl: 0
+    - _FMaskTex: 0
+    - _FilpMask: 0
+    - _FnlPower: 1
+    - _FnlScale: 0
+    - _FogDensityOffset: 0
+    - _FresnelClamp: 0.75
+    - _FresnelPower: 0.85
+    - _GlowIntensity: 1
+    - _IB_Amount: 1
+    - _IB_BlockLayer1_Indensity: 8
+    - _IB_BlockLayer1_U: 9
+    - _IB_BlockLayer1_V: 9
+    - _IB_BlockLayer2_Indensity: 4
+    - _IB_BlockLayer2_U: 5
+    - _IB_BlockLayer2_V: 5
+    - _IB_Fade: 1
+    - _IB_RGBEnum: 0.5
+    - _IB_RGBSplitIndensity: 0.5
+    - _IB_Speed: 0.5
+    - _IfVTO: 0
+    - _InvFade: 1
+    - _LB_Alpha: 1
+    - _LB_Amount: 0.5
+    - _LB_Direction: 0
+    - _LB_Frequency: 0
+    - _LB_Infinite: 0
+    - _LB_LinesWidth: 1
+    - _LB_Offset: 1
+    - _LB_Speed: 0.8
+    - _LerpWeight: 0
+    - _MainAlpha: 1
+    - _MainTexAR: 0
+    - _MainTexUSpeed: 0
+    - _MainTexVSpeed: 0
+    - _MaskTexAR: 1
+    - _MaskTexUSpeed: 0
+    - _MaskTexVSpeed: 0
+    - _Metallic: 1
+    - _Mode: 0
+    - _NormalFlipY: 0
+    - _NormalMode: 0
+    - _OcclusionStrength: 1
+    - _QueueOffset: 0
+    - _RGBS_Amount: 0.5
+    - _RGBS_AmountB: 1
+    - _RGBS_AmountR: 1
+    - _RGBS_CenterFading: 0
+    - _RGBS_Direction: 0
+    - _RGBS_Fading: 1
+    - _RGBS_Speed: 1
+    - _ReFnl: 0
+    - _SLJ_Direction: 0
+    - _SLJ_Frequency: 0
+    - _SLJ_Intensity: 0.1
+    - _SS_Direction: 0
+    - _SS_Intensity: 0.3
+    - _Scr: 1
+    - _Section1: 0
+    - _Section2: 0
+    - _Section3: 0
+    - _Section4: 0
+    - _Section5: 0
+    - _Section6: 0
+    - _Section7: 0
+    - _SectionHint: 0
+    - _Smoothness: 1
+    - _SrcBlend: 1
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _Tutorial: 0
+    - _UseAerialFog: 1
+    - _UseNormalMap: 0
+    - _VTOScale: 1
+    - _VTOTexAR: 1
+    - _VTOTexUSpeed: 0
+    - _VTOTexVSpeed: 0
+    - _WJ_Amount: 1
+    - _WJ_Direction: 0
+    - _WJ_Frequency: 0
+    - _WJ_RGBSplit: 20
+    - _WJ_Speed: 0.25
+    - _WJ_UseCustomResolution: 0
+    - _ZTest: 4
+    - _ZWrite: 1
+    - _ZWriteOn: 0
+    m_Colors:
+    - _AoeSelectColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
+    - _DissolveColor: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _FnlColor: {r: 1, g: 1, b: 1, a: 1}
+    - _LerpColor: {r: 1, g: 1, b: 1, a: 1}
+    - _MainColor: {r: 4, g: 4, b: 4, a: 1}
+    - _TintColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
+    - _TutorialColor: {r: 1, g: 1, b: 1, a: 1}
+    - _WJ_Resolution: {r: 640, g: 480, b: 0, a: 0}
+  m_BuildTextureStacks: []
