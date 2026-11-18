@@ -189,6 +189,22 @@ public static class DeviceIdentifier
         }
     }
 
+    /// <summary>完整版本号：<c>versionName.versionCode</c>，如 <c>1.0.0.24</c>（24 为 build 号）。</summary>
+    public static string FullVersion
+    {
+        get
+        {
+#if UNITY_EDITOR
+            return $"{UnityEditor.PlayerSettings.bundleVersion}.{UnityEditor.PlayerSettings.Android.bundleVersionCode}";
+#else
+            string name = VersionName;
+            if (string.IsNullOrEmpty(name)) name = Application.version;
+            int code = VersionCode;
+            return code > 0 ? $"{name}.{code}" : name;
+#endif
+        }
+    }
+
     // ════════════════════════════════════════════════════════════════════
     //  系统信息
     // ════════════════════════════════════════════════════════════════════

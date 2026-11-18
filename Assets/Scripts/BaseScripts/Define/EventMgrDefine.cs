@@ -491,6 +491,12 @@ namespace LetsPiu
         ScoreCardVoiceMusicCommandEvent,
 
         /// <summary>
+        /// 比分牌 MQTT 自动更新通知（<c>msgType=updateVersion</c>，无载荷）：
+        /// 由 <c>FirApkUpdateButton</c> 订阅，回到待机页后静默检查并安装新版本。
+        /// </summary>
+        ScoreCardAutoUpdateRequestEvent,
+
+        /// <summary>
         /// 比分牌当前场次数据刷新（载荷 <see cref="LetsPiu.Common.Network.Model.ScoreCard.ScoreCardMatchData"/>）。
         /// 由 <c>ScoreCardFightPanel</c> 经 <c>ScoreCardMatchDataHub.Publish</c> 广播；
         /// 各模式顶部 Top widget 自行订阅接收，页面不再转发。

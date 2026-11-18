@@ -20,6 +20,7 @@ using LetsPiu.Base.BaseScripts.Utils;
 using LetsPiu.Common.Network.Model.Http.Play;
 using LetsPiu.Common.Network.Model.Mqtt;
 using LetsPiu.Common.Network.Model.Mqtt.Read;
+using LetsPiu.Common.Network.Model.ScoreCard;
 using LetsPiu.Define;
 using LetsPiu.Main.Common.Scripts;
 using MQTTnet;
@@ -330,6 +331,86 @@ namespace LetsPiu
                                 return;
                             }
 
+                            var mqttMsgType = scoreCardRoot.Value<string>("msgType");
+                            if (!string.IsNullOrWhiteSpace(mqttMsgType) &&
+                                string.Equals(mqttMsgType, ScoreCardAndroidMqttMsgType.Voice,
+                                    StringComparison.OrdinalIgnoreCase))
+                            {
+                                var voiceEnvelope = scoreCardRoot.ToObject<ScoreCardVoiceMqttEnvelope>();
+                                if (voiceEnvelope?.msg != null)
+                                {
+                                    EventManager.Instance.Broadcast(EventMsg.ScoreCardVoiceMusicCommandEvent,
+                                        voiceEnvelope.msg);
+                                }
+                                else
+                                {
+                                    Debug.LogWarning("[ScoreCard] voice 消息解析失败（msg 为空），str=" + str);
+                                }
+
+                                return;
+                            }
+
+                            if (!string.IsNullOrWhiteSpace(mqttMsgType) &&
+                                string.Equals(mqttMsgType, ScoreCardAndroidMqttMsgType.Lora,
+                                    StringComparison.OrdinalIgnoreCase))
+                            {
+                                var loraEnvelope = scoreCardRoot.ToObject<ScoreCardLoraMqttEnvelope>();
+                                var hexFrame = loraEnvelope?.msg?.value;
+                                if (!string.IsNullOrWhiteSpace(hexFrame))
+                                {
+                                    Debug.Log("[ScoreCard] lora 下行透传: " + hexFrame);
+                                    LoraSerialBridge.Instance.DispatchMqttLoraCommand(hexFrame.Trim());
+                                }
+                                else
+                                {
+                                    Debug.LogWarning("[ScoreCard] lora 消息解析失败（msg.value 为空），str=" + str);
+                                }
+
+                                return;
+                            }
+
+                            if (string.Equals(mqttMsgType, ScoreCardAndroidMqttMsgType.UpdateVersion,
+                                    StringComparison.OrdinalIgnoreCase))
+                            {
+                                Debug.Log("[ScoreCard] 收到自动更新通知，回到待机页后静默检查并更新");
+                                EventManager.Instance.Broadcast(EventMsg.ScoreCardAutoUpdateRequestEvent);
+                                return;
+                            }
+
+                            if (string.Equals(mqttMsgType, ScoreCardAndroidMqttMsgType.QueryVersion,
+                                    StringComparison.OrdinalIgnoreCase))
+                            {
+                                PublishVersion();
+                                return;
+                            }
+
+                            if (!string.IsNullOrWhiteSpace(mqttMsgType) &&
+                                string.Equals(mqttMsgType, ScoreCardAndroidMqttMsgType.ScoreCard,
+                                    StringComparison.OrdinalIgnoreCase))
+                            {
+                                var envelope = scoreCardRoot.ToObject<ScoreCardCommandEnvelope>();
+                                var cmd = envelope?.msg;
+                                if (cmd == null || string.IsNullOrWhiteSpace(cmd.subCode))
+                                {
+                                    Debug.LogWarning("[ScoreCard] scoreCard 指令解析失败（msg 或 subCode 为空），str=" + str);
+                                    return;
+                                }
+
+                                if (string.Equals(cmd.subCode, ScoreCardAndroidMqttMsgType.QueryVersion,
+                                        StringComparison.OrdinalIgnoreCase))
+                                {
+                                    PublishVersion();
+                                    return;
+                                }
+
+                                Debug.Log($"[ScoreCard] command category={cmd.category} subCode={cmd.subCode}" +
+                                          $" autoPlay={cmd.autoPlay} hasData={cmd.data != null}");
+                                EventManager.Instance.Broadcast(EventMsg.ScoreCardCommandEvent, cmd);
+                                return;
+                            }
+
+                            // 未知 msgType（含历史 wgc / 旧 type=ping 等）一律忽略
+                            Debug.LogWarning($"[ScoreCard] 未知 msgType={mqttMsgType}，已忽略");
                             return;
                         }
 
@@ -1323,19 +1404,139 @@ namespace LetsPiu
         /// </summary>
         private void PublishLoraUplink(string hexFrame)
         {
-            //if (string.IsNullOrWhiteSpace(hexFrame)) return;
+            if (string.IsNullOrWhiteSpace(hexFrame)) return;
 
-            //var device = AppStateManager.Instance.DeviceInfo5S;
-            //if (device == null)
-            //{
-            //    Debug.LogWarning("[MqttConnector] LORA 上行失败: DeviceInfo5S 为空, hex=" + hexFrame);
-            //    return;
-            //}
+            var device = AppStateManager.Instance.DeviceInfo5S;
+            if (device == null)
+            {
+                Debug.LogWarning("[MqttConnector] LORA 上行失败: DeviceInfo5S 为空, hex=" + hexFrame);
+                return;
+            }
 
-            //var topic = device.GetSubscribeTopic();
-            //var json = JsonHelper.SerializeObject(new ScoreCardLoraUplinkMessage(hexFrame));
-            //Debug.Log("[ScoreCard] lora 上行: topic=" + topic + " json=" + json);
-            //Publish(topic, json);
+            var topic = device.GetSubscribeTopic();
+            var json = JsonHelper.SerializeObject(new ScoreCardLoraUplinkMessage(hexFrame));
+            Debug.Log("[ScoreCard] lora 上行: topic=" + topic + " json=" + json);
+            Publish(topic, json);
+        }
+
+        /// <summary>
+        /// 回复服务器的版本号查询（<c>msgType=queryVersion</c>，或 <c>msgType=scoreCard</c> 且 <c>subCode=QueryVersion</c>）。与 Lora 上行同一 topic
+        /// （<see cref="DeviceInfo5S.GetSubscribeTopic"/>，即 <c>.../android/get</c>），
+        /// 消息体 <c>{"msgType":"version","msg":{"version":"1.0.0.24"}}</c>。
+        /// </summary>
+        private void PublishVersion()
+        {
+            var device = AppStateManager.Instance.DeviceInfo5S;
+            if (device == null)
+            {
+                Debug.LogWarning("[MqttConnector] 版本号上报失败: DeviceInfo5S 为空");
+                return;
+            }
+
+            var json = new JObject
+            {
+                ["msgType"] = ScoreCardAndroidMqttMsgType.Version,
+                ["msg"] = new JObject { ["version"] = DeviceIdentifier.FullVersion },
+            }.ToString(Formatting.None);
+            var topic = device.GetSubscribeTopic();
+            Debug.Log("[ScoreCard] 上报版本号: topic=" + topic + " json=" + json);
+            Publish(topic, json);
+        }
+
+        /// <summary>
+        /// 联调用：模拟收到一条 <c>msgType=scoreCard</c> 的 MQTT 消息，
+        /// 走与正常入站完全相同的反序列化/广播路径。
+        /// 与真实 MQTT 链路无关，可在无后端时本地驱动整套切屏管线。
+        /// </summary>
+        /// <param name="json">完整外壳 JSON，例如
+        /// <c>{"msgType":"scoreCard","msg":{"category":"PAGE","subCode":"S1","autoPlay":true,"data":{}}}</c></param>
+        public void SimulateReceiveScoreCardJson(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                Debug.LogWarning("[MqttConnector][Simulate] 空 JSON，已忽略");
+                return;
+            }
+
+            try
+            {
+                Debug.Log("[MqttConnector][Simulate] 注入消息: " + json);
+                var root = JsonHelper.DeserializeObject<JObject>(json);
+                if (root == null)
+                {
+                    Debug.LogWarning("[MqttConnector][Simulate] JSON 反序列化失败");
+                    return;
+                }
+
+                var mqttMsgType = root.Value<string>("msgType");
+                if (!string.Equals(mqttMsgType, ScoreCardAndroidMqttMsgType.ScoreCard,
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    Debug.LogWarning($"[MqttConnector][Simulate] 仅支持 msgType=scoreCard，实际={mqttMsgType}");
+                    return;
+                }
+
+                var envelope = root.ToObject<ScoreCardCommandEnvelope>();
+                var cmd = envelope?.msg;
+                if (cmd == null || string.IsNullOrWhiteSpace(cmd.subCode))
+                {
+                    Debug.LogWarning("[MqttConnector][Simulate] msg 或 subCode 为空");
+                    return;
+                }
+
+                EventManager.Instance.Broadcast(EventMsg.ScoreCardCommandEvent, cmd);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("[MqttConnector][Simulate] 异常: " + e);
+            }
+        }
+
+        /// <summary>
+        /// 联调用：模拟收到一条 <c>msgType=voice</c> 的 MQTT 消息（耳机口战场背景音乐播放/暂停等），
+        /// 走与正常入站完全相同的反序列化/广播路径。与真实 MQTT 链路无关。
+        /// </summary>
+        /// <param name="json">完整外壳 JSON，例如
+        /// <c>{"msgType":"voice","msg":{"id":"1","isLoop":1,"type":"play","url":"https://...mp3"}}</c></param>
+        public void SimulateReceiveVoiceJson(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                Debug.LogWarning("[MqttConnector][Simulate] 空 JSON，已忽略");
+                return;
+            }
+
+            try
+            {
+                Debug.Log("[MqttConnector][Simulate] 注入消息: " + json);
+                var root = JsonHelper.DeserializeObject<JObject>(json);
+                if (root == null)
+                {
+                    Debug.LogWarning("[MqttConnector][Simulate] JSON 反序列化失败");
+                    return;
+                }
+
+                var mqttMsgType = root.Value<string>("msgType");
+                if (!string.Equals(mqttMsgType, ScoreCardAndroidMqttMsgType.Voice,
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    Debug.LogWarning($"[MqttConnector][Simulate] 仅支持 msgType=voice，实际={mqttMsgType}");
+                    return;
+                }
+
+                var envelope = root.ToObject<ScoreCardVoiceMqttEnvelope>();
+                if (envelope?.msg == null)
+                {
+                    Debug.LogWarning("[MqttConnector][Simulate] voice msg 为空");
+                    return;
+                }
+
+                EventManager.Instance.Broadcast(EventMsg.ScoreCardVoiceMusicCommandEvent, envelope.msg);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("[MqttConnector][Simulate] 异常: " + e);
+            }
         }
 
         /// <summary>
@@ -1349,11 +1550,11 @@ namespace LetsPiu
             try
             {
                 var playerTopic = "/glsa/player/" + AppStateManager.Instance.Play.id + "/" + shortId;
-                
+
                 Profiler.BeginSample($"SendMessageToPlayerTopic_JsonSerialize_{shortId}");
                 var json = JsonHelper.SerializeObject(msg);
                 Profiler.EndSample();
-                
+
                 Publish(playerTopic, json);
             }
             catch (Exception e)
