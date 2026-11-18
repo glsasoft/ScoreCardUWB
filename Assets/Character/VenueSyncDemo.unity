@@ -545,7 +545,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   space: {fileID: 100033}
   modelPrefab: {fileID: 0}
-  interpolationDelay: 0.12
+  interpolationDelay: 0.2
   removeAfterSeconds: 2
   teleportDistance: 8
   gaitReferenceSpeed: 1.8

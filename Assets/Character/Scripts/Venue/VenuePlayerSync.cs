@@ -42,8 +42,8 @@ namespace LetsPiu.Character
         [Tooltip("玩家模型。留空时用胶囊代替，方便美术场景还没好时先看同步。")]
         public GameObject modelPrefab;
 
-        [Tooltip("回放比最新数据包晚多少秒。大约比服务器发送间隔再多一两帧。")]
-        public float interpolationDelay = 0.12f;
+        [Tooltip("回放比最新数据包晚多少秒。要大于发送间隔，两包之间才有缓冲可插值。")]
+        public float interpolationDelay = 0.2f;
 
         [Tooltip("多久没收到这个玩家就从场景里拿走。")]
         public float removeAfterSeconds = 2f;
@@ -76,7 +76,7 @@ namespace LetsPiu.Character
             if (space == null)
                 space = GetComponent<VenueSpace>();
 
-            if (UIRoot.S.worldCanvas)
+            if (UIRoot.S && UIRoot.S.worldCanvas)
             {
                 this.transform.SetParent(UIRoot.S.worldCanvas.transform);
                 var virtualCamera = GameObject.Find("/Virtual Camera");
@@ -272,9 +272,12 @@ namespace LetsPiu.Character
                 return;
 
             int last = samples.Count - 1;
+            // 回放时间跟着本地时钟走。若钉在「最新一包的时间」上，两包之间位置不变，下一包到了才跳一截。
             double renderTime = samples.Count == 1
                 ? samples[0].time
-                : samples[last].time - interpolationDelay;
+                : Time.timeAsDouble - Math.Max(0d, interpolationDelay);
+            if (renderTime > samples[last].time)
+                renderTime = samples[last].time;
             if (renderTime < samples[0].time)
                 renderTime = samples[0].time;
 

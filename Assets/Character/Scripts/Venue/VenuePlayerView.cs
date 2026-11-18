@@ -173,10 +173,14 @@ namespace LetsPiu.Character
             else
                 aniVelocity = localVelocity / _gaitReferenceSpeed;
 
-            float t = Mathf.Exp(-4 * Time.deltaTime);
-            float moveX = Mathf.Lerp(Mathf.Clamp(aniVelocity.x, -AnimationRunSpeed, AnimationRunSpeed), _lastMoveX, t);
-            float moveZ = Mathf.Lerp(Mathf.Clamp(aniVelocity.z, -AnimationWalkSpeed, AnimationRunSpeed), _lastMoveZ, t);
-            float moveSpeed = Mathf.Lerp(speed / _animator.transform.lossyScale.x, _lastMoveSpeed, t);
+            //float t = Mathf.Exp(-4 * Time.deltaTime);
+            //float moveX = Mathf.Lerp(Mathf.Clamp(aniVelocity.x, -AnimationRunSpeed, AnimationRunSpeed), _lastMoveX, t);
+            //float moveZ = Mathf.Lerp(Mathf.Clamp(aniVelocity.z, -AnimationWalkSpeed, AnimationRunSpeed), _lastMoveZ, t);
+            //float moveSpeed = Mathf.Lerp(speed / _animator.transform.lossyScale.x, _lastMoveSpeed, t);
+
+            float moveX = Mathf.Clamp(aniVelocity.x, -AnimationRunSpeed, AnimationRunSpeed);
+            float moveZ = Mathf.Clamp(aniVelocity.z, -AnimationWalkSpeed, AnimationRunSpeed);
+            float moveSpeed = speed / _animator.transform.lossyScale.x;
 
             //if (_hasMoveX && !Mathf.Approximately(moveX, _lastMoveX)) _animator.SetFloat(MoveXId, moveX);
             if (_hasMoveZ && !Mathf.Approximately(moveZ, _lastMoveZ)) _animator.SetFloat(MoveZId, moveZ);
