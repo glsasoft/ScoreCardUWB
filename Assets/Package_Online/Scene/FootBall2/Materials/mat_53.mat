@@ -24,15 +24,15 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 18d6bcbe1a14ea04cbd04a9aae03883c, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8b65edf6b79323048b6d964f0e1a6958, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NRMTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: bc71670d81347b346ac575c886c4c66b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SMO:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: c5cad72fb571d6d449fc92b186f346b0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -49,13 +49,13 @@ Material:
     - _Metallic: 1
     - _Mode: 0
     - _NormalFlipY: 0
-    - _NormalMode: 0
+    - _NormalMode: 1
     - _OcclusionStrength: 1
     - _QueueOffset: 0
     - _Smoothness: 1
     - _SrcBlend: 1
     - _Tutorial: 0
-    - _UseNormalMap: 0
+    - _UseNormalMap: 1
     - _ZWrite: 1
     m_Colors:
     - _AoeSelectColor: {r: 1, g: 1, b: 1, a: 1}

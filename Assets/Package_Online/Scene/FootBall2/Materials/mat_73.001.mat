@@ -59,7 +59,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _AoeSelectColor: {r: 1, g: 1, b: 1, a: 1}
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 0.7783019, g: 0.90922505, b: 1, a: 1}
     - _LerpColor: {r: 1, g: 1, b: 1, a: 1}
     - _TutorialColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

@@ -41,7 +41,7 @@ Material:
     - _AlphaClip: 1
     - _AoeSelect: 0
     - _BumpScale: 1
-    - _Cull: 2
+    - _Cull: 0
     - _Cutoff: 0.5
     - _DXT5nmSwap: 0
     - _DstBlend: 0

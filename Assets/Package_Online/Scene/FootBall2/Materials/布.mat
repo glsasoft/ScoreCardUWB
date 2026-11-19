@@ -45,7 +45,7 @@ Material:
     - _Cutoff: 0.5
     - _DXT5nmSwap: 0
     - _DstBlend: 0
-    - _EmissionSize: 1
+    - _EmissionSize: 0.3
     - _LerpWeight: 0
     - _Metallic: 1
     - _Mode: 0

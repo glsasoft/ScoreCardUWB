@@ -1,0 +1,159 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Ground
+  m_Shader: {fileID: 4800000, guid: f45207aa8f9b2f349a63470c9b6ecf0c, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _FDISSOLVETEX_ON
+  - _FDISTORTTEX_ON
+  - _FMASKTEX_ON
+  m_InvalidKeywords:
+  - _AERIALFOG_ON
+  - _ALPHATEST_ON
+  - _DISSOLVETEXAR_ON
+  - _DISTORTMAINTEX_ON
+  - _DISTORTTEXAR_ON
+  - _MASKTEXAR_ON
+  - _VTOTEXAR_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: cc0d9b50acb39684093c95ebaee12fb6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DissolveTex:
+        m_Texture: {fileID: 2800000, guid: 59913c7576dc4db597368fdb423f7557, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DistortTex:
+        m_Texture: {fileID: 2800000, guid: 82b1908ee7690a342b0c6481c959f1ca, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 7350247d2bc2ec748968fa42bd671e96, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 2800000, guid: 5039bffa46d93cf4f9388cd9169ec1cd, type: 3}
+        m_Scale: {x: 8, y: 8}
+        m_Offset: {x: 0, y: 0}
+    - _NRMTex:
+        m_Texture: {fileID: 2800000, guid: efd6a7f4150b8e1429b81c14acedadfe, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SMO:
+        m_Texture: {fileID: 2800000, guid: ae0db20601b9d8a43a2056080b3304f2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _VTOTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaClip: 1
+    - _AlphaCutoff: 0.5
+    - _AoeSelect: 0
+    - _BlendMode: 1
+    - _BumpScale: 1
+    - _ColorMask: 15
+    - _ColorMask0: 15
+    - _ColorMask1: 15
+    - _Cull: 2
+    - _CullMode: 0
+    - _CustomDissolve: 0
+    - _CustomMainTex: 0
+    - _CustomVTO: 0
+    - _Cutoff: 0.5
+    - _DXT5nmSwap: 0
+    - _DepthFade: 1
+    - _Desaturate: 0
+    - _DissolveFactor: 0.501
+    - _DissolveSoft: 1
+    - _DissolveTexAR: 1
+    - _DissolveTexUSpeed: 0
+    - _DissolveTexVSpeed: 0
+    - _DissolveWide: 0.05
+    - _DistortDissolveTex: 0
+    - _DistortFactor: 0.083
+    - _DistortMainTex: 1
+    - _DistortMaskTex: 0
+    - _DistortTexAR: 1
+    - _DistortTexUSpeed: 0
+    - _DistortTexVSpeed: -0.1
+    - _Dst: 1
+    - _DstBlend: 0
+    - _EmissionSize: 0.3
+    - _FDepth: 0
+    - _FDissolveTex: 1
+    - _FDistortTex: 1
+    - _FFnl: 0
+    - _FMaskTex: 1
+    - _FnlPower: 1
+    - _FnlScale: 0
+    - _FogDensityOffset: 0
+    - _FresnelClamp: 0.75
+    - _FresnelPower: 0.85
+    - _GlowIntensity: 1
+    - _IfVTO: 0
+    - _LerpWeight: 0
+    - _MainAlpha: 0.2
+    - _MainLightTintStrength: 1
+    - _MainTexAR: 0
+    - _MainTexUSpeed: 0
+    - _MainTexVSpeed: 0.1
+    - _MaskTexAR: 1
+    - _MaskTexUSpeed: 0
+    - _MaskTexVSpeed: 0
+    - _Metallic: 1
+    - _Mode: 0
+    - _NormalFlipY: 0
+    - _NormalMode: 1
+    - _OcclusionStrength: 1
+    - _QueueOffset: 0
+    - _ReFnl: 0
+    - _Scr: 1
+    - _Smoothness: 1
+    - _SrcBlend: 1
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _Tutorial: 0
+    - _UseAerialFog: 1
+    - _UseNormalMap: 1
+    - _VTOScale: 1
+    - _VTOTexAR: 1
+    - _VTOTexUSpeed: 0
+    - _VTOTexVSpeed: 0
+    - _ZTest: 4
+    - _ZWrite: 1
+    - _ZWriteOn: 0
+    m_Colors:
+    - _AoeSelectColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
+    - _DissolveColor: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _FnlColor: {r: 1, g: 1, b: 1, a: 1}
+    - _LerpColor: {r: 1, g: 1, b: 1, a: 1}
+    - _MainColor: {r: 1, g: 1, b: 1, a: 1}
+    - _TutorialColor: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []

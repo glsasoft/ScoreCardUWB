@@ -34,7 +34,7 @@ Material:
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: 2000
   stringTagMap: {}
   disabledShaderPasses:
   - DrawStencilOutline
@@ -138,7 +138,7 @@ Material:
     - _BaseMapValue: 2
     - _BaseOutlineOffset: 0.5
     - _Blend: 0
-    - _BlendMode2: 1
+    - _BlendMode2: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
     - _ClearCoatMask: 0
@@ -159,7 +159,7 @@ Material:
     - _Dissolve_On: 0
     - _Dither: 0
     - _DitherFadeoutAmount: 0
-    - _DstBlend: 10
+    - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _Eff: 0
     - _EmissionIntensity: 0.86
@@ -209,7 +209,7 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _Smoothness_Rain: 1
     - _SpecularHighlights: 1
-    - _SrcBlend: 5
+    - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Static: 0
     - _StencilOutline: 0
@@ -223,7 +223,7 @@ Material:
     - _Unlit: 0
     - _WorkflowMode: 1
     - _ZTest: 4
-    - _ZWrite: 0
+    - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseOutlineColor: {r: 0, g: 0, b: 0, a: 1}

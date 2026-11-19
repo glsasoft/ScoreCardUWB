@@ -29,11 +29,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NRMTex:
-        m_Texture: {fileID: 2800000, guid: 7fee3d1bccd18dc459379a4437452064, type: 3}
+        m_Texture: {fileID: 2800000, guid: af9b0280a02d39749abe89b9f7e8d5b8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SMO:
-        m_Texture: {fileID: 2800000, guid: d6664398af8cf8c48a12d9f2b3173d9b, type: 3}
+        m_Texture: {fileID: 2800000, guid: 05ef42dbb5e5b2743b690c4a75ad44ed, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []

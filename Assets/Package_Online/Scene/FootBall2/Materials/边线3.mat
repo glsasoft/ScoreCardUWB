@@ -8,10 +8,12 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: "\u8FB9\u7EBF3"
-  m_Shader: {fileID: 4800000, guid: d92c74fb97ca1bd4a940217731742700, type: 3}
+  m_Shader: {fileID: 4800000, guid: fee7443962ff48758fc3279a69891896, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _AERIALFOG_ON
+  - _ALPHATEST_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -24,11 +26,15 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 8d2ff4f55bce5654e9a63b24a0d83e75, type: 3}
+        m_Texture: {fileID: 2800000, guid: 82c45927072e898489bfc2c9187143f9, type: 3}
+        m_Scale: {x: 1, y: 0.18}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NRMTex:
-        m_Texture: {fileID: 2800000, guid: 3f03411fb2c167e459b7849938d7419d, type: 3}
+        m_Texture: {fileID: 2800000, guid: 5c8dbb45e0ba35c4c97b61b7faddd297, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SMO:
@@ -37,15 +43,22 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AlphaClip: 0
+    - _AlphaClip: 1
     - _AoeSelect: 0
     - _BumpScale: 1
+    - _ColorMask0: 15
+    - _ColorMask1: 15
     - _Cull: 2
     - _Cutoff: 0.5
     - _DXT5nmSwap: 0
     - _DstBlend: 0
     - _EmissionSize: 0
+    - _FogDensityOffset: 0
+    - _FresnelClamp: 0.75
+    - _FresnelPower: 0.85
+    - _GlowIntensity: 1
     - _LerpWeight: 0
+    - _MainLightTintStrength: 1
     - _Metallic: 1
     - _Mode: 0
     - _NormalFlipY: 0
@@ -55,11 +68,12 @@ Material:
     - _Smoothness: 1
     - _SrcBlend: 1
     - _Tutorial: 0
+    - _UseAerialFog: 1
     - _UseNormalMap: 1
     - _ZWrite: 1
     m_Colors:
     - _AoeSelectColor: {r: 1, g: 1, b: 1, a: 1}
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 1, g: 0.5098561, b: 0, a: 1}
     - _LerpColor: {r: 1, g: 1, b: 1, a: 1}
     - _TutorialColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
