@@ -138,6 +138,19 @@ MonoBehaviour:
         FilterRuleName: CollectScene
         AssetTags: 
         UserData: 
+    - GroupName: Online
+      GroupDesc: 
+      AssetTags: Online
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Package_Online/Scene/FootBall2
+        CollectorGUID: 3586fb3de46615a4590a3ee08317f67a
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectScene
+        AssetTags: 
+        UserData: 
     - GroupName: Art
       GroupDesc: "\u6240\u6709\u7F8E\u672F\u8D44\u6E90"
       AssetTags: 

@@ -250,7 +250,8 @@ namespace LetsPiu.UI
 
         string GetSceneName(SceneType sceneType) => sceneType switch
         {
-            SceneType.Hall => "Scene_Homepage",
+            //SceneType.Hall => "Scene_Homepage",
+            SceneType.Hall => "FootBall2",
             _ => "",
         };
 

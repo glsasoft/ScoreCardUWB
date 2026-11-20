@@ -79,13 +79,11 @@ namespace LetsPiu.Character
             if (UIRoot.S && UIRoot.S.worldCanvas)
             {
                 this.transform.SetParent(UIRoot.S.worldCanvas.transform);
-                var virtualCamera = GameObject.Find("/Virtual Camera");
+                var virtualCamera = GameObject.Find("/SceneBase/Virtual Camera");
                 float dis = (this.transform.position - virtualCamera.transform.position).magnitude;
                 Canvas rootCanvas = UIRoot.S.rootCanvas;
                 worldUiScale = dis / rootCanvas.planeDistance * rootCanvas.transform.localScale.x;
             }
-
-            GameObject.Find("/Plane")?.GetComponent<MeshRenderer>()?.material.SetColor("_BaseColor", new Color(0.8f, 0.8f, 0.8f));
         }
 
         void OnEnable()

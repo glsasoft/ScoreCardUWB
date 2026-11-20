@@ -42,6 +42,7 @@ namespace LetsPiu.UI.UIScript.SceneLoad.UIPnlScript
                 return LoadType.LoadSeverDataFail;
             }
 
+            ShowTip("正在加载场景...", Color.white);
             SetSliderAmount(m_DataSliderMax);
             return LoadType.OK;
         }
