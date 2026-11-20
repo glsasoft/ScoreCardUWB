@@ -63,15 +63,15 @@ Material:
     - _HeadShift: 0.0125
     - _HeadSpeed: 0.145
     - _HeadWidth: 0.126
-    - _JitterRowFreq: 128
+    - _JitterRowFreq: 189
     - _JitterSpeed: 2
     - _JitterStrength: 0.001
-    - _JumpChance: 0.12
+    - _JumpChance: 0.124
     - _JumpSpeed: 5
     - _JumpStrength: 0.018
     - _LerpWeight: 0
     - _Metallic: 1
-    - _MipBias: -0.5
+    - _MipBias: -2
     - _Mode: 0
     - _NoiseSpeed: 10
     - _NoiseStrength: 0.067
@@ -88,8 +88,8 @@ Material:
     - _Tutorial: 0
     - _UseExternalFrame: 0
     - _UseNormalMap: 0
-    - _Vignette: 0
-    - _VignettePower: 0.5
+    - _Vignette: 1
+    - _VignettePower: 0.96
     - _ZWrite: 1
     m_Colors:
     - _AoeSelectColor: {r: 1, g: 1, b: 1, a: 1}
