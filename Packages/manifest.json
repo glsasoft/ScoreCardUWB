@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.coplaydev.unity-mcp": "file:com.coplaydev.unity-mcp",
     "com.code-philosophy.hybridclr": "https://github.com/focus-creative-games/hybridclr_unity.git/",
     "com.coffee.softmask-for-ugui": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src",
     "com.jasonma.lwgui": "https://github.com/JasonMa0012/LWGUI.git",

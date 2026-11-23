@@ -2,6 +2,12 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <!--
+      multisink-alsa-release.aar 声明 minSdkVersion=24，而本项目 PlayerSettings 仍是 22。
+      UVC 插件（com.serenegiant.unity.uvcplugin）声明更高 minSdk。
+      目标设备（RK3588 / 小米电视）均为 API 31+，用 overrideLibrary 与 ScoreCardUnity 对齐。
+    -->
+    <uses-sdk tools:overrideLibrary="com.example.multisinkaudio.alsa,com.serenegiant.unity.uvcplugin"/>
     <application>
         <activity android:name="com.unity3d.player.UnityPlayerActivity"
                   android:theme="@style/UnityThemeSelector">

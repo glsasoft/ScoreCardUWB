@@ -272,7 +272,7 @@ public class XFPersonateTTSPlayer : MonoBehaviour
 #endif
     }
 
-#if UNITY_EDITOR
+#if !(UNITY_ANDROID && !UNITY_EDITOR)
     private IEnumerator MockExternalAlsa()
     {
         yield return new WaitForSeconds(0.1f);

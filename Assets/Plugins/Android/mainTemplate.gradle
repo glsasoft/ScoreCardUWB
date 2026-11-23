@@ -16,6 +16,13 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
 
+    packagingOptions {
+        pickFirst '**/arm64-v8a/libtinyalsa.so'
+        pickFirst '**/arm64-v8a/libmultisinkalsa.so'
+        pickFirst '**/armeabi-v7a/libtinyalsa.so'
+        pickFirst '**/armeabi-v7a/libmultisinkalsa.so'
+    }
+
     defaultConfig {
         minSdkVersion **MINSDKVERSION**
         targetSdkVersion **TARGETSDKVERSION**
