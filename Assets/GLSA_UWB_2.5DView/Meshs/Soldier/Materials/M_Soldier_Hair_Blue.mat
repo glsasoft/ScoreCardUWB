@@ -25,6 +25,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _NILOTOON_DISSOLVE
   - _SUNTINT
   m_InvalidKeywords:
   - OFF
@@ -142,8 +143,8 @@ Material:
     - _DissolveBorderRange: 0.04
     - _DissolveEdgeDitherStrength: 0
     - _DissolveGroup: 0
-    - _DissolveMaxY: 1.538881
-    - _DissolveMinY: -0.20976698
+    - _DissolveMaxY: 1.5528498
+    - _DissolveMinY: -0.1002931
     - _DissolveRootY: 0
     - _DissolveTopBorderRange: 0.02
     - _DitherFadeoutAmount: 0.631
@@ -151,7 +152,7 @@ Material:
     - _DstBlendAlpha: 0
     - _EmissionIntensity: 1
     - _EmissionMapUseSingleChannelOnly: 0
-    - _EnableDissolve: 0
+    - _EnableDissolve: 1
     - _EnableDitherFadeout: 0
     - _EnableRendering: 1
     - _EnvironmentReflections: 1
@@ -167,7 +168,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _HitFlashGroup: 0
-    - _HitFlashIntensity: 0
+    - _HitFlashIntensity: 10
     - _HitFlashPower: 2
     - _LightDirFromCameraDir: 0
     - _MatCapAdditiveIntensity: 1
@@ -281,15 +282,15 @@ Material:
     - _FaceUpDirection: {r: 0, g: 1, b: 0, a: 1}
     - _FresnelColor: {r: 1, g: 0.1, b: 0.1, a: 1}
     - _HeadBonePositionWS: {r: 0, g: 0, b: 0, a: 1}
-    - _HitFlashColor: {r: 1, g: 1, b: 1, a: 1}
+    - _HitFlashColor: {r: 0.4, g: 1, b: 0, a: 1}
     - _LightDirFromCameraDirOffSet: {r: 0, g: 0, b: 0, a: 0}
     - _MatCapAdditiveColor: {r: 1, g: 1, b: 1, a: 1}
     - _MetallicSpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _OutlineTintColor1: {r: 0.05660379, g: 0.05660379, b: 0.05660379, a: 0}
-    - _OutlineTintColor2: {r: 0.13207549, g: 0.13207549, b: 0.13207549, a: 0}
+    - _OutlineTintColor1: {r: 0, g: 0.060058776, b: 0.482, a: 0}
+    - _OutlineTintColor2: {r: 0.33459416, g: 0.6414679, b: 0.6886792, a: 0}
     - _OutlineTintColor3: {r: 0.13286836, g: 0.13286836, b: 0.13286836, a: 0}
-    - _OutlineTintColor4: {r: 1, g: 0.26704967, b: 0, a: 0}
+    - _OutlineTintColor4: {r: 0.010654882, g: 0.3018868, b: 0, a: 0}
     - _OutlineTintColor5: {r: 0, g: 0, b: 0, a: 0}
     - _OutlineWidthMaskFromVertexColor: {r: 1, g: 0, b: 0, a: 0}
     - _PerCharEffectAddColor: {r: 0, g: 0, b: 0, a: 1}
