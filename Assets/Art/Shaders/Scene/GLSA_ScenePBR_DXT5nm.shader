@@ -95,6 +95,10 @@ Shader "GLSA/Scene/PBR_EnvStandard"
             float  _SrcBlend;
             float  _DstBlend;
             float  _ZWrite;
+            // texelSize 由 Unity 按纹理属性自动填充，必须留在 UnityPerMaterial 里，
+            // 否则 SRP Batcher 会报 "material property found in another cbuffer" 并逐材质断批
+            float4 _NRMTex_TexelSize;
+            float4 _SMO_TexelSize;
         CBUFFER_END
 
         TEXTURE2D(_BaseMap); SAMPLER(sampler_BaseMap);
@@ -103,8 +107,7 @@ Shader "GLSA/Scene/PBR_EnvStandard"
 
         // Unity 没给材质挂贴图时会补一张 4x4 的内置纹理，texelSize 就是 0.25；
         // 真贴图基本都 >= 32 像素（texelSize <= 0.031），用它自动判断有没有挂图。
-        float4 _NRMTex_TexelSize;
-        float4 _SMO_TexelSize;
+        // 注意：_NRMTex_TexelSize / _SMO_TexelSize 的声明在 UnityPerMaterial CBUFFER 里，别挪出来。
 
         half GLSA_HasNormalTex()
         {
