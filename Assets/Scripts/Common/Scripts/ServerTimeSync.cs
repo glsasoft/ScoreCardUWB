@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using Cysharp.Threading.Tasks;
 using LetsPiu.Base.BaseScripts.Define;
 using Newtonsoft.Json;
@@ -9,7 +8,8 @@ using UnityEngine.Networking;
 namespace LetsPiu
 {
     /// <summary>
-    /// 用 /serverTime 对齐安卓系统时间。采样 3 次，取往返最短的一次，误差按单程延迟估计。
+    /// 用 /serverTime 校验与服务器的时间差。采样 3 次取往返最短的一次。
+    /// UWB 比分牌不修改系统时钟（不做 su / date）。
     /// </summary>
     public static class ServerTimeSync
     {
@@ -17,7 +17,6 @@ namespace LetsPiu
         const int SampleGapMs = 200;
         const int MaxRttMs = 2000;
         const int RequestTimeoutSec = 5;
-        const int SuccessDeltaMs = 1500;
         const int MatchSyncMinAdjustMs = 300;
 
         static bool s_Syncing;
@@ -138,34 +137,9 @@ namespace LetsPiu
                 return true;
             }
 
-#if UNITY_ANDROID && !UNITY_EDITOR
-            // 设备的 date 命令不支持小数秒，四舍五入设整秒会带来最多 0.5 秒误差，所以等到下一个整秒再设
-            long alignedMs = (targetMs + 999L) / 1000L * 1000L;
-            await UniTask.Delay((int)(alignedMs - targetMs));
-            targetMs = alignedMs;
-
-            if (!TrySetAndroidClock(targetMs, out string detail))
-            {
-                Debug.LogError("[ServerTimeSync] 失败：设置系统时间未成功。 " + detail);
-                return false;
-            }
-
-            Debug.Log("[ServerTimeSync] 设置命令完成。 " + detail);
-            long after = UtcNowMs();
-            long delta = after - targetMs;
-            Debug.Log("[ServerTimeSync] 设置后本地时间 " + FormatMs(after) + " 与目标差 " + delta + "ms");
-            if (Math.Abs(delta) > SuccessDeltaMs)
-            {
-                Debug.LogError("[ServerTimeSync] 失败：设置后仍偏差 " + delta + "ms，超过 " + SuccessDeltaMs + "ms");
-                return false;
-            }
-
-            Debug.Log("[ServerTimeSync] 同步成功");
+            // UWB 比分牌不改系统时钟（无 su / date），只校验与服务器的时间差并放行。
+            Debug.Log("[ServerTimeSync] 采样成功，不修改系统时间。相对服务器偏差约 " + offsetMs + "ms");
             return true;
-#else
-            Debug.Log("[ServerTimeSync] 当前不是安卓真机，不修改系统时间。接口采样成功，若在真机上需要调整 " + offsetMs + "ms");
-            return true;
-#endif
         }
 
         static async UniTask<Sample> TakeSampleAsync(int index, int storeId)
@@ -285,85 +259,5 @@ namespace LetsPiu
             var local = DateTimeOffset.FromUnixTimeMilliseconds(unixMs).ToLocalTime();
             return local.ToString("yyyy-MM-dd HH:mm:ss.fff") + " unix=" + unixMs;
         }
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-        static bool TrySetAndroidClock(long targetUnixMs, out string detail)
-        {
-            long seconds = (targetUnixMs + 500L) / 1000L;
-            string shell = "settings put global auto_time 0 && date @" + seconds;
-            var log = new StringBuilder();
-            if (RunSu(new[] { "su", "-c", shell }, log))
-            {
-                detail = log.ToString();
-                return true;
-            }
-
-            if (RunSu(new[] { "su", "0", "sh", "-c", shell }, log))
-            {
-                detail = log.ToString();
-                return true;
-            }
-
-            detail = log.ToString();
-            return false;
-        }
-
-        static bool RunSu(string[] args, StringBuilder log)
-        {
-            log.Append("cmd=");
-            log.Append(string.Join(" ", args));
-            try
-            {
-                using var runtimeClass = new AndroidJavaClass("java.lang.Runtime");
-                using var runtime = runtimeClass.CallStatic<AndroidJavaObject>("getRuntime");
-                using var process = runtime.Call<AndroidJavaObject>("exec", (object)args);
-                int exit = process.Call<int>("waitFor");
-                string stdout = ReadStream(process.Call<AndroidJavaObject>("getInputStream"));
-                string stderr = ReadStream(process.Call<AndroidJavaObject>("getErrorStream"));
-                log.Append(" exit=").Append(exit);
-                log.Append(" stdout=").Append(string.IsNullOrEmpty(stdout) ? "(empty)" : stdout);
-                log.Append(" stderr=").Append(string.IsNullOrEmpty(stderr) ? "(empty)" : stderr);
-                log.Append(" | ");
-                return exit == 0;
-            }
-            catch (Exception e)
-            {
-                log.Append(" exception=").Append(e.Message).Append(" | ");
-                return false;
-            }
-        }
-
-        static string ReadStream(AndroidJavaObject stream)
-        {
-            if (stream == null)
-            {
-                return "";
-            }
-
-            using (stream)
-            using (var reader = new AndroidJavaObject("java.io.InputStreamReader", stream, "UTF-8"))
-            using (var buffered = new AndroidJavaObject("java.io.BufferedReader", reader))
-            {
-                var sb = new StringBuilder();
-                while (true)
-                {
-                    string line = buffered.Call<string>("readLine");
-                    if (line == null)
-                    {
-                        break;
-                    }
-
-                    if (sb.Length > 0)
-                    {
-                        sb.Append('\n');
-                    }
-
-                    sb.Append(line);
-                }
-
-                return sb.ToString();
-            }
-        }
-#endif
     }
 }

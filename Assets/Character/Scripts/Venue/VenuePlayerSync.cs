@@ -340,13 +340,13 @@ namespace LetsPiu.Character
         Vector3 SnapGround(Vector3 world, Transform ignore)
         {
             Vector3 origin = world + Vector3.up * 4f;
-            int count = Physics.RaycastNonAlloc(origin, Vector3.down, _hits, 8f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+            int count = Physics.RaycastNonAlloc(origin, Vector3.down, _hits, 8f, 1 << Layer.MAP, QueryTriggerInteraction.Ignore);
             float best = float.MaxValue;
             bool found = false;
             Vector3 point = world;
             for (int i = 0; i < count; i++)
             {
-                Transform hit = _hits[i].transform;
+                Transform hit = _hits[i].collider.transform;
                 if (hit == ignore || hit.IsChildOf(ignore))
                     continue;
                 if (_hits[i].distance >= best)
