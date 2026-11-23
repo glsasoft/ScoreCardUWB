@@ -30,7 +30,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 1e8b18fe7e590f54ebc9a294347ae815, type: 3}
-        m_Scale: {x: 2, y: 1}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NRMTex:
         m_Texture: {fileID: 0}
@@ -56,7 +56,7 @@ Material:
     - _Desaturate: 0.12
     - _DstBlend: 0
     - _EmissionSize: 2
-    - _FPS: 12
+    - _FPS: 1
     - _Flicker: 0.1
     - _FlickerSpeed: 1.4
     - _FrameIndex: 0
@@ -72,7 +72,7 @@ Material:
     - _JumpStrength: 0.018
     - _LerpWeight: 0
     - _Metallic: 1
-    - _MipBias: -0.5
+    - _MipBias: -1
     - _Mode: 0
     - _NoiseSpeed: 24
     - _NoiseStrength: 0.02
@@ -87,7 +87,7 @@ Material:
     - _SrcBlend: 1
     - _StartFrame: 0
     - _Tutorial: 0
-    - _UseExternalFrame: 0
+    - _UseExternalFrame: 1
     - _UseNormalMap: 0
     - _Vignette: 0.35
     - _VignettePower: 2.2

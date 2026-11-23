@@ -142,8 +142,8 @@ Material:
     - _DissolveBorderRange: 0.04
     - _DissolveEdgeDitherStrength: 0
     - _DissolveGroup: 0
-    - _DissolveMaxY: 1.538881
-    - _DissolveMinY: -0.20976698
+    - _DissolveMaxY: 1.5528498
+    - _DissolveMinY: -0.1002931
     - _DissolveRootY: 0
     - _DissolveTopBorderRange: 0.02
     - _DitherFadeoutAmount: 0.631
@@ -286,8 +286,8 @@ Material:
     - _MatCapAdditiveColor: {r: 1, g: 1, b: 1, a: 1}
     - _MetallicSpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _OutlineTintColor1: {r: 0.05660379, g: 0.05660379, b: 0.05660379, a: 0}
-    - _OutlineTintColor2: {r: 0.13207549, g: 0.13207549, b: 0.13207549, a: 0}
+    - _OutlineTintColor1: {r: 0.1882353, g: 0.021270595, b: 0.021270595, a: 0}
+    - _OutlineTintColor2: {r: 1, g: 0.23113209, b: 0.23113209, a: 0}
     - _OutlineTintColor3: {r: 0.13286836, g: 0.13286836, b: 0.13286836, a: 0}
     - _OutlineTintColor4: {r: 1, g: 0.26704967, b: 0, a: 0}
     - _OutlineTintColor5: {r: 0, g: 0, b: 0, a: 0}

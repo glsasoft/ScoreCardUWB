@@ -8,12 +8,16 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: mat_41.001
-  m_Shader: {fileID: 4800000, guid: d92c74fb97ca1bd4a940217731742700, type: 3}
+  m_Shader: {fileID: 4800000, guid: f45207aa8f9b2f349a63470c9b6ecf0c, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
+  m_ValidKeywords: []
+  m_InvalidKeywords:
   - _ALPHATEST_ON
-  m_InvalidKeywords: []
+  - _DISSOLVETEXAR_ON
+  - _DISTORTTEXAR_ON
+  - _MASKTEXAR_ON
+  - _VTOTEXAR_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -28,6 +32,22 @@ Material:
         m_Texture: {fileID: 2800000, guid: 90d14190fed5d9d42992ece30b4360e3, type: 3}
         m_Scale: {x: 2, y: -1}
         m_Offset: {x: 0, y: 0}
+    - _DissolveTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DistortTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 90d14190fed5d9d42992ece30b4360e3, type: 3}
+        m_Scale: {x: 2, y: -1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _NRMTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -36,31 +56,91 @@ Material:
         m_Texture: {fileID: 2800000, guid: 90d14190fed5d9d42992ece30b4360e3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _VTOTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _AlphaClip: 1
+    - _AlphaCutoff: 0.5
     - _AoeSelect: 0
+    - _BlendMode: 0
     - _BumpScale: 1
+    - _ColorMask: 15
     - _Cull: 2
+    - _CullMode: 0
+    - _CustomDissolve: 0
+    - _CustomMainTex: 0
+    - _CustomVTO: 0
     - _Cutoff: 0.521
     - _DXT5nmSwap: 0
+    - _DepthFade: 1
+    - _Desaturate: 0
+    - _DissolveFactor: 0
+    - _DissolveSoft: 0.1
+    - _DissolveTexAR: 1
+    - _DissolveTexUSpeed: 0
+    - _DissolveTexVSpeed: 0
+    - _DissolveWide: 0.05
+    - _DistortDissolveTex: 0
+    - _DistortFactor: 0
+    - _DistortMainTex: 0
+    - _DistortMaskTex: 0
+    - _DistortTexAR: 1
+    - _DistortTexUSpeed: 0
+    - _DistortTexVSpeed: 0
+    - _Dst: 10
     - _DstBlend: 0
     - _EmissionSize: 1
+    - _FDepth: 0
+    - _FDissolveTex: 0
+    - _FDistortTex: 0
+    - _FFnl: 0
+    - _FMaskTex: 0
+    - _FnlPower: 1
+    - _FnlScale: 0
+    - _IfVTO: 0
     - _LerpWeight: 0
+    - _MainAlpha: 1
+    - _MainTexAR: 0
+    - _MainTexUSpeed: 0
+    - _MainTexVSpeed: 0.1
+    - _MaskTexAR: 1
+    - _MaskTexUSpeed: 0
+    - _MaskTexVSpeed: 0
     - _Metallic: 1
     - _Mode: 0
     - _NormalFlipY: 0
     - _NormalMode: 0
     - _OcclusionStrength: 1
     - _QueueOffset: 0
+    - _ReFnl: 0
+    - _Scr: 5
     - _Smoothness: 1
     - _SrcBlend: 1
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
     - _Tutorial: 0
     - _UseNormalMap: 0
+    - _VTOScale: 1
+    - _VTOTexAR: 1
+    - _VTOTexUSpeed: 0
+    - _VTOTexVSpeed: 0
+    - _ZTest: 4
     - _ZWrite: 1
+    - _ZWriteOn: 0
     m_Colors:
     - _AoeSelectColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
+    - _DissolveColor: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _FnlColor: {r: 1, g: 1, b: 1, a: 1}
     - _LerpColor: {r: 1, g: 1, b: 1, a: 1}
+    - _MainColor: {r: 3.9999998, g: 3.9999998, b: 3.9999998, a: 1}
     - _TutorialColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

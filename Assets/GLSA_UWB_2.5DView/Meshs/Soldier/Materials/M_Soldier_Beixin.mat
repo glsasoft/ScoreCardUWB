@@ -267,7 +267,7 @@ Material:
     m_Colors:
     - _BackFaceTintColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _CenterPointPosition: {r: 0, g: 0, b: 100, a: 0}
+    - _CenterPointPosition: {r: -12.51, g: 0, b: -18.96, a: 0}
     - _CharacterBoundCenterPosWS: {r: 0, g: 0, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DepthTexRimLightTintColor: {r: 1, g: 1, b: 1, a: 1}
@@ -280,7 +280,7 @@ Material:
     - _ExtraThickOutlineViewSpacePosOffset: {r: 0, g: 0, b: 0, a: 1}
     - _FaceForwardDirection: {r: 0, g: 0, b: 1, a: 1}
     - _FaceUpDirection: {r: 0, g: 1, b: 0, a: 1}
-    - _FresnelColor: {r: 1, g: 0.1, b: 0.1, a: 1}
+    - _FresnelColor: {r: 1, g: 1, b: 1, a: 1}
     - _HeadBonePositionWS: {r: 0, g: 0, b: 0, a: 1}
     - _HitFlashColor: {r: 1, g: 1, b: 1, a: 1}
     - _LightDirFromCameraDirOffSet: {r: 0, g: 0, b: 0, a: 0}

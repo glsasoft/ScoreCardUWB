@@ -49,7 +49,7 @@ Material:
     - _Metallic: 1
     - _Mode: 0
     - _NormalFlipY: 0
-    - _NormalMode: 1
+    - _NormalMode: 0
     - _OcclusionStrength: 1
     - _QueueOffset: 0
     - _Smoothness: 1
