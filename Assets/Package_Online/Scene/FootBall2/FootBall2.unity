@@ -2250,7 +2250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   space: {fileID: 0}
-  modelPrefab: {fileID: 0}
+  modelPrefab: {fileID: 973057003}
   interpolationDelay: 0.2
   removeAfterSeconds: 2
   gaitReferenceSpeed: 1.5
