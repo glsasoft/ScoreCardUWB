@@ -73,6 +73,13 @@ namespace LetsPiu
 
         void Awake()
         {
+            if (!LeftPanelPlatform.IsAndroidPlayer)
+            {
+                enabled = false;
+                Destroy(this);
+                return;
+            }
+
             if (gameObject.name != HostName)
             {
                 var host = new GameObject(HostName);

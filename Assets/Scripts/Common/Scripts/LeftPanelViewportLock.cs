@@ -34,6 +34,13 @@ namespace LetsPiu
 
         void Awake()
         {
+            if (!LeftPanelPlatform.IsAndroidPlayer)
+            {
+                enabled = false;
+                Destroy(this);
+                return;
+            }
+
             // 若挂在 Boot 等会被 Destroy 的物体上，迁移到独立宿主，避免启动结束后组件被带走。
             if (gameObject.name != "LeftPanelViewportLock_Host")
             {

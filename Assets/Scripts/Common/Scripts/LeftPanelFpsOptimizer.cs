@@ -80,6 +80,8 @@ namespace LetsPiu
             {
                 if (source == null)
                 {
+                    // 玩家已销毁时 Status 被拆到 Canvas 下，需自行清掉血条/名字
+                    Destroy(gameObject);
                     return;
                 }
 
@@ -98,6 +100,13 @@ namespace LetsPiu
 
         void Awake()
         {
+            if (!LeftPanelPlatform.IsAndroidPlayer)
+            {
+                enabled = false;
+                Destroy(this);
+                return;
+            }
+
             if (gameObject.name != HostName)
             {
                 var host = new GameObject(HostName);

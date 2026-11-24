@@ -14,6 +14,7 @@ namespace LetsPiu.Character
             root.AddComponent<VenueSpace>();
             root.AddComponent<VenuePlayerSync>();
             root.AddComponent<VenuePlayerMockFeed>();
+            root.AddComponent<LetsPiu.Character.Uwb.UwbRuntime>();
             Selection.activeGameObject = root;
             if (!Application.isPlaying)
                 EditorSceneManager.MarkSceneDirty(root.scene);

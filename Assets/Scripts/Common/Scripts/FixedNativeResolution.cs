@@ -33,6 +33,14 @@ namespace LetsPiu
 
         void Awake()
         {
+            // 左屏钉窗/定分辨率只给 Android 超宽电视用；Editor/PC 跳过
+            if (!LeftPanelPlatform.IsAndroidPlayer)
+            {
+                enabled = false;
+                Destroy(this);
+                return;
+            }
+
             if (gameObject.name != HostName)
             {
                 var host = new GameObject(HostName);
