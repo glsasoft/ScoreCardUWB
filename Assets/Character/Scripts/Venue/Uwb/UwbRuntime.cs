@@ -329,7 +329,7 @@ namespace LetsPiu.Character.Uwb
             if (_physGrid == null)
             {
                 _physGrid = UwbVenueWalkGrid.BuildForMap(
-                    space, mockAreaX, mockAreaY, correctionGridCell, 9, CorrectionAgentRadiusM);
+                    space, mockAreaX, mockAreaY, correctionGridCell, Layer.Obstacles, CorrectionAgentRadiusM);
             }
 
             return _physGrid;

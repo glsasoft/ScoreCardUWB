@@ -23,6 +23,12 @@ namespace LetsPiu.Character
             return Anchor.TransformPoint(venueMeters * unityUnitsPerMeter);
         }
 
+        public Vector3 FromWorld(Vector3 world)
+        {
+            float scale = Mathf.Max(0.0001f, unityUnitsPerMeter);
+            return Anchor.InverseTransformPoint(world) / scale;
+        }
+
         //void OnDrawGizmos()
         //{
         //    var anchor = Anchor;

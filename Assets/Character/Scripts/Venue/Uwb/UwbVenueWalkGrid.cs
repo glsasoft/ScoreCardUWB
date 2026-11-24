@@ -88,7 +88,7 @@ namespace LetsPiu.Character.Uwb
             float fallbackAreaX = 24f,
             float fallbackAreaZ = 24f,
             float cellSize = DefaultCell,
-            int mapLayer = 9,
+            int mapLayer = Layer.Obstacles,
             float agentRadius = AgentRadiusMeters)
         {
             if (space == null)
@@ -125,7 +125,7 @@ namespace LetsPiu.Character.Uwb
             float areaX,
             float areaZ,
             float cellSize = DefaultCell,
-            int mapLayer = 9)
+            int mapLayer = Layer.Obstacles)
         {
             float sizeX = Mathf.Max(1f, areaX);
             float sizeZ = Mathf.Max(1f, areaZ);

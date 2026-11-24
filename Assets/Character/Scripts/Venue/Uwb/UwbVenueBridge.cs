@@ -102,14 +102,8 @@ namespace LetsPiu.Character.Uwb
                     continue;
 
                 Vector3 venue = _mapper.ToVenueMeters(evt.rawX, evt.rawY, evt.rawZ);
-                float yaw = _mapper.EstimateYawDegrees(evt.velX, evt.velY, evt.velZ);
-                if (float.IsNaN(yaw))
-                {
-                    if (_latest.TryGetValue(binding.playerId, out VenuePlayerSnapshot prev))
-                        yaw = prev.yaw;
-                    else
-                        yaw = 0f;
-                }
+                // 快照不再带朝向，脸朝哪由 VenuePlayerSync 按位移决定；纠偏器的 yaw 参数只是占位
+                float yaw = 0f;
 
                 double stamp = evt.deviceTimeMs > 0
                     ? evt.deviceTimeMs / 1000.0
@@ -131,7 +125,6 @@ namespace LetsPiu.Character.Uwb
                     x = venue.x,
                     y = venue.y,
                     z = venue.z,
-                    yaw = yaw,
                     hp = _registry.defaultMaxHp,
                     maxHp = _registry.defaultMaxHp,
                     firing = false,
