@@ -1,0 +1,17 @@
+2026-11-23
+
+[  x  ] UWB比分牌打包Windows/PC版本
+[OK.] UWB比分牌打包安卓版本跑到屏幕上测试
+[  x  ] UWB版本的真实地图api接口对接
+[  x  ] UWB版本的对战数据对接
+[  x  ] UWB版本的玩家碰撞检测、路径规划
+
+
+好的。接下来开始帮我完善其他功能。
+1、目前工作区的ScoreCardUWB 项目是基于ScoreCardUWB创建的新的3D地图比分牌，但是目前所有的玩家数据、模拟玩家移动全都是模拟的随机移动，
+没有对接任何真正的UWB服务器的接口数据。
+2、/Users/leizhan/Documents/GitHub/piupiu-map 这个项目是几年前更老的一个Unity 版本3D地图，但是这个地图已经对接了UWB的数据，应该是websocket的链接。
+不过这个piupiu-map项目中似乎也没有mock数据或者之前的UWB服务器的玩家移动录制的json数据。需要探索这个项目，看看能不能找到原有录屏数据的结构。
+3、https://support.nooploop.com/cn/ips/api 这个api接口是UWB设备的实际数据下发，这个数据结构应该跟 piupiu-map 
+项目中使用的是一致的，只是piupiu-map 不记得之前是用到mqtt还是http轮询了，不过最终应该采用响应速度最快的链接方式。
+4、

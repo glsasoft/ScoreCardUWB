@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:sharedUserId="android.uid.system">
     <!--
+      sharedUserId=system：与 ScoreCardUnity 对齐，需 wogemu/平台签名。
+      从普通 uid 升到 system uid 时，覆盖安装会失败，需先卸载再装。
       multisink-alsa-release.aar 声明 minSdkVersion=24，而本项目 PlayerSettings 仍是 22。
       UVC 插件（com.serenegiant.unity.uvcplugin）声明更高 minSdk。
       目标设备（RK3588 / 小米电视）均为 API 31+，用 overrideLibrary 与 ScoreCardUnity 对齐。
     -->
     <uses-sdk tools:overrideLibrary="com.example.multisinkaudio.alsa,com.serenegiant.unity.uvcplugin"/>
+    <!-- PackageReceiver 用精确闹钟兜底拉起 -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <application>
         <activity android:name="com.unity3d.player.UnityPlayerActivity"
                   android:theme="@style/UnityThemeSelector">
@@ -17,5 +23,14 @@
             </intent-filter>
             <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
         </activity>
+
+        <!-- 覆盖安装完成后自动拉起 LAUNCHER（与 ScoreCardUnity PackageReceiver 对齐） -->
+        <receiver
+            android:name="cn.com.glsa.app.fightgame.PackageReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

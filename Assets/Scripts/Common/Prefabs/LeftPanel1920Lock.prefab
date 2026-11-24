@@ -1,0 +1,120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1853877069114281811
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5031506845588493873}
+  - component: {fileID: 2563894926610230764}
+  - component: {fileID: 6848762225919867707}
+  - component: {fileID: 5069874907277484785}
+  - component: {fileID: 6912828236672520575}
+  m_Layer: 0
+  m_Name: LeftPanel1920Lock
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5031506845588493873
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853877069114281811}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2563894926610230764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853877069114281811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 049d83e29c0d94eb296c2415d10d4e9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelWidth: 1920
+  panelHeight: 1080
+  panelIndex: 0
+  showFps: 1
+  fpsColor: {r: 0, g: 1, b: 0, a: 1}
+  fpsFontSize: 14
+--- !u!114 &6848762225919867707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853877069114281811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e034d07e5b204567b2a23d272b7a93a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetWidth: 1920
+  targetHeight: 1080
+  panelIndex: 0
+  fullScreenMode: 1
+  keepLocked: 1
+--- !u!114 &5069874907277484785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853877069114281811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93056a0c261c242d3bb96e75fa4a5938, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableProfiling: 1
+  sampleIntervalSec: 1
+  sceneScanIntervalSec: 5
+  topHeavyObjectCount: 8
+  alsoWriteToSdcard: 1
+--- !u!114 &6912828236672520575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853877069114281811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7d709b5800814644b7baae0fe0928d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableOptimizer: 1
+  applyIntervalSec: 2
+  heavyOptimizeDelaySec: 2.5
+  forceAnimatorCulling: 1
+  disableCharacterShadows: 1
+  disableAllLightShadows: 0
+  limitRealtimeLights: 0
+  maxRealtimeLights: 2
+  applyQualityHints: 0
+  disableRealtimeReflections: 0
+  detachSkinnedFromCanvas: 1
+  combineStaticMaps: 1
+  mapRootNameHints:
+  - FootBall2_Imported
+  - SongjiangWandaMap
+  - SceneBase
+  mergePlayerSkinnedMeshes: 0
+  stripCharacterProbes: 1
+  quietIdleParticles: 0
