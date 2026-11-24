@@ -23,11 +23,6 @@ namespace LetsPiu.Character
             return Anchor.TransformPoint(venueMeters * unityUnitsPerMeter);
         }
 
-        public Quaternion ToWorldRotation(float yawDegrees)
-        {
-            return Anchor.rotation * Quaternion.Euler(0f, yawDegrees, 0f);
-        }
-
         //void OnDrawGizmos()
         //{
         //    var anchor = Anchor;

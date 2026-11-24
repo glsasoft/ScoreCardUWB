@@ -17,7 +17,6 @@ namespace LetsPiu.Character
         {
             public double time;
             public Vector3 pos;
-            public float yaw;
             public int hp;
             public int maxHp;
             public int team;
@@ -32,6 +31,11 @@ namespace LetsPiu.Character
             public double lastPush;
             public double presentedTime;
             public bool started;
+            public Vector3 resolved;
+            public bool hasResolved;
+            public double blockedSince;
+            public Quaternion facing;
+            public bool hasFacing;
         }
 
         public static VenuePlayerSync Current { get; private set; }
@@ -59,10 +63,24 @@ namespace LetsPiu.Character
 
         public bool snapToGround = true;
 
+        [Tooltip("挡墙用的胶囊半径。墙要在 Obstacles 层。要比门宽的一半小，否则会卡在门框上。")]
+        public float bodyRadius = 0.25f;
+
+        [Tooltip("挡墙用的胶囊高度。")]
+        public float bodyHeight = 1.8f;
+
+        [Tooltip("定位点陷进墙里时，沿墙面最多推出这么远。再远就认为人在墙的另一侧，这一帧留在墙外。")]
+        public float maxWallPush = 0.5f;
+
+        [Tooltip("服务器位置一直在墙的另一侧、并且落在空地上，超过这么久就跟过去。用来放行美术多做的墙。")]
+        public float wallReleaseDelay = 1f;
+
         readonly Dictionary<int, Track> _tracks = new Dictionary<int, Track>();
         readonly HashSet<int> _seen = new HashSet<int>();
         readonly List<int> _remove = new List<int>(8);
         readonly RaycastHit[] _hits = new RaycastHit[16];
+        readonly Collider[] _overlaps = new Collider[8];
+        CapsuleCollider _probe;
 
         Transform _root;
         bool _hasClock;
@@ -80,9 +98,12 @@ namespace LetsPiu.Character
             {
                 this.transform.SetParent(UIRoot.S.worldCanvas.transform);
                 var virtualCamera = GameObject.Find("/SceneBase/Virtual Camera");
-                float dis = (this.transform.position - virtualCamera.transform.position).magnitude;
                 Canvas rootCanvas = UIRoot.S.rootCanvas;
-                worldUiScale = dis / rootCanvas.planeDistance * rootCanvas.transform.localScale.x;
+                if (virtualCamera != null && rootCanvas != null)
+                {
+                    float dis = (transform.position - virtualCamera.transform.position).magnitude;
+                    worldUiScale = dis / rootCanvas.planeDistance * rootCanvas.transform.localScale.x;
+                }
             }
         }
 
@@ -102,6 +123,11 @@ namespace LetsPiu.Character
             if (Current == this)
                 Current = null;
             DespawnAll();
+            if (_probe != null)
+            {
+                Destroy(_probe.gameObject);
+                _probe = null;
+            }
         }
 
         public void Push(VenuePlayerSnapshot snapshot)
@@ -182,7 +208,6 @@ namespace LetsPiu.Character
             {
                 time = localTime,
                 pos = new Vector3(snapshot.x, snapshot.y, snapshot.z),
-                yaw = snapshot.yaw,
                 hp = snapshot.hp,
                 maxHp = snapshot.maxHp,
                 team = snapshot.team,
@@ -242,13 +267,32 @@ namespace LetsPiu.Character
             return root;
         }
 
-        static void AddSample(Track track, Sample sample)
+        void AddSample(Track track, Sample sample)
         {
             List<Sample> list = track.samples;
             int count = list.Count;
             if (count > 0 && sample.time < list[count - 1].time - 0.0001d)
                 return;
-            if (count > 0 && sample.time - list[count - 1].time < 0.0001d)
+
+            // 写入前就把点推到墙外，并存成世界坐标。之后插值直接用这些点。
+            bool replaceLast = count > 0 && sample.time - list[count - 1].time < 0.0001d;
+            if (replaceLast && count >= 2)
+            {
+                track.resolved = list[count - 2].pos;
+                track.hasResolved = true;
+            }
+            else if (!replaceLast && count >= 1)
+            {
+                track.resolved = list[count - 1].pos;
+                track.hasResolved = true;
+            }
+
+            Vector3 world = ToWorld(sample.pos);
+            if (snapToGround)
+                world = SnapGround(world, track.view.transform);
+            sample.pos = ResolveAgainstWalls(world, track);
+
+            if (replaceLast)
                 list[count - 1] = sample;
             else
                 list.Add(sample);
@@ -279,13 +323,10 @@ namespace LetsPiu.Character
             if (renderTime < samples[0].time)
                 renderTime = samples[0].time;
 
-            Evaluate(samples, renderTime, out Vector3 venuePos, out float yaw);
-            Vector3 world = space != null ? space.ToWorld(venuePos) : venuePos;
+            Vector3 world = Evaluate(samples, renderTime);
             if (snapToGround)
                 world = SnapGround(world, track.view.transform);
-            Quaternion rot = space != null ? space.ToWorldRotation(yaw) : Quaternion.Euler(0f, yaw, 0f);
-            if (modelYawOffset != 0f)
-                rot *= Quaternion.Euler(0f, modelYawOffset, 0f);
+            Quaternion rot = Facing(track, samples, renderTime, world);
 
             Sample newest = samples[last];
             track.view.Show(world, rot, newest.hp, newest.maxHp);
@@ -309,22 +350,14 @@ namespace LetsPiu.Character
             track.started = true;
         }
 
-        static void Evaluate(List<Sample> samples, double time, out Vector3 pos, out float yaw)
+        static Vector3 Evaluate(List<Sample> samples, double time)
         {
             if (time <= samples[0].time)
-            {
-                pos = samples[0].pos;
-                yaw = samples[0].yaw;
-                return;
-            }
+                return samples[0].pos;
 
             int last = samples.Count - 1;
             if (time >= samples[last].time)
-            {
-                pos = samples[last].pos;
-                yaw = samples[last].yaw;
-                return;
-            }
+                return samples[last].pos;
 
             int index = 0;
             while (index < last - 1 && samples[index + 1].time < time)
@@ -333,8 +366,40 @@ namespace LetsPiu.Character
             Sample b = samples[index + 1];
             double span = b.time - a.time;
             float t = span > 0.00001d ? (float)((time - a.time) / span) : 1f;
-            pos = Vector3.Lerp(a.pos, b.pos, t);
-            yaw = Mathf.LerpAngle(a.yaw, b.yaw, t);
+            return Vector3.Lerp(a.pos, b.pos, t);
+        }
+
+        const double FaceWindow = 0.25d;
+        const float FaceMinDistance = 0.08f;
+
+        Quaternion Facing(Track track, List<Sample> samples, double renderTime, Vector3 worldPos)
+        {
+            // 没有服务器朝向。看这一小段水平位移；太短就保持上次，免得定位抖动把人转圈。
+            Vector3 from = Evaluate(samples, renderTime - FaceWindow);
+            Vector3 flat = worldPos - from;
+            flat.y = 0f;
+            if (flat.sqrMagnitude >= FaceMinDistance * FaceMinDistance)
+            {
+                Quaternion want = Quaternion.LookRotation(flat, Vector3.up);
+                track.facing = track.hasFacing
+                    ? Quaternion.Slerp(track.facing, want, 1f - Mathf.Exp(-10f * Time.deltaTime))
+                    : want;
+                track.hasFacing = true;
+            }
+
+            Quaternion rot = track.hasFacing ? track.facing : DefaultFacing();
+            if (modelYawOffset != 0f)
+                rot *= Quaternion.Euler(0f, modelYawOffset, 0f);
+            return rot;
+        }
+
+        Quaternion DefaultFacing()
+        {
+            Vector3 forward = ToWorld(Vector3.forward) - ToWorld(Vector3.zero);
+            forward.y = 0f;
+            if (forward.sqrMagnitude < 0.0001f)
+                return Quaternion.identity;
+            return Quaternion.LookRotation(forward, Vector3.up);
         }
 
         Vector3 SnapGround(Vector3 world, Transform ignore)
@@ -360,12 +425,177 @@ namespace LetsPiu.Character
             return world;
         }
 
+        Vector3 ToWorld(Vector3 venue)
+        {
+            return space != null ? space.ToWorld(venue) : venue;
+        }
+
+        const float WallSkin = 0.05f;
+        const int WallMask = 1 << Layer.Obstacles;
+
+        Vector3 ResolveAgainstWalls(Vector3 desired, Track track)
+        {
+            Vector3 fallback = track.hasResolved ? track.resolved : desired;
+            Vector3 candidate = desired;
+            if (track.hasResolved)
+            {
+                Vector3 flat = desired - track.resolved;
+                flat.y = 0f;
+                float distance = flat.magnitude;
+                if (distance > 0.0001f && CapsuleHitsWall(track.resolved, flat / distance, distance, out float travel))
+                {
+                    if (IsClearOfWalls(desired) && TryReleaseBlockedWall(track))
+                    {
+                        track.blockedSince = 0d;
+                        track.resolved = desired;
+                        track.hasResolved = true;
+                        return desired;
+                    }
+
+                    candidate = track.resolved + (flat / distance) * travel;
+                    candidate.y = desired.y;
+                }
+                else
+                    track.blockedSince = 0d;
+            }
+
+            candidate = PushOutOfWalls(candidate, fallback, out bool rejected);
+            if (rejected && track.hasResolved)
+                candidate = track.resolved;
+            candidate.y = desired.y;
+            if (rejected && !track.hasResolved)
+                return candidate;
+
+            track.resolved = candidate;
+            track.hasResolved = true;
+            return candidate;
+        }
+
+        bool CapsuleHitsWall(Vector3 feet, Vector3 direction, float distance, out float travel)
+        {
+            CapsuleEnds(feet, out Vector3 bottom, out Vector3 top);
+            // 起点已经在墙里时 CapsuleCast 会返回 false，路径会被当成没撞墙，人就穿过去。
+            if (CapsuleOverlapsWall(bottom, top))
+            {
+                travel = 0f;
+                return true;
+            }
+
+            if (Physics.CapsuleCast(bottom, top, bodyRadius, direction, out RaycastHit hit, distance, WallMask, QueryTriggerInteraction.Ignore))
+            {
+                travel = Mathf.Max(0f, hit.distance - WallSkin);
+                return true;
+            }
+
+            travel = distance;
+            return false;
+        }
+
+        bool CapsuleOverlapsWall(Vector3 bottom, Vector3 top)
+        {
+            int count = Physics.OverlapCapsuleNonAlloc(bottom, top, bodyRadius, _overlaps, WallMask, QueryTriggerInteraction.Ignore);
+            for (int i = 0; i < count; i++)
+            {
+                if (_overlaps[i] != null)
+                    return true;
+            }
+
+            return false;
+        }
+
+        bool TryReleaseBlockedWall(Track track)
+        {
+            double now = Time.timeAsDouble;
+            if (track.blockedSince <= 0d)
+            {
+                track.blockedSince = now;
+                return false;
+            }
+
+            return now - track.blockedSince >= wallReleaseDelay;
+        }
+
+        bool IsClearOfWalls(Vector3 feet)
+        {
+            CapsuleEnds(feet, out Vector3 bottom, out Vector3 top);
+            return !CapsuleOverlapsWall(bottom, top);
+        }
+
+        Vector3 PushOutOfWalls(Vector3 feet, Vector3 fallback, out bool rejected)
+        {
+            rejected = false;
+            PrepareProbe();
+
+            Vector3 pushed = feet;
+            for (int pass = 0; pass < 2; pass++)
+            {
+                CapsuleEnds(pushed, out Vector3 bottom, out Vector3 top);
+                int count = Physics.OverlapCapsuleNonAlloc(bottom, top, bodyRadius, _overlaps, WallMask, QueryTriggerInteraction.Ignore);
+                bool moved = false;
+                for (int i = 0; i < count; i++)
+                {
+                    Collider other = _overlaps[i];
+                    if (other == null)
+                        continue;
+                    if (!Physics.ComputePenetration(_probe, pushed, Quaternion.identity, other, other.transform.position, other.transform.rotation, out Vector3 dir, out float dist))
+                        continue;
+                    dir.y = 0f;
+                    if (dir.sqrMagnitude < 0.0001f)
+                        continue;
+                    Vector3 extra = pushed - feet;
+                    extra.y = 0f;
+                    if (extra.magnitude + dist > maxWallPush)
+                    {
+                        rejected = true;
+                        return fallback;
+                    }
+                    pushed += dir.normalized * (dist + 0.01f);
+                    moved = true;
+                }
+                if (!moved)
+                    break;
+            }
+
+            return pushed;
+        }
+
+        void CapsuleEnds(Vector3 feet, out Vector3 bottom, out Vector3 top)
+        {
+            float height = Mathf.Max(bodyHeight, bodyRadius * 2f);
+            bottom = feet + Vector3.up * bodyRadius;
+            top = feet + Vector3.up * (height - bodyRadius);
+        }
+
+        void PrepareProbe()
+        {
+            EnsureProbe();
+            CapsuleEnds(Vector3.zero, out Vector3 bottom, out Vector3 top);
+            float height = Mathf.Max((top.y - bottom.y) + bodyRadius * 2f, bodyRadius * 2f);
+            _probe.radius = bodyRadius;
+            _probe.height = height;
+            _probe.center = new Vector3(0f, (bottom.y + top.y) * 0.5f, 0f);
+        }
+
+        void EnsureProbe()
+        {
+            if (_probe != null)
+                return;
+            var go = new GameObject("WallProbe");
+            go.layer = Layer.IgnoreRaycast;
+            _probe = go.AddComponent<CapsuleCollider>();
+            _probe.direction = 1;
+            // 只拿来做 ComputePenetration。不勾选的话，这个胶囊会留在原点挡到场景里的物理。
+            _probe.isTrigger = true;
+        }
+
         void ClearBuffers()
         {
             foreach (Track track in _tracks.Values)
             {
                 track.samples.Clear();
                 track.started = false;
+                track.blockedSince = 0d;
+                track.hasResolved = false;
             }
         }
 

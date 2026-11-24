@@ -85,7 +85,6 @@ namespace LetsPiu.Character
                     x = agent.pos.x,
                     y = agent.pos.y,
                     z = agent.pos.z,
-                    yaw = agent.yaw,
                     hp = agent.hp,
                     maxHp = agent.maxHp,
                     firing = agent.firing,
