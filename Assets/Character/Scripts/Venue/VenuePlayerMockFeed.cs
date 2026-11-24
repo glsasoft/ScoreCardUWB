@@ -4,8 +4,8 @@ using UnityEngine;
 namespace LetsPiu.Character
 {
     /// <summary>
-    /// 服务器没接上之前，在场馆坐标里走几个人，用来看客户端同步。
-    /// 接到真实数据后关掉或删掉这个组件，改由网络层调用 VenuePlayerSync.PushAll。
+    /// 旧版本地随机游走（已由 Uwb.UwbRuntime Mock/Replay/Live 替代）。
+    /// 同物体挂了 UwbRuntime 且启用时会被自动关闭 playing。
     /// </summary>
     [DisallowMultipleComponent]
     public class VenuePlayerMockFeed : MonoBehaviour
@@ -29,7 +29,7 @@ namespace LetsPiu.Character
         public bool playing = true;
 
         public VenuePlayerSync sync;
-        public int playerCount = 4;
+        public int playerCount = 40;
         public float areaLength = 24f;
         public float areaWidth = 16f;
         public float moveSpeed = 3.2f;

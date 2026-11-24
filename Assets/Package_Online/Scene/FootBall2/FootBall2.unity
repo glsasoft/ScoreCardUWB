@@ -2210,6 +2210,7 @@ GameObject:
   - component: {fileID: 70417606}
   - component: {fileID: 70417605}
   - component: {fileID: 70417604}
+  - component: {fileID: 70417608}
   m_Layer: 0
   m_Name: VenueSync
   m_TagString: Untagged
@@ -2229,9 +2230,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7c31a04b8d64f1a9c2e5b7d0a1f3c15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playing: 1
+  playing: 0
   sync: {fileID: 0}
-  playerCount: 4
+  playerCount: 40
   areaLength: 18
   areaWidth: 10
   moveSpeed: 1
@@ -2290,6 +2291,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &70417608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70417603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e27c38ec8264346bdae4a3d1e051e74b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableUwb: 1
+  sourceMode: 0
+  mqttBrokerUrl: mqtt://192.168.0.15:1883
+  mqttTopic: ips/pos
+  mqttClientId: 
+  udpListenPort: 9000
+  udpLocalAddress: 
+  mockTagCount: 20
+  mockAreaX: 18
+  mockAreaY: 10
+  mockMoveSpeed: 1.2
+  mockIntervalSec: 0.1
+  replayFilePath: 
+  replayLoop: 1
+  replaySpeed: 1
+  recordEnabled: 1
+  recordDirectory: 
+  recordFilePrefix: uwb
+  recordMaxQueue: 20000
+  mapper:
+    venueXFrom: 0
+    venueYFrom: 2
+    venueZFrom: 1
+    offsetMeters: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    flattenHeight: 1
+  tagRegistry:
+    bindings: []
+    defaultMaxHp: 100
+  sync: {fileID: 70417605}
+  usePushAll: 0
+  pushAllInterval: 0.1
+  disableLegacyMockFeed: 1
 --- !u!4 &71284432 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7313092780078604330, guid: 94eb31ac0b5b0e342924e536311f4106,

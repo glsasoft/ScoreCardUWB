@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Launcher 模块的 AndroidManifest（最终 APK 入口）。
+  Unity Manifest Merger 不会把 unityLibrary（Assets/Plugins/Android/AndroidManifest.xml）
+  里的 <manifest> 顶层属性合并到 launcher，因此 android:sharedUserId 必须写在这里。
+-->
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:sharedUserId="android.uid.system"
     android:installLocation="preferExternal">
     <supports-screens
         android:smallScreens="true"

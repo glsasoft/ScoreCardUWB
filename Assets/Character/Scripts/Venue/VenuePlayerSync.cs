@@ -608,6 +608,17 @@ namespace LetsPiu.Character
                 Destroy(track.view.gameObject);
         }
 
+        /// <summary>
+        /// 清空场上全部玩家（切换数据源/Mock 人数时调用，避免残留）。
+        /// </summary>
+        public void ClearAllPlayers()
+        {
+            DespawnAll();
+            _hasClock = false;
+            _serverToLocal = 0;
+            _clockJump = false;
+        }
+
         void DespawnAll()
         {
             foreach (Track track in _tracks.Values)

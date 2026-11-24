@@ -151,6 +151,10 @@ namespace LetsPiu.Character
 
         void OnDestroy()
         {
+            // Android LeftPanel 优化可能把 Status 拆到 Canvas 下，需单独销毁
+            if (_status != null)
+                Destroy(_status.gameObject);
+
             for (int i = 0; i < _owned.Count; i++)
             {
                 if (_owned[i] != null)

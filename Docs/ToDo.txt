@@ -1,0 +1,23 @@
+2026-11-23
+
+[  x  ] UWB比分牌打包Windows/PC版本
+[OK.] UWB比分牌打包安卓版本跑到屏幕上测试
+[OK.] UWB版本的真实地图api接口对接（MQTT/UDP + Mock/录制/回放；击杀数据下次）
+[  x  ] UWB版本的对战数据对接
+[OK.] UWB版本的玩家碰撞检测、路径规划
+        - Mock A* 漫游（单目标、2~10m 对角、热度均匀分布、路径拉直）已完成
+        - Mock 穿墙/穿墙角 glitch 模拟（只改输出点，不影响真值路径）已完成
+        - 客户端纠偏（UwbPositionCorrector：Viterbi 地图匹配、限速、绕路追赶）已完成
+        - 待办：接真实 UWB 服务器后，用真实数据微调（限速、滞后帧数、物理网格半径）
+
+
+说明：Docs/UWB对接文档/对接说明.md
+代码：Assets/Character/Scripts/Venue/Uwb/
+FootBall2 已挂 UwbRuntime（默认 Mock），旧 VenuePlayerMockFeed.playing 已关。
+
+历史需求纪要（已落地 a–d，e 下次）：
+a) uwb API 对接：LiveMqtt / LiveUdp
+b) 场景对接：UwbVenueBridge → VenuePlayerSync
+c) Mocker：sourceMode=Mock
+d) 录制器：UwbRecorder JSONL + Replay
+e) 击杀/对战 MQTT：暂不做

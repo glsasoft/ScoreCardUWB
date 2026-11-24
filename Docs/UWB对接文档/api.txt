@@ -1,0 +1,8 @@
+API文档:
+
+https://support.nooploop.com/cn/ips/api
+
+本工程对接说明见同目录：对接说明.md
+
+实时位置优先使用 IPS Tools 配置的 MQTT 推送（明文 JSON，name=Pos）。
+HTTP /openapi/v1/devices 仅用于查设备列表，不适合高频定位。

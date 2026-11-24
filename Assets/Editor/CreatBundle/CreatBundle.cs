@@ -105,8 +105,11 @@ namespace LetsPiu
             EditorApplication.delayCall += () =>
             {
                 AssetDatabase.Refresh();
-                new SelfCreatBundle().ExecuteBuild(PACKAGE_NAME, EBuildinFileCopyOption.ClearAndCopyAll, null);
-                Debug.Log("[CreatBundle] 离线全包构建完成");
+                bool ok = new SelfCreatBundle().ExecuteBuild(PACKAGE_NAME, EBuildinFileCopyOption.ClearAndCopyAll, null);
+                if (ok)
+                    Debug.Log("[CreatBundle] 离线全包构建完成");
+                else
+                    Debug.LogError("[CreatBundle] 离线全包构建失败，请查看 Console 中的 ErrorCode / 编译错误");
             };
         }
 
@@ -128,14 +131,14 @@ namespace LetsPiu
     {
         string packageName;
 
-        public void ExecuteBuild(string packageName, EBuildinFileCopyOption copyType, string tag)
+        public bool ExecuteBuild(string packageName, EBuildinFileCopyOption copyType, string tag)
         {
             this.packageName = packageName;
             var packageList = GetBuildPackageNames();
             if (packageList.Count == 0 || !packageList.Contains(packageName))
             {
                 Debug.LogError($"[CreatBundle] 包名检测异常，PackageName:{packageName} 不存在");
-                return;
+                return false;
             }
 
             Debug.Log($"[CreatBundle] BuildBundleStart! PackageName:{packageName}, copyType:{copyType}, tag:{tag}");
@@ -165,7 +168,10 @@ namespace LetsPiu
             if (buildResult.Success)
             {
                 EditorUtility.RevealInFinder(buildResult.OutputPackageDirectory);
+                return true;
             }
+
+            return false;
         }
 
         System.Collections.Generic.List<string> GetBuildPackageNames()
