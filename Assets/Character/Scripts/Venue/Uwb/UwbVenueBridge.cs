@@ -19,6 +19,8 @@ namespace LetsPiu.Character.Uwb
         readonly bool _usePushAll;
         readonly float _pushAllInterval;
         UwbRecorder _recorder;
+        UwbPositionCorrector _corrector;
+        VenueSpace _debugSpace;
         float _pushAcc;
         int _accepted;
         int _parseFail;
@@ -48,11 +50,36 @@ namespace LetsPiu.Character.Uwb
             _recorder = recorder;
         }
 
+        /// <summary>
+        /// corrector 为空则不纠偏。debugSpace 非空时，被纠偏超过 0.25m 的点在 Scene 视图画红线（原始→纠偏）。
+        /// </summary>
+        public void SetCorrector(UwbPositionCorrector corrector, VenueSpace debugSpace = null)
+        {
+            _corrector = corrector;
+            _debugSpace = debugSpace;
+        }
+
         public void OnRawMessage(string raw)
         {
             if (string.IsNullOrEmpty(raw))
                 return;
             _rawQueue.Enqueue(raw);
+        }
+
+        void DrawCorrection(Vector3 raw, Vector3 corrected)
+        {
+            if (_debugSpace == null)
+                return;
+            Vector3 d = corrected - raw;
+            d.y = 0f;
+            if (d.sqrMagnitude < 0.0625f)
+                return;
+            Vector3 lift = new Vector3(0f, 0.1f, 0f);
+            Debug.DrawLine(
+                _debugSpace.ToWorld(raw) + lift,
+                _debugSpace.ToWorld(corrected) + lift,
+                Color.red,
+                0.6f);
         }
 
         public void Tick(float deltaTime)
@@ -87,6 +114,14 @@ namespace LetsPiu.Character.Uwb
                 double stamp = evt.deviceTimeMs > 0
                     ? evt.deviceTimeMs / 1000.0
                     : now;
+
+                if (_corrector != null)
+                {
+                    if (!_corrector.Submit(binding.playerId, stamp, venue, yaw,
+                            out venue, out yaw, out stamp, out Vector3 rawVenue))
+                        continue;
+                    DrawCorrection(rawVenue, venue);
+                }
 
                 var snap = new VenuePlayerSnapshot
                 {

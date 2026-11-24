@@ -23,6 +23,12 @@ namespace LetsPiu.Character
             return Anchor.TransformPoint(venueMeters * unityUnitsPerMeter);
         }
 
+        public Vector3 FromWorld(Vector3 world)
+        {
+            float scale = Mathf.Max(0.0001f, unityUnitsPerMeter);
+            return Anchor.InverseTransformPoint(world) / scale;
+        }
+
         public Quaternion ToWorldRotation(float yawDegrees)
         {
             return Anchor.rotation * Quaternion.Euler(0f, yawDegrees, 0f);

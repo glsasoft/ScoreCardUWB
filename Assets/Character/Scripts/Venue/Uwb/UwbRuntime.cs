@@ -32,6 +32,7 @@ namespace LetsPiu.Character.Uwb
         [SerializeField] float mockAreaY = 10f;
         [SerializeField] float mockMoveSpeed = 1.2f;
         [SerializeField] float mockIntervalSec = 0.1f;
+        [SerializeField] bool mockSimulateGlitch = true;
 
         [Header("Replay")]
         [SerializeField] string replayFilePath = "";
@@ -53,6 +54,12 @@ namespace LetsPiu.Character.Uwb
         [SerializeField] bool usePushAll = false;
         [SerializeField] float pushAllInterval = 0.1f;
 
+        [Header("渲染前纠偏（地图匹配，会让位置多滞后 lagFrames 帧）")]
+        [SerializeField] bool enableCorrection = true;
+        [SerializeField] int correctionLagFrames = 5;
+        [SerializeField] float correctionGridCell = 0.25f;
+        [SerializeField] bool correctionDebugDraw = true;
+
         [Header("与旧 MockFeed 共存")]
         [SerializeField] bool disableLegacyMockFeed = true;
 
@@ -63,6 +70,10 @@ namespace LetsPiu.Character.Uwb
         UwbMqttTransport _mqtt;
         UwbVenueBridge _bridge;
         UwbRecorder _recorder;
+        const float CorrectionAgentRadiusM = 0.15f;
+        UwbPositionCorrector _corrector;
+        UwbVenueWalkGrid _physGrid;
+        float _baseInterpolationDelay;
         float _logTimer;
         bool _alertShown;
 
@@ -123,6 +134,10 @@ namespace LetsPiu.Character.Uwb
             _transport?.Tick(dt);
             _bridge?.Tick(dt);
 
+            // 纠偏输出比原始数据晚 lagFrames 帧，回放延迟要同步加大，否则位置会卡顿
+            if (_corrector != null && sync != null)
+                sync.interpolationDelay = _baseInterpolationDelay + _corrector.LagSeconds;
+
             _logTimer += dt;
             if (_logTimer < 5f || _bridge == null)
                 return;
@@ -130,6 +145,15 @@ namespace LetsPiu.Character.Uwb
             Debug.Log(
                 $"[UwbRuntime] mode={sourceMode} accepted={_bridge.Accepted} fail={_bridge.ParseFail} " +
                 $"tags={_bridge.TrackedTags} mqtt={(IsMqttConnected ? "up" : "down")}");
+            if (_corrector != null && _corrector.Outputs > 0)
+            {
+                Debug.Log(
+                    $"[UwbCorrect] out={_corrector.Outputs} viterbi={_corrector.ViterbiRuns} moved>0.3m={_corrector.Moved} " +
+                    $"avgShift={(_corrector.SumDisplacement / _corrector.Outputs):0.###}m " +
+                    $"maxShift={_corrector.MaxDisplacement:0.##}m breaks={_corrector.Breaks} " +
+                    $"lag={_corrector.LagSeconds:0.##}s");
+                _corrector.ResetStats();
+            }
         }
 
         public UwbConfigData ExportConfig()
@@ -253,6 +277,7 @@ namespace LetsPiu.Character.Uwb
                               sourceMode == UwbSourceMode.Mock ||
                               sourceMode == UwbSourceMode.Replay;
             _bridge = new UwbVenueBridge(sync, mapper, tagRegistry, rosterMode, pushAllInterval);
+            SetupCorrection();
 
             if (sourceMode == UwbSourceMode.LiveMqtt)
             {
@@ -295,8 +320,47 @@ namespace LetsPiu.Character.Uwb
             Debug.Log($"[UwbRuntime] started mode={sourceMode} record={(live ? _recorder?.FilePath : "off")}");
         }
 
+        /// <summary>
+        /// 实体墙网格：不做人体外扩（0.22m 会把贴墙走的真实点判成不可走），半径取小值，细格。
+        /// 纠偏判断「是否穿墙」和 Mock 生成「真的穿墙」的故障都用它，两边拓扑一致。
+        /// </summary>
+        UwbVenueWalkGrid GetPhysicalGrid(VenueSpace space)
+        {
+            if (_physGrid == null)
+            {
+                _physGrid = UwbVenueWalkGrid.BuildForMap(
+                    space, mockAreaX, mockAreaY, correctionGridCell, 9, CorrectionAgentRadiusM);
+            }
+
+            return _physGrid;
+        }
+
+        void SetupCorrection()
+        {
+            if (!enableCorrection)
+                return;
+
+            VenueSpace space = sync.space != null ? sync.space : GetComponent<VenueSpace>();
+            UwbVenueWalkGrid grid = GetPhysicalGrid(space);
+            if (grid == null || !grid.Ready)
+            {
+                Debug.LogWarning("[UwbRuntime] 纠偏网格不可用，本次不纠偏");
+                return;
+            }
+
+            _corrector = new UwbPositionCorrector(grid, correctionLagFrames);
+            _baseInterpolationDelay = sync.interpolationDelay;
+            _bridge.SetCorrector(_corrector, correctionDebugDraw ? space : null);
+            Debug.Log($"[UwbRuntime] correction on lagFrames={correctionLagFrames} cell={grid.CellSize}");
+        }
+
         void StopPipeline()
         {
+            if (_corrector != null && sync != null)
+                sync.interpolationDelay = _baseInterpolationDelay;
+            _corrector = null;
+            _physGrid = null;
+
             if (_mqtt != null)
             {
                 _mqtt.Connected -= OnMqttConnected;
@@ -359,7 +423,17 @@ namespace LetsPiu.Character.Uwb
                 case UwbSourceMode.LiveUdp:
                     return new UwbUdpTransport(udpListenPort, udpLocalAddress);
                 case UwbSourceMode.Mock:
-                    return new UwbMockTransport(mockTagCount, mockAreaX, mockAreaY, mockMoveSpeed, mockIntervalSec);
+                {
+                    VenueSpace space = sync != null ? sync.space : null;
+                    if (space == null)
+                        space = GetComponent<VenueSpace>();
+                    // 按整张地图包围盒建可走网格，避免中心对称裁切漏区
+                    UwbVenueWalkGrid grid = UwbVenueWalkGrid.BuildForMap(space, mockAreaX, mockAreaY);
+                    return new UwbMockTransport(
+                        mockTagCount, mockAreaX, mockAreaY, mockMoveSpeed, mockIntervalSec, grid,
+                        mockSimulateGlitch, mockSimulateGlitch ? GetPhysicalGrid(space) : null);
+                }
+
                 case UwbSourceMode.Replay:
                 {
                     string path = replayFilePath;
