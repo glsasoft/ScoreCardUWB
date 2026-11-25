@@ -37,6 +37,8 @@ namespace LetsPiu.Character.Uwb
         const float ReacquireDistM = 1.2f;
         const int ReacquireFrames = 4;
         const float MaxVelMps = 2.8f;
+        // 每个玩家每包都会更新一次，增益要小：单次掉帧不能让全场的回放延迟跟着跳
+        const float AvgDtGain = 0.003f;
 
         sealed class Frame
         {
@@ -135,7 +137,7 @@ namespace LetsPiu.Character.Uwb
             if (dt <= 0d || dt > ResetGapSec)
                 ResetTrack(t);
             else
-                _avgDt = Mathf.Lerp(_avgDt, Mathf.Clamp((float)dt, 0.02f, 1f), 0.05f);
+                _avgDt = Mathf.Lerp(_avgDt, Mathf.Clamp((float)dt, 0.02f, 0.5f), AvgDtGain);
             t.lastTime = time;
 
             Frame f = t.pool.Count > 0 ? t.pool.Pop() : new Frame();

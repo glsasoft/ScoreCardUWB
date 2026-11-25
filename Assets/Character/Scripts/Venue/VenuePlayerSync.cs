@@ -37,6 +37,15 @@ namespace LetsPiu.Character
 
         public static VenuePlayerSync Current { get; private set; }
 
+        public int BackSteps { get; private set; }
+        public float MaxBackStepSec { get; private set; }
+
+        public void ResetBackStats()
+        {
+            BackSteps = 0;
+            MaxBackStepSec = 0f;
+        }
+
         [Tooltip("场馆坐标锚点。留空则用同一个物体上的 VenueSpace，再没有就按场景坐标直接摆。")]
         public VenueSpace space;
 
@@ -288,6 +297,15 @@ namespace LetsPiu.Character
                 renderTime = samples[last].time;
             if (renderTime < samples[0].time)
                 renderTime = samples[0].time;
+            // 回放延迟变大时只是停一会儿，不能让回放时间倒退，否则走动的人会一起往回缩
+            if (track.started && renderTime < track.presentedTime)
+            {
+                float back = (float)(track.presentedTime - renderTime);
+                BackSteps++;
+                if (back > MaxBackStepSec)
+                    MaxBackStepSec = back;
+                renderTime = track.presentedTime;
+            }
 
             Vector3 world = Evaluate(samples, renderTime);
             if (snapToGround)

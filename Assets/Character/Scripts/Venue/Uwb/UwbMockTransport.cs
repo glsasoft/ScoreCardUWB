@@ -167,7 +167,10 @@ namespace LetsPiu.Character.Uwb
             _acc += deltaTime;
             if (_acc < _interval)
                 return;
-            _acc = 0f;
+            // 扣掉一个间隔而不是清零：发包速率不被帧时间量化，和真实 UWB 的固定速率一致
+            _acc -= _interval;
+            if (_acc > _interval)
+                _acc = 0f;
 
             long ms = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             for (int i = 0; i < _agents.Length; i++)
