@@ -22,6 +22,11 @@ namespace LetsPiu
         void Awake()
         {
             Application.runInBackground = true;
+#if UNITY_STANDALONE_WIN && !UNITY_EDITOR
+            // 比分牌 PC 包启动即全屏（无边框窗口全屏，便于投屏/切显示器）
+            Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+            Screen.fullScreen = true;
+#endif
 #if UNITY_EDITOR
             m_InitModel = EPlayMode.EditorSimulateMode;
 #else
@@ -29,6 +34,34 @@ namespace LetsPiu
 #endif
             Debug.Log($"资源系统运行模式：{m_InitModel}");
             m_Root = GameObject.Find("UIRoot/RootCanvas/PanelRoot").GetComponent<Transform>();
+
+            // Login/注册页也要能双击开设置（含退出）。Character 非 autoReferenced，需主动加载。
+            EnsureUwbSettingsPanel();
+        }
+
+        static void EnsureUwbSettingsPanel()
+        {
+            try
+            {
+                var asm = AppDomain.CurrentDomain.GetAssemblies()
+                    .FirstOrDefault(a => a.GetName().Name == "LetsPiu.Character");
+                if (asm == null)
+                    asm = Assembly.Load("LetsPiu.Character");
+
+                var type = asm?.GetType("LetsPiu.Character.Uwb.UwbSettingsPanel");
+                var ensure = type?.GetMethod("EnsureExists", BindingFlags.Public | BindingFlags.Static);
+                if (ensure == null)
+                {
+                    Debug.LogWarning("[Boot] UwbSettingsPanel.EnsureExists 未找到");
+                    return;
+                }
+
+                ensure.Invoke(null, null);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("[Boot] 创建 UwbSettingsPanel 失败: " + e.Message);
+            }
         }
 
         async void Start()

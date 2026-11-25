@@ -74,6 +74,7 @@ namespace LetsPiu.Character.Uwb
         UwbPositionCorrector _corrector;
         UwbVenueWalkGrid _physGrid;
         float _baseInterpolationDelay;
+        float _maxFrameDt;
         float _logTimer;
         bool _alertShown;
 
@@ -100,11 +101,8 @@ namespace LetsPiu.Character.Uwb
             // Editor 启动默认 Mock 方便调试；正式包（exe/android）启动固定连 MQTT
             sourceMode = Application.isEditor ? UwbSourceMode.Mock : UwbSourceMode.LiveMqtt;
 
-            if (ensureSettingsPanel && UwbSettingsPanel.Current == null)
-            {
-                var host = new GameObject("UwbSettingsPanel_Host");
-                host.AddComponent<UwbSettingsPanel>();
-            }
+            if (ensureSettingsPanel)
+                UwbSettingsPanel.EnsureExists();
         }
 
         void OnEnable()
@@ -138,10 +136,21 @@ namespace LetsPiu.Character.Uwb
             if (_corrector != null && sync != null)
                 sync.interpolationDelay = _baseInterpolationDelay + _corrector.LagSeconds;
 
+            if (dt > _maxFrameDt)
+                _maxFrameDt = dt;
+
             _logTimer += dt;
             if (_logTimer < 5f || _bridge == null)
                 return;
             _logTimer = 0f;
+            Debug.Log(
+                $"[UwbFrame] maxFrameDt={_maxFrameDt * 1000f:0}ms res={Screen.width}x{Screen.height} " +
+                $"delay={(sync != null ? sync.interpolationDelay : 0f):0.###}s " +
+                $"fps={(1f / Mathf.Max(0.0001f, Time.smoothDeltaTime)):0} " +
+                $"backSteps={(sync != null ? sync.BackSteps : 0)} maxBack={(sync != null ? sync.MaxBackStepSec : 0f):0.###}s");
+            _maxFrameDt = 0f;
+            if (sync != null)
+                sync.ResetBackStats();
             Debug.Log(
                 $"[UwbRuntime] mode={sourceMode} accepted={_bridge.Accepted} fail={_bridge.ParseFail} " +
                 $"tags={_bridge.TrackedTags} mqtt={(IsMqttConnected ? "up" : "down")}");

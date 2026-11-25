@@ -10,7 +10,6 @@ using UnityEngine.UI;
 using LetsPiu.Base.BaseScripts.Define.ModelDefine.Http.Device;
 using LetsPiu.Base;
 using TMPro;
-using Newtonsoft.Json;
 
 namespace LetsPiu.UI.UIScript.LoginScripts.Logic
 {
@@ -34,24 +33,6 @@ namespace LetsPiu.UI.UIScript.LoginScripts.Logic
         
         private bool _isRegistering = false;
 
-        // 测试比分牌按钮展示用设备码
-        static readonly string[] s_TestDeviceNames =
-        {
-            "20260509174531",
-            "20260509174649",
-            "20260509174744",
-            "20260509174815",
-        };
-
-        // 测试比分牌预设 JSON（点击按钮直接写入缓存，不走注册接口）
-        static readonly string[] s_TestDeviceJson =
-        {
-            "{\"publish_topic\":\"/store22/20260509174538845/android/update\",\"device_name\":\"20260509174538845\",\"umeng_flag\":\"store22-20260509174531\",\"product_key\":\"store22\",\"store_type\":0,\"id\":1,\"subscribe_topic\":\"/store22/20260509174538845/android/get\",\"uri\":\"tcp://lz0000000000000022.qmlz.store:1883\",\"device_pass\":\"cf82eb\"}",
-            "{\"publish_topic\":\"/store22/20260509174656819/android/update\",\"device_name\":\"20260509174656819\",\"umeng_flag\":\"store22-20260509174649\",\"product_key\":\"store22\",\"store_type\":0,\"id\":2,\"subscribe_topic\":\"/store22/20260509174656819/android/get\",\"uri\":\"tcp://lz0000000000000022.qmlz.store:1883\",\"device_pass\":\"ea48f5\"}",
-            "{\"publish_topic\":\"/store22/20260509174752474/android/update\",\"device_name\":\"20260509174752474\",\"umeng_flag\":\"store22-20260509174744\",\"product_key\":\"store22\",\"store_type\":0,\"id\":3,\"subscribe_topic\":\"/store22/20260509174752474/android/get\",\"uri\":\"tcp://lz0000000000000022.qmlz.store:1883\",\"device_pass\":\"773e75\"}",
-            "{\"publish_topic\":\"/store22/20260509174823380/android/update\",\"device_name\":\"20260509174823380\",\"umeng_flag\":\"store22-20260509174815\",\"product_key\":\"store22\",\"store_type\":0,\"id\":4,\"subscribe_topic\":\"/store22/20260509174823380/android/get\",\"uri\":\"tcp://lz0000000000000022.qmlz.store:1883\",\"device_pass\":\"7beede\"}",
-        };
-
         static readonly string[] s_TestScoreCardButtonNames =
         {
             "TestScoreCard1",
@@ -61,6 +42,7 @@ namespace LetsPiu.UI.UIScript.LoginScripts.Logic
         };
 
         // 测试比分牌按钮的父节点；隐藏后 Menu 的 VerticalLayoutGroup 只剩「开始注册」按钮，自动居中
+        // Release 预设入口改到登录页双击设置面板，此处仍仅 Editor 显示原按钮
         const string TestScoreCardRootName = "TestScoreCards";
         
         protected override void Awake()
@@ -144,46 +126,23 @@ namespace LetsPiu.UI.UIScript.LoginScripts.Logic
 
         void RegisterWithTestDevice(int index)
         {
-            if (index < 0 || index >= s_TestDeviceJson.Length)
-            {
-                Debug.LogError($"RegisterDevicePanel 测试设备索引越界: {index}");
-                return;
-            }
-
             ApplyTestDevicePreset(index);
         }
 
         void ApplyTestDevicePreset(int index)
         {
-            DeviceInfo5S deviceInfo;
-            try
+            if (!ScoreCardTestDevicePresets.TryApply(index, out string error))
             {
-                deviceInfo = JsonConvert.DeserializeObject<DeviceInfo5S>(s_TestDeviceJson[index]);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"RegisterDevicePanel 测试设备 JSON 反序列化失败 index={index}: {e.Message}");
-                DialogManager.OpenAlertDialog("温馨提示", "测试设备数据无效，请检查内置 JSON", "确定");
+                DialogManager.OpenAlertDialog("温馨提示", error ?? "预注册失败", "确定");
                 return;
             }
 
-            if (deviceInfo == null || !deviceInfo.IsValid())
-            {
-                var detail = deviceInfo == null ? "null" : deviceInfo.GetInvalidDataInfo();
-                Debug.LogError($"RegisterDevicePanel 测试设备数据无效 index={index}: {detail}");
-                DialogManager.OpenAlertDialog("温馨提示", "测试设备数据无效:" + detail, "确定");
-                return;
-            }
-
-            deviceInfo.PrintDeviceInfo($"RegisterDevicePanel 测试设备预设 index={index}");
-            Debug.Log($"RegisterDevicePanel 测试设备预设 index={index} 跳过注册接口，写入缓存后进入大厅加载");
-            AppStateManager.Instance.DeviceInfo5S = deviceInfo;
             NotifyRegisterSuccess();
         }
 
         void RefreshTestScoreCardButtonLabels()
         {
-            for (var i = 0; i < s_TestDeviceNames.Length; i++)
+            for (var i = 0; i < ScoreCardTestDevicePresets.Count; i++)
             {
                 var buttonName = i < s_TestScoreCardButtonNames.Length
                     ? s_TestScoreCardButtonNames[i]
@@ -207,7 +166,7 @@ namespace LetsPiu.UI.UIScript.LoginScripts.Logic
                     continue;
                 }
 
-                label.text = s_TestDeviceNames[i];
+                label.text = ScoreCardTestDevicePresets.GetDeviceCode(i);
             }
         }
 
@@ -335,13 +294,22 @@ namespace LetsPiu.UI.UIScript.LoginScripts.Logic
             base.OnEnable();
             RefreshTestScoreCardButtonLabels();
             EventManager.Instance.AddEvent<RemoteKey>(EventMsg.RemoteKeyEvent, OnTVRemoteKey);
+            // 登录页设置面板的 1~4 号预注册 → 与面板按钮同一条成功回调进大厅
+            ScoreCardTestDevicePresets.EnterHallRequested -= OnPresetEnterHallFromSettings;
+            ScoreCardTestDevicePresets.EnterHallRequested += OnPresetEnterHallFromSettings;
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
             EventManager.Instance.RemoveEvent<RemoteKey>(EventMsg.RemoteKeyEvent, OnTVRemoteKey);
+            ScoreCardTestDevicePresets.EnterHallRequested -= OnPresetEnterHallFromSettings;
             // StopLocalServer();
+        }
+
+        void OnPresetEnterHallFromSettings()
+        {
+            NotifyRegisterSuccess();
         }
         
         // /// <summary>

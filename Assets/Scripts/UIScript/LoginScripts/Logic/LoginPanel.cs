@@ -13,14 +13,34 @@ namespace LetsPiu.UI.UIScript.LoginScripts.Logic
     /// </summary>
     public class LoginPanel : AbstractPanel
     {
+        static bool s_ClearRegisterHooked;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
+        static void HookClearRegisterAtStartup()
+        {
+            EnsureClearRegisterHook();
+        }
+
         protected override void Awake()
         {
+            EnsureClearRegisterHook();
         }
 
         protected override void Start()
         {
             base.Start();
+            EnsureClearRegisterHook();
             CheckLocalDeviceInfo().Forget();
+        }
+
+        /// <summary>设置面板「清除注册」→ 走本面板静态清理逻辑（大厅场景也有效）。</summary>
+        static void EnsureClearRegisterHook()
+        {
+            if (s_ClearRegisterHooked)
+                return;
+            s_ClearRegisterHooked = true;
+            ScoreCardTestDevicePresets.ClearRegisterRequested -= ClearRegisterInfoAndReturnToLogin;
+            ScoreCardTestDevicePresets.ClearRegisterRequested += ClearRegisterInfoAndReturnToLogin;
         }
         
         /// <summary>
