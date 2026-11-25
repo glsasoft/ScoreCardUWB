@@ -133,6 +133,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: VFX_UWB_2.5DView_Attack_Reborn
       objectReference: {fileID: 0}
+    - target: {fileID: 3269495602424555881, guid: df0f95117917a86438b9119cd197e51e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7052007023266084614, guid: df0f95117917a86438b9119cd197e51e,
         type: 3}
       propertyPath: InitialModule.startSpeed.scalar
@@ -402,6 +407,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: VFX_UWB_2.5DView_Attack_Dead
       objectReference: {fileID: 0}
+    - target: {fileID: 7960262878324945186, guid: 29245800a9587774e8b6544199b7879e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8663387219056347794, guid: 29245800a9587774e8b6544199b7879e,
         type: 3}
       propertyPath: m_Enabled
@@ -589,6 +599,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3800431980843694906}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 576cc1f66e9cd53459f698505240b68e,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6571434302779932046}
   m_SourcePrefab: {fileID: 100100000, guid: 576cc1f66e9cd53459f698505240b68e, type: 3}
 --- !u!137 &332440596155488491 stripped
 SkinnedMeshRenderer:
@@ -758,6 +772,21 @@ MonoBehaviour:
   isDead: 0
   vfxRoot: {fileID: 0}
   vfxParticles: []
+--- !u!114 &6571434302779932046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5741701728217196213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e26dcea27d3fd3f44a937caf6164b4ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  includeMeshRenderers: 0
+  includeInactive: 0
+  includeParticleRenderers: 0
 --- !u!137 &7889587838410354360 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 3319861880525960540, guid: 576cc1f66e9cd53459f698505240b68e,

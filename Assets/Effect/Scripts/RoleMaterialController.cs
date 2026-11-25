@@ -11,6 +11,11 @@ namespace LetsPiu.Graphics
     /// <summary>
     /// 角色材质参数控制器：把一批"每个角色都要设一遍"的材质参数，从角色根节点统一下发给所有材质。
     ///
+    /// 关键约束：所有 SetFloat / SetColor / keyword 只允许打在运行时实例上。
+    /// 编辑模式下本脚本只读不写——以前 [ExecuteAlways] 让它对着 sharedMaterial（也就是 .mat 资源本身）
+    /// 每帧写 _CenterPointPosition，场景里 6 个角色共用同一批资源，于是整个工程的材质文件都被写脏了。
+    /// 现在运行时实例由 RuntimeMaterialInstancer 负责创建和回收。
+    ///
     /// 从 H:\ScoreCardUnity\Assets\Effect\Scripts\RoleMaterialController.cs 搬过来的，
     /// 去掉了两类东西：
     ///   1. 当前工程 shader 里已经不存在的参数（老 PBR 溶解 / 整体变色那一套）：
@@ -50,9 +55,10 @@ namespace LetsPiu.Graphics
         public Transform modelRoot;
 
         [Header("Editor 预览控制")]
-        [Tooltip("在 Edit Mode 是否实时刷新材质参数")]
+        [Tooltip("废弃字段，仅为兼容旧场景保留。编辑模式不再把参数写进材质资源，勾不勾都一样。")]
         public bool previewInEditor = false;
-        [Tooltip("运行时（Play Mode）是否仍然用 sharedMaterials")]
+
+        [Tooltip("调试开关：运行时强制写原始材质资源（会脏 .mat 文件）。正常流程请保持关闭。")]
         public bool useSharedMaterial = false;
 
         [SerializeField, HideInInspector]
@@ -107,6 +113,31 @@ namespace LetsPiu.Graphics
 
         private Vector3 lastPosition;
         private bool niloDirty = true;
+        private RuntimeMaterialInstancer _instancer;
+        private bool warnedSharedMaterial;
+
+        /// <summary>
+        /// 当前这批材质是否允许直接写资源。只有在显式打开 useSharedMaterial 的调试模式下才成立，
+        /// 其余情况（包括编辑模式）一律不准写。
+        /// </summary>
+        private bool WritesMaterialAssets
+        {
+            get { return Application.isPlaying && useSharedMaterial; }
+        }
+
+        /// <summary>
+        /// 这个材质是不是磁盘上的 .mat 资源。
+        /// 编辑器预览开关刚打开、allMaterials 还没重收集的那一帧，列表里可能还混着资源引用，
+        /// 所有写入点都要先过这一关，否则资源又会被写上 _CenterPointPosition。
+        /// </summary>
+        private static bool IsMaterialAsset(Material mat)
+        {
+#if UNITY_EDITOR
+            return mat != null && UnityEditor.EditorUtility.IsPersistent(mat);
+#else
+            return false;
+#endif
+        }
 
         private void OnValidate()
         {
@@ -114,7 +145,8 @@ namespace LetsPiu.Graphics
             perspectiveRemovalAmount = Mathf.Clamp01(perspectiveRemovalAmount);
             outlineWidthExtraMultiplier = Mathf.Clamp(outlineWidthExtraMultiplier, 0, 256);
 
-            if (Application.isPlaying || previewInEditor)
+            // 编辑模式一律不碰材质。运行时也只有开了调试开关才写资源。
+            if (WritesMaterialAssets)
             {
                 foreach (var mat in allMaterials)
                 {
@@ -128,18 +160,26 @@ namespace LetsPiu.Graphics
         private void Awake()
         {
             if (modelRoot == null) modelRoot = transform;
-            m_AllMaterials = allMaterials;
+            EnsureInstancer();
             RefreshMaterialList();
         }
 
         private void OnEnable()
         {
-            CacheMaterialProperty();
+            EnsureInstancer();
+            RefreshMaterialList();
             niloDirty = true;
+
+            if (!MaterialPreviewState.Active)
+            {
+                return;
+            }
+
+            CacheMaterialProperty();
 
             foreach (var mat in allMaterials)
             {
-                if (!mat) continue;
+                if (!mat || IsMaterialAsset(mat)) continue;
                 mat.SetFloat(_PerspectiveRemovalAmount, perspectiveRemovalAmount);
                 mat.SetFloat(_OutlineWidthExtraMultiplier, outlineWidthExtraMultiplier);
             }
@@ -147,6 +187,11 @@ namespace LetsPiu.Graphics
 
         private void Update()
         {
+            if (!MaterialPreviewState.Active)
+            {
+                return;
+            }
+
             // 开着的时候每帧同步，_DissolveRootY 要跟角色移动；
             // 关着的时候只在参数改动后刷一次，把 keyword 收干净。
             if (niloDissolveOn || niloDirty)
@@ -161,47 +206,94 @@ namespace LetsPiu.Graphics
 
         private void LateUpdate()
         {
+            if (!MaterialPreviewState.Active)
+            {
+                return;
+            }
+
             if (modelRoot == null) return;
             if (modelRoot.position == lastPosition) return;
 
             lastPosition = modelRoot.position;
-            foreach (var mat in allMaterials)
+            for (int i = 0; i < allMaterials.Count; i++)
             {
-                if (mat) mat.SetVector(CenterPointPosition, lastPosition);
+                Material mat = allMaterials[i];
+                if (mat == null || IsMaterialAsset(mat)) continue;
+                mat.SetVector(CenterPointPosition, lastPosition);
             }
         }
 
         private void OnDisable()
         {
-            RevertMaterialProperty();
+            // 运行时写的是实例，实例由 RuntimeMaterialInstancer 统一销毁，不需要回滚。
+            // 只有调试开关打开、真的写过资源时，才需要把原值还回去。
+            if (WritesMaterialAssets)
+            {
+                RevertMaterialProperty();
+            }
         }
 
+        RuntimeMaterialInstancer EnsureInstancer()
+        {
+            if (_instancer == null)
+            {
+                _instancer = GetComponent<RuntimeMaterialInstancer>();
+                if (_instancer == null && MaterialPreviewState.Active && !useSharedMaterial)
+                {
+                    _instancer = gameObject.AddComponent<RuntimeMaterialInstancer>();
+                }
+            }
+            return _instancer;
+        }
+
+        /// <summary>
+        /// 重新收集当前真正挂在 renderer 上的材质。
+        /// 运行时拿到的是 RuntimeMaterialInstancer 建的副本；编辑模式只读原始资源、仅用于 Inspector 展示。
+        /// </summary>
         public void RefreshMaterialList()
         {
             allMaterials.Clear();
             HashSet<Material> seen = new HashSet<Material>();
+
+            RuntimeMaterialInstancer instancer = MaterialPreviewState.Active ? EnsureInstancer() : null;
 
             var renderers = GetComponentsInChildren<SkinnedMeshRenderer>(true);
             foreach (var rend in renderers)
             {
                 if (!rend) continue;
 
-                // 非运行时用 sharedMaterials（原始材质资源），运行时用 materials（实例化副本）
-                bool forceShared = !Application.isPlaying;
-                Material[] mats = (forceShared || useSharedMaterial) ? rend.sharedMaterials : rend.materials;
+                // 编辑模式：资源本身（只读展示）
+                // 运行时：instancer 已经把 sharedMaterials 换成副本了，这里拿到的就是副本
+                Material[] mats = rend.sharedMaterials;
                 if (mats == null) continue;
 
                 foreach (var mat in mats)
                 {
-                    if (mat && seen.Add(mat)) allMaterials.Add(mat);
+                    if (!mat) continue;
+
+                    Material resolved = instancer != null ? instancer.Get(mat) : mat;
+                    if (resolved && seen.Add(resolved)) allMaterials.Add(resolved);
                 }
+            }
+
+            // 只有「编辑模式且没开预览」时 allMaterials 才是资源引用，这时才写回序列化字段。
+            // 预览模式下手里拿的是 HideAndDontSave 副本，写进去会变成场景里的空引用。
+            if (!MaterialPreviewState.Active)
+            {
+                m_AllMaterials = allMaterials;
+            }
+            else if (useSharedMaterial && !warnedSharedMaterial)
+            {
+                warnedSharedMaterial = true;
+                Debug.LogWarning(
+                    "[RoleMaterialController] useSharedMaterial 已开启：" +
+                    "本角色会直接写 .mat 资源，退出 Play 后材质文件会被改脏。", this);
             }
         }
 
         private void CacheMaterialProperty()
         {
-            bool forceShared = !Application.isPlaying;
-            if (!(forceShared || useSharedMaterial)) return;
+            if (!WritesMaterialAssets) return;
 
             materialPropertyCacheDic.Clear();
 
@@ -237,8 +329,7 @@ namespace LetsPiu.Graphics
 
         private void RevertMaterialProperty()
         {
-            bool forceShared = !Application.isPlaying;
-            if (!(forceShared || useSharedMaterial)) return;
+            if (!WritesMaterialAssets) return;
 
             foreach (var mat in allMaterials)
             {
@@ -258,6 +349,11 @@ namespace LetsPiu.Graphics
         /// </summary>
         public void ApplyNiloDissolve()
         {
+            if (!MaterialPreviewState.Active)
+            {
+                return;
+            }
+
             // 域重载 / 场景重载后 allMaterials 会被清空，而 Awake 不一定补得回来。
             // 这里兜一次底，避免溶解参数打到一个空列表上、看着像「没效果」。
             if (allMaterials.Count == 0)
@@ -267,9 +363,10 @@ namespace LetsPiu.Graphics
 
             float rootY = modelRoot ? modelRoot.position.y : transform.position.y;
 
-            foreach (var mat in allMaterials)
+            for (int i = 0; i < allMaterials.Count; i++)
             {
-                if (mat == null || !mat.HasProperty(NiloDissolveMinY)) continue;
+                Material mat = allMaterials[i];
+                if (mat == null || IsMaterialAsset(mat) || !mat.HasProperty(NiloDissolveMinY)) continue;
 
                 if (niloDissolveOn) mat.EnableKeyword(NiloDissolveKeyword);
                 else mat.DisableKeyword(NiloDissolveKeyword);
@@ -289,9 +386,15 @@ namespace LetsPiu.Graphics
         /// </summary>
         public void ApplyHitFlash()
         {
-            foreach (var mat in allMaterials)
+            if (!MaterialPreviewState.Active)
             {
-                if (mat == null || !mat.HasProperty(HitFlashIntensity)) continue;
+                return;
+            }
+
+            for (int i = 0; i < allMaterials.Count; i++)
+            {
+                Material mat = allMaterials[i];
+                if (mat == null || IsMaterialAsset(mat) || !mat.HasProperty(HitFlashIntensity)) continue;
                 mat.SetFloat(HitFlashIntensity, hitFlashIntensity);
                 mat.SetFloat(HitFlashPower, hitFlashPower);
                 mat.SetColor(HitFlashColor, hitFlashColor);
@@ -363,7 +466,8 @@ namespace LetsPiu.Graphics
             }
             EditorGUILayout.HelpBox(
                 "把角色摆成需要的姿势（比如手举过头顶），再点上面这个按钮，" +
-                "会用当前所有渲染器的世界包围盒自动填好溶解高度上下限。",
+                "会用当前所有渲染器的世界包围盒自动填好溶解高度上下限。\n\n" +
+                "运行时参数全部打在 RuntimeMaterialInstancer 建的材质副本上，编辑模式不会改任何 .mat 资源。",
                 MessageType.Info);
         }
     }
