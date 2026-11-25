@@ -169,7 +169,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _HitFlashGroup: 0
-    - _HitFlashIntensity: 10
+    - _HitFlashIntensity: 0
     - _HitFlashPower: 2
     - _LightDirFromCameraDir: 0
     - _MatCapAdditiveIntensity: 1
@@ -283,7 +283,7 @@ Material:
     - _FaceUpDirection: {r: 0, g: 1, b: 0, a: 1}
     - _FresnelColor: {r: 1, g: 0.1, b: 0.1, a: 1}
     - _HeadBonePositionWS: {r: 0, g: 0, b: 0, a: 1}
-    - _HitFlashColor: {r: 0.4, g: 1, b: 0, a: 1}
+    - _HitFlashColor: {r: 0.2216981, g: 0.9486833, b: 1, a: 1}
     - _LightDirFromCameraDirOffSet: {r: 0, g: 0, b: 0, a: 0}
     - _MatCapAdditiveColor: {r: 1, g: 1, b: 1, a: 1}
     - _MetallicSpecularColor: {r: 1, g: 1, b: 1, a: 1}
