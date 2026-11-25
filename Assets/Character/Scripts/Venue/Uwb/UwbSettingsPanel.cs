@@ -7,7 +7,7 @@ namespace LetsPiu.Character.Uwb
 {
     /// <summary>
     /// UWB 设置面板。连点 2 次弹出。
-    /// 模式互斥：顶栏 Tab 只切换编辑页，点「应用」才切换并持久化生效模式。
+    /// 顶栏 Tab：0~3 为数据源模式（点「应用」才生效），4 为系统设置（预注册/清注册/退出）。
     /// </summary>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(200)]
@@ -20,11 +20,39 @@ namespace LetsPiu.Character.Uwb
         const float CloseWidth = 52f;
         const float Pad = 14f;
         const float TabHeight = 46f;
+        const int SystemTabIndex = 4;
+        const float WindowMaxWidth = 1320f;
 
         public static UwbSettingsPanel Current { get; private set; }
 
         [SerializeField] bool dontDestroyOnLoad = true;
         [SerializeField] int fontSize = 20;
+
+        /// <summary>
+        /// 确保全局设置面板存在（Login/注册页也需要，否则无法双击退出）。
+        /// UwbRuntime 未就绪时仍可改连接配置并退出程序。
+        /// </summary>
+        public static UwbSettingsPanel EnsureExists()
+        {
+            if (Current != null)
+                return Current;
+
+            var existing = Object.FindObjectOfType<UwbSettingsPanel>();
+            if (existing != null)
+            {
+                Current = existing;
+                return existing;
+            }
+
+            var host = new GameObject(HostName);
+            return host.AddComponent<UwbSettingsPanel>();
+        }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        static void BootstrapAfterSceneLoad()
+        {
+            EnsureExists();
+        }
 
         bool _visible;
         int _tapCount;
@@ -36,7 +64,7 @@ namespace LetsPiu.Character.Uwb
         bool _dragging;
         Vector2 _dragGrab;
 
-        /// <summary>当前正在编辑的 Tab（0~3），不等于已生效模式</summary>
+        /// <summary>当前顶栏 Tab（0~3 模式编辑，4 系统设置）</summary>
         int _editTab;
 
         /// <summary>已生效模式索引 0~3</summary>
@@ -59,6 +87,9 @@ namespace LetsPiu.Character.Uwb
         string _offsetZ = "0";
         readonly string[] _modeNames = { "LiveMqtt", "LiveUdp", "Mock", "Replay" };
         readonly string[] _modeLabels = { "真机MQTT", "真机UDP", "Mock", "Replay" };
+        readonly string[] _tabLabels = { "真机MQTT", "真机UDP", "Mock", "Replay", "系统设置" };
+
+        bool IsSystemTab => _editTab == SystemTabIndex;
 
         List<string> _dates = new List<string>();
         int _dateIndex;
@@ -71,6 +102,7 @@ namespace LetsPiu.Character.Uwb
         bool _alertVisible;
         string _alertTitle = "";
         string _alertBody = "";
+        bool _confirmClearRegister;
 
         GUIStyle _box;
         GUIStyle _titleBar;
@@ -85,6 +117,7 @@ namespace LetsPiu.Character.Uwb
         GUIStyle _tabApplied;
         GUIStyle _selectedBtn;
         bool _stylesReady;
+        readonly List<Texture2D> _ownedTextures = new List<Texture2D>();
 
         void Awake()
         {
@@ -117,6 +150,14 @@ namespace LetsPiu.Character.Uwb
         {
             if (Current == this)
                 Current = null;
+            for (int i = 0; i < _ownedTextures.Count; i++)
+            {
+                if (_ownedTextures[i] != null)
+                    Destroy(_ownedTextures[i]);
+            }
+
+            _ownedTextures.Clear();
+            _stylesReady = false;
         }
 
         public void ShowAlert(string title, string body)
@@ -126,9 +167,14 @@ namespace LetsPiu.Character.Uwb
             _alertVisible = true;
         }
 
+        void Update()
+        {
+            // 用 Update 收点击，避免注册页 uGUI 吃掉 OnGUI 的 MouseDown
+            HandleTapFromInput();
+        }
+
         void OnGUI()
         {
-            HandleTap();
             DrawAlertIfNeeded();
             if (!_visible)
                 return;
@@ -137,10 +183,13 @@ namespace LetsPiu.Character.Uwb
             EnsureWindowRect();
             HandleWindowDragAndClose();
 
-            GUI.Box(_windowRect, GUIContent.none, _box);
+            // Windows Player 上 GUIStyle.background 的运行时贴图常画不出来，改用 whiteTexture 铺底。
+            FillRect(new Rect(0f, 0f, Screen.width, Screen.height), new Color(0f, 0f, 0f, 0.5f));
+            FillRect(_windowRect, new Color(0.08f, 0.08f, 0.1f, 0.96f));
 
             Rect titleRect = new Rect(_windowRect.x, _windowRect.y, _windowRect.width - CloseWidth, TitleHeight);
-            GUI.Box(titleRect, GUIContent.none, _titleBar);
+            FillRect(new Rect(_windowRect.x, _windowRect.y, _windowRect.width, TitleHeight),
+                new Color(0.14f, 0.14f, 0.16f, 1f));
             GUI.Label(
                 new Rect(titleRect.x + 14f, titleRect.y, titleRect.width - 20f, TitleHeight),
                 "UWB 设置",
@@ -158,17 +207,25 @@ namespace LetsPiu.Character.Uwb
             float innerW = _windowRect.width - Pad * 2f;
             float x0 = _windowRect.x + Pad;
 
-            // 顶栏模式 Tab（互斥）
-            DrawModeTabs(new Rect(x0, y, innerW, TabHeight));
+            DrawTopTabs(new Rect(x0, y, innerW, TabHeight));
             y += TabHeight + 8f;
 
-            // 生效提示
-            GUI.Label(
-                new Rect(x0, y, innerW, 28f),
-                "当前生效: " + _modeLabels[Mathf.Clamp(_appliedTab, 0, 3)] +
-                "　　编辑中: " + _modeLabels[Mathf.Clamp(_editTab, 0, 3)] +
-                "（点「应用」后切换）",
-                _label);
+            if (IsSystemTab)
+            {
+                GUI.Label(new Rect(x0, y, innerW, 28f),
+                    "当前生效数据源: " + _modeLabels[Mathf.Clamp(_appliedTab, 0, 3)] + "　　本页为系统设置（无需点应用）",
+                    _label);
+            }
+            else
+            {
+                GUI.Label(
+                    new Rect(x0, y, innerW, 28f),
+                    "当前生效: " + _modeLabels[Mathf.Clamp(_appliedTab, 0, 3)] +
+                    "　　编辑中: " + _modeLabels[Mathf.Clamp(_editTab, 0, 3)] +
+                    "（点「应用」后切换）",
+                    _label);
+            }
+
             y += 30f;
 
             if (!string.IsNullOrEmpty(_status))
@@ -177,94 +234,187 @@ namespace LetsPiu.Character.Uwb
                 y += 26f;
             }
 
-            // Tab 内容区
-            float contentBottomPad = 70f;
+            float contentBottomPad = IsSystemTab ? 8f : 70f;
             Rect contentRect = new Rect(x0, y, innerW, _windowRect.yMax - y - contentBottomPad - Pad);
-            GUI.Box(contentRect, GUIContent.none, _contentBox);
+            FillRect(contentRect, new Color(0.12f, 0.12f, 0.14f, 1f));
             GUILayout.BeginArea(new Rect(contentRect.x + 12f, contentRect.y + 10f,
                 contentRect.width - 24f, contentRect.height - 16f));
             _scroll = GUILayout.BeginScrollView(_scroll);
 
-            switch (_editTab)
+            if (IsSystemTab)
             {
-                case 0:
-                    GUILayout.Label("真机 MQTT", _title);
-                    GUILayout.Label("应用后将持续使用此模式；自动按日录制。", _label);
-                    _mqttUrl = LabeledField("Broker URL", _mqttUrl);
-                    _mqttTopic = LabeledField("Topic", _mqttTopic);
-                    _mqttClientId = LabeledField("ClientId(可空)", _mqttClientId);
-                    GUILayout.Label("日志: " + GetRecordDir() + "/uwb_yyyyMMdd.jsonl", _label);
-                    break;
-                case 1:
-                    GUILayout.Label("真机 UDP", _title);
-                    GUILayout.Label("应用后将持续使用此模式；自动按日录制。", _label);
-                    _udpPort = LabeledField("Listen Port", _udpPort);
-                    _udpLocal = LabeledField("Local Address(可空)", _udpLocal);
-                    GUILayout.Label("日志: " + GetRecordDir() + "/uwb_yyyyMMdd.jsonl", _label);
-                    break;
-                case 2:
-                    GUILayout.Label("Mock", _title);
-                    GUILayout.Label("应用后将持续使用此模式；不录制。", _label);
-                    _mockCount = LabeledField("Tag 数量", _mockCount);
-                    _mockAreaX = LabeledField("Area X(米)", _mockAreaX);
-                    _mockAreaY = LabeledField("Area Y(米)", _mockAreaY);
-                    break;
-                case 3:
-                    DrawReplayContent();
-                    break;
+                DrawSystemSettingsContent();
             }
-
-            GUILayout.Space(12);
-            GUILayout.Label("坐标偏移(米)", _title);
-            _offsetX = LabeledField("Offset X", _offsetX);
-            _offsetY = LabeledField("Offset Y", _offsetY);
-            _offsetZ = LabeledField("Offset Z", _offsetZ);
-
-            UwbRuntime runtime = FindRuntime();
-            if (runtime != null)
+            else
             {
-                GUILayout.Space(8);
-                GUILayout.Label(
-                    $"运行状态: mode={runtime.ActiveMode} accepted={runtime.AcceptedCount} tags={runtime.TrackedTags}",
-                    _label);
+                switch (_editTab)
+                {
+                    case 0:
+                        GUILayout.Label("真机 MQTT", _title);
+                        GUILayout.Label("应用后将持续使用此模式；自动按日录制。", _label);
+                        _mqttUrl = LabeledField("Broker URL", _mqttUrl);
+                        _mqttTopic = LabeledField("Topic", _mqttTopic);
+                        _mqttClientId = LabeledField("ClientId(可空)", _mqttClientId);
+                        GUILayout.Label("日志: " + GetRecordDir() + "/uwb_yyyyMMdd.jsonl", _label);
+                        break;
+                    case 1:
+                        GUILayout.Label("真机 UDP", _title);
+                        GUILayout.Label("应用后将持续使用此模式；自动按日录制。", _label);
+                        _udpPort = LabeledField("Listen Port", _udpPort);
+                        _udpLocal = LabeledField("Local Address(可空)", _udpLocal);
+                        GUILayout.Label("日志: " + GetRecordDir() + "/uwb_yyyyMMdd.jsonl", _label);
+                        break;
+                    case 2:
+                        GUILayout.Label("Mock", _title);
+                        GUILayout.Label("应用后将持续使用此模式；不录制。", _label);
+                        _mockCount = LabeledField("Tag 数量", _mockCount);
+                        _mockAreaX = LabeledField("Area X(米)", _mockAreaX);
+                        _mockAreaY = LabeledField("Area Y(米)", _mockAreaY);
+                        break;
+                    case 3:
+                        DrawReplayContent();
+                        break;
+                }
+
+                GUILayout.Space(12);
+                GUILayout.Label("坐标偏移(米)", _title);
+                _offsetX = LabeledField("Offset X", _offsetX);
+                _offsetY = LabeledField("Offset Y", _offsetY);
+                _offsetZ = LabeledField("Offset Z", _offsetZ);
+
+                UwbRuntime runtime = FindRuntime();
+                if (runtime != null)
+                {
+                    GUILayout.Space(8);
+                    GUILayout.Label(
+                        $"运行状态: mode={runtime.ActiveMode} accepted={runtime.AcceptedCount} tags={runtime.TrackedTags}",
+                        _label);
+                }
             }
 
             GUILayout.EndScrollView();
             GUILayout.EndArea();
 
-            // 底部应用
-            Rect applyRect = new Rect(x0, _windowRect.yMax - Pad - 52f, innerW, 52f);
-            if (GUI.Button(applyRect, "应用（切换到「" + _modeLabels[Mathf.Clamp(_editTab, 0, 3)] + "」并保存）", _btn))
-                ApplyAndSave();
+            if (!IsSystemTab)
+            {
+                float btnH = 52f;
+                float yBtn = _windowRect.yMax - Pad - btnH;
+                Rect applyRect = new Rect(x0, yBtn, innerW, btnH);
+                if (GUI.Button(applyRect,
+                        "应用（切换到「" + _modeLabels[Mathf.Clamp(_editTab, 0, 3)] + "」并保存）", _btn))
+                    ApplyAndSave();
+            }
         }
 
-        void DrawModeTabs(Rect area)
+        static void QuitApp()
         {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+        }
+
+        void DrawSystemSettingsContent()
+        {
+            GUILayout.Label("系统设置", _title);
+            GUILayout.Label("预注册、清除注册、退出程序。与 UWB 数据源「应用」无关。", _label);
+
+            GUILayout.Space(14);
+            GUILayout.Label("1~4号预注册比分牌", _title);
+            GUILayout.Label(
+                "跳过「开始注册」接口，直接写入本地设备缓存并进入大厅（Editor / Release 均可）。",
+                _label);
+            GUILayout.Space(6);
+
+            for (int i = 0; i < ScoreCardTestDevicePresets.Count; i++)
+            {
+                int index = i;
+                if (GUILayout.Button(ScoreCardTestDevicePresets.GetButtonLabel(index), _btn, GUILayout.Height(48)))
+                    ApplyPresetRegister(index);
+            }
+
+            GUILayout.Space(18);
+            GUILayout.Label("设备注册", _title);
+            GUILayout.Label("清除本地注册后返回登录/注册页，可重新注册或选用上方预设。", _label);
+            GUILayout.Space(6);
+
+            if (_confirmClearRegister)
+            {
+                GUILayout.Label("确定要清除设备注册数据吗？清除后将返回注册页。", _label);
+                GUILayout.BeginHorizontal();
+                if (GUILayout.Button("确定清除", _btn, GUILayout.Height(48)))
+                    ConfirmClearRegister();
+                if (GUILayout.Button("取消", _btn, GUILayout.Height(48)))
+                    _confirmClearRegister = false;
+                GUILayout.EndHorizontal();
+            }
+            else if (GUILayout.Button("清除设备注册数据（返回注册页）", _btn, GUILayout.Height(48)))
+            {
+                _confirmClearRegister = true;
+            }
+
+            GUILayout.Space(18);
+            GUILayout.Label("程序", _title);
+            GUILayout.Space(6);
+            if (GUILayout.Button("退出程序", _btn, GUILayout.Height(52)))
+                QuitApp();
+        }
+
+        void ApplyPresetRegister(int index)
+        {
+            if (!ScoreCardTestDevicePresets.TryApply(index, out string error))
+            {
+                _status = error ?? "预注册失败";
+                ShowAlert("预注册失败", _status);
+                return;
+            }
+
+            _status = $"已应用{index + 1}号预注册，正在进入大厅…";
+            _confirmClearRegister = false;
+            Close();
+            ScoreCardTestDevicePresets.RequestEnterHall();
+        }
+
+        void ConfirmClearRegister()
+        {
+            _confirmClearRegister = false;
+            _status = "已请求清除注册数据…";
+            Close();
+            ScoreCardTestDevicePresets.RequestClearRegisterAndReturnToLogin();
+        }
+
+        void DrawTopTabs(Rect area)
+        {
+            int tabCount = _tabLabels.Length;
             float gap = 6f;
-            float w = (area.width - gap * 3f) / 4f;
-            for (int i = 0; i < 4; i++)
+            float w = (area.width - gap * (tabCount - 1)) / tabCount;
+            for (int i = 0; i < tabCount; i++)
             {
                 Rect r = new Rect(area.x + i * (w + gap), area.y, w, area.height);
-                // 生效模式始终绿色高亮；正在编辑但未应用的用蓝色；其余灰色
                 GUIStyle style = _tabIdle;
-                if (i == _appliedTab)
+                if (i < 4 && i == _appliedTab)
                     style = _tabApplied;
                 else if (i == _editTab)
                     style = _tabEdit;
 
-                string text = _modeLabels[i];
-                if (i == _appliedTab)
+                string text = _tabLabels[i];
+                if (i < 4 && i == _appliedTab)
                     text = "● " + text;
 
                 if (GUI.Button(r, text, style))
                 {
-                    if (_editTab != i)
-                    {
-                        _editTab = i;
-                        _scroll = Vector2.zero;
-                        _showLogBrowser = false;
+                    if (_editTab == i)
+                        continue;
+
+                    _editTab = i;
+                    _scroll = Vector2.zero;
+                    _showLogBrowser = false;
+                    _confirmClearRegister = false;
+                    if (i == SystemTabIndex)
+                        _status = "";
+                    else
                         _status = "编辑: " + _modeLabels[i] + "（尚未应用）";
-                    }
                 }
             }
         }
@@ -405,8 +555,8 @@ namespace LetsPiu.Character.Uwb
 
         void EnsureWindowRect()
         {
-            float w = Mathf.Min(1100f, Screen.width - 48f);
-            float h = Mathf.Min(940f, Screen.height - 40f);
+            float w = Mathf.Min(WindowMaxWidth, Screen.width - 32f);
+            float h = Mathf.Min(960f, Screen.height - 32f);
             if (!_hasWindowPos)
             {
                 _windowRect = new Rect((Screen.width - w) * 0.5f, (Screen.height - h) * 0.5f, w, h);
@@ -445,11 +595,11 @@ namespace LetsPiu.Character.Uwb
             }
         }
 
-        void HandleTap()
+        void HandleTapFromInput()
         {
-            if (_visible)
+            if (_visible || _alertVisible)
                 return;
-            if (Event.current == null || Event.current.type != EventType.MouseDown || Event.current.button != 0)
+            if (!Input.GetMouseButtonDown(0))
                 return;
 
             float now = Time.unscaledTime;
@@ -457,7 +607,6 @@ namespace LetsPiu.Character.Uwb
                 _tapCount = 0;
             _lastTapTime = now;
             _tapCount++;
-            Event.current.Use();
             if (_tapCount < TapNeed)
                 return;
             _tapCount = 0;
@@ -470,11 +619,14 @@ namespace LetsPiu.Character.Uwb
             // 打开时定位到当前生效模式
             _editTab = _appliedTab;
             _visible = true;
-            _status = "";
             _scroll = Vector2.zero;
             _dragging = false;
             _hasWindowPos = false;
             _showLogBrowser = false;
+            _confirmClearRegister = false;
+            _status = FindRuntime() == null
+                ? "当前在启动/注册页：可改连接配置并退出程序；Mock/Replay 需进入场馆画面后应用"
+                : "";
         }
 
         public void Close()
@@ -520,6 +672,9 @@ namespace LetsPiu.Character.Uwb
 
         void ApplyAndSave()
         {
+            if (IsSystemTab)
+                return;
+
             if (_editTab == 3 && (string.IsNullOrEmpty(_replayPath) || !File.Exists(_replayPath)))
             {
                 _status = "Replay 需要先选中日志文件";
@@ -572,7 +727,8 @@ namespace LetsPiu.Character.Uwb
             float w = Mathf.Min(560f, Screen.width - 40f);
             float h = 240f;
             Rect box = new Rect((Screen.width - w) * 0.5f, (Screen.height - h) * 0.5f, w, h);
-            GUI.Box(box, GUIContent.none, _box);
+            FillRect(new Rect(0f, 0f, Screen.width, Screen.height), new Color(0f, 0f, 0f, 0.55f));
+            FillRect(box, new Color(0.1f, 0.1f, 0.12f, 0.98f));
             GUILayout.BeginArea(new Rect(box.x + 20f, box.y + 16f, box.width - 40f, box.height - 32f));
             GUILayout.Label(_alertTitle, _title);
             GUILayout.Space(8);
@@ -684,24 +840,33 @@ namespace LetsPiu.Character.Uwb
             int fs = Mathf.Max(16, fontSize);
 
             _box = new GUIStyle(GUI.skin.box);
-            _box.normal.background = MakeTex(8, 8, new Color(0.08f, 0.08f, 0.1f, 0.94f));
-
             _titleBar = new GUIStyle(GUI.skin.box);
-            _titleBar.normal.background = MakeTex(8, 8, new Color(0.14f, 0.14f, 0.16f, 1f));
-
             _contentBox = new GUIStyle(GUI.skin.box);
-            _contentBox.normal.background = MakeTex(8, 8, new Color(0.12f, 0.12f, 0.14f, 0.98f));
             _contentBox.padding = new RectOffset(8, 8, 8, 8);
 
-            _label = new GUIStyle(GUI.skin.label) { fontSize = fs, wordWrap = true };
+            _label = new GUIStyle(GUI.skin.label)
+            {
+                fontSize = fs,
+                wordWrap = true,
+                normal = { textColor = Color.white }
+            };
             _title = new GUIStyle(GUI.skin.label)
             {
                 fontSize = fs + 3,
                 fontStyle = FontStyle.Bold,
-                alignment = TextAnchor.MiddleLeft
+                alignment = TextAnchor.MiddleLeft,
+                normal = { textColor = Color.white }
             };
             _field = new GUIStyle(GUI.skin.textField) { fontSize = fs };
+            ApplySolidBackground(_field, new Color(0.18f, 0.18f, 0.2f, 1f));
+            _field.normal.textColor = Color.white;
+            _field.focused.textColor = Color.white;
+
             _btn = new GUIStyle(GUI.skin.button) { fontSize = fs };
+            ApplySolidBackground(_btn, new Color(0.25f, 0.25f, 0.28f, 1f));
+            _btn.hover.background = MakeTex(8, 8, new Color(0.32f, 0.32f, 0.36f, 1f));
+            _btn.active.background = MakeTex(8, 8, new Color(0.38f, 0.38f, 0.42f, 1f));
+            _btn.normal.textColor = Color.white;
 
             _tabIdle = new GUIStyle(GUI.skin.button)
             {
@@ -709,30 +874,25 @@ namespace LetsPiu.Character.Uwb
                 fontStyle = FontStyle.Normal,
                 alignment = TextAnchor.MiddleCenter
             };
-            _tabIdle.normal.background = MakeTex(8, 8, new Color(0.22f, 0.22f, 0.25f, 1f));
+            ApplySolidBackground(_tabIdle, new Color(0.22f, 0.22f, 0.25f, 1f));
             _tabIdle.hover.background = MakeTex(8, 8, new Color(0.28f, 0.28f, 0.32f, 1f));
             _tabIdle.active.background = MakeTex(8, 8, new Color(0.32f, 0.32f, 0.36f, 1f));
+            _tabIdle.normal.textColor = Color.white;
 
-            _tabEdit = new GUIStyle(_tabIdle)
-            {
-                fontStyle = FontStyle.Bold
-            };
-            _tabEdit.normal.background = MakeTex(8, 8, new Color(0.18f, 0.36f, 0.55f, 1f));
+            _tabEdit = new GUIStyle(_tabIdle) { fontStyle = FontStyle.Bold };
+            ApplySolidBackground(_tabEdit, new Color(0.18f, 0.36f, 0.55f, 1f));
             _tabEdit.hover.background = MakeTex(8, 8, new Color(0.22f, 0.42f, 0.62f, 1f));
             _tabEdit.normal.textColor = Color.white;
 
-            _tabApplied = new GUIStyle(_tabIdle)
-            {
-                fontStyle = FontStyle.Bold
-            };
-            _tabApplied.normal.background = MakeTex(8, 8, new Color(0.12f, 0.48f, 0.28f, 1f));
+            _tabApplied = new GUIStyle(_tabIdle) { fontStyle = FontStyle.Bold };
+            ApplySolidBackground(_tabApplied, new Color(0.12f, 0.48f, 0.28f, 1f));
             _tabApplied.hover.background = MakeTex(8, 8, new Color(0.16f, 0.55f, 0.32f, 1f));
             _tabApplied.normal.textColor = Color.white;
 
-            _selectedBtn = new GUIStyle(GUI.skin.button) { fontSize = fs, fontStyle = FontStyle.Bold };
+            _selectedBtn = new GUIStyle(_btn) { fontSize = fs, fontStyle = FontStyle.Bold };
             _selectedBtn.normal.textColor = new Color(0.4f, 1f, 0.6f);
 
-            _closeBtn = new GUIStyle(GUI.skin.button)
+            _closeBtn = new GUIStyle(_btn)
             {
                 fontSize = fs + 8,
                 fontStyle = FontStyle.Bold,
@@ -741,14 +901,36 @@ namespace LetsPiu.Character.Uwb
             _stylesReady = true;
         }
 
-        static Texture2D MakeTex(int w, int h, Color col)
+        void ApplySolidBackground(GUIStyle style, Color col)
         {
-            var tex = new Texture2D(w, h);
+            Texture2D tex = MakeTex(8, 8, col);
+            style.normal.background = tex;
+            style.onNormal.background = tex;
+            style.hover.background = tex;
+            style.active.background = tex;
+            style.focused.background = tex;
+        }
+
+        static void FillRect(Rect r, Color c)
+        {
+            Color prev = GUI.color;
+            GUI.color = c;
+            GUI.DrawTexture(r, Texture2D.whiteTexture);
+            GUI.color = prev;
+        }
+
+        Texture2D MakeTex(int w, int h, Color col)
+        {
+            var tex = new Texture2D(w, h, TextureFormat.RGBA32, false);
+            tex.hideFlags = HideFlags.HideAndDontSave;
+            tex.wrapMode = TextureWrapMode.Clamp;
+            tex.filterMode = FilterMode.Point;
             var pixels = new Color[w * h];
             for (int i = 0; i < pixels.Length; i++)
                 pixels[i] = col;
             tex.SetPixels(pixels);
-            tex.Apply();
+            tex.Apply(false, false);
+            _ownedTextures.Add(tex);
             return tex;
         }
     }

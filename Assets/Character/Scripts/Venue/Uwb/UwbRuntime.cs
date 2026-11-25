@@ -100,11 +100,8 @@ namespace LetsPiu.Character.Uwb
             // Editor 启动默认 Mock 方便调试；正式包（exe/android）启动固定连 MQTT
             sourceMode = Application.isEditor ? UwbSourceMode.Mock : UwbSourceMode.LiveMqtt;
 
-            if (ensureSettingsPanel && UwbSettingsPanel.Current == null)
-            {
-                var host = new GameObject("UwbSettingsPanel_Host");
-                host.AddComponent<UwbSettingsPanel>();
-            }
+            if (ensureSettingsPanel)
+                UwbSettingsPanel.EnsureExists();
         }
 
         void OnEnable()

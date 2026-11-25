@@ -9,6 +9,7 @@ using UnityEngine;
 
 /// <summary>
 /// 命令行 / 菜单：打 Android Release APK（ScoreCardUWB）。
+/// 流程：切 Android → CreatBundle 离线全包（强制变体收集）→ Release APK。
 /// 签名读取项目 PlayerSettings（keystore/alias）+ <see cref="RememberKeystore"/> 注入的密码。
 /// 打包前自动校正 JDK/SDK/NDK（兼容 Windows / macOS）。
 /// </summary>
@@ -52,7 +53,7 @@ public static class AndroidReleaseApkBuilder
         }
 
         ApplyVersion(versionName, buildNumber);
-        Build(openExplorerOnSuccess: true);
+        AutoOfflineReleasePipeline.StartAndroid(openExplorerOnSuccess: true);
     }
 
     /// <summary>供 bat：Unity -batchmode -executeMethod AndroidReleaseApkBuilder.Build。无界面，版本名沿用上次，Build 号自动 +1。</summary>
@@ -71,7 +72,7 @@ public static class AndroidReleaseApkBuilder
         }
 
         ApplyVersion(versionName.Trim(), buildNumber);
-        Build(openExplorerOnSuccess: false);
+        AutoOfflineReleasePipeline.StartAndroid(openExplorerOnSuccess: false);
     }
 
     static void ApplyVersion(string versionName, int buildNumber)
@@ -80,7 +81,8 @@ public static class AndroidReleaseApkBuilder
         PlayerSettings.Android.bundleVersionCode = buildNumber;
     }
 
-    static void Build(bool openExplorerOnSuccess)
+    /// <summary>离线全包成功后由 <see cref="AutoOfflineReleasePipeline"/> 调用。</summary>
+    public static void BuildPlayerAfterOffline(bool openExplorerOnSuccess)
     {
         if (!EnsureAndroidExternalTools())
         {
@@ -155,7 +157,6 @@ public static class AndroidReleaseApkBuilder
                 $"{PlayerSettings.productName}_v{PlayerSettings.bundleVersion}_{PlayerSettings.Android.bundleVersionCode}_{DateTime.Now:yyyyMMdd_HHmmss}.apk";
             string apkPath = Path.Combine(outDir, fileName);
 
-            EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
             EditorUserBuildSettings.buildAppBundle = false;
             EditorUserBuildSettings.androidBuildSystem = AndroidBuildSystem.Gradle;
             EditorUserBuildSettings.development = false;
@@ -942,7 +943,10 @@ class AndroidReleaseVersionWindow : EditorWindow
     void OnGUI()
     {
         EditorGUILayout.Space(8f);
-        EditorGUILayout.HelpBox("版本号写入 APK 的 versionName，也可以手改。Build 号已按上次打包自动 +1。", MessageType.None);
+        EditorGUILayout.HelpBox(
+            "将自动：切到 Android → CreatBundle 离线全包（收集全部 Shader 变体）→ 打 Release APK。\n" +
+            "版本号写入 APK 的 versionName，也可以手改。Build 号已按上次打包自动 +1。",
+            MessageType.Info);
         EditorGUILayout.Space(6f);
         m_VersionName = EditorGUILayout.TextField("版本号", m_VersionName);
         m_BuildNumber = EditorGUILayout.IntField("Build 号", m_BuildNumber);
