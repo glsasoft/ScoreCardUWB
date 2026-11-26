@@ -2258,10 +2258,6 @@ MonoBehaviour:
   modelYawOffset: 0
   statusHeight: 2.15
   snapToGround: 1
-  bodyRadius: 0.25
-  bodyHeight: 1.8
-  maxWallPush: 0.5
-  wallReleaseDelay: 1
 --- !u!114 &70417606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2315,12 +2311,13 @@ MonoBehaviour:
   mockAreaY: 10
   mockMoveSpeed: 1.2
   mockIntervalSec: 0.1
+  mockSimulateGlitch: 1
   replayFilePath: 
   replayLoop: 1
   replaySpeed: 1
-  recordEnabled: 1
+  replayRangeStart: -1
+  replayRangeEnd: -1
   recordDirectory: 
-  recordFilePrefix: uwb
   recordMaxQueue: 20000
   mapper:
     venueXFrom: 0
@@ -2335,7 +2332,12 @@ MonoBehaviour:
   sync: {fileID: 70417605}
   usePushAll: 0
   pushAllInterval: 0.1
+  enableCorrection: 1
+  correctionLagFrames: 5
+  correctionGridCell: 0.25
+  correctionDebugDraw: 1
   disableLegacyMockFeed: 1
+  ensureSettingsPanel: 1
 --- !u!4 &71284432 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7313092780078604330, guid: 94eb31ac0b5b0e342924e536311f4106,
@@ -40852,7 +40854,7 @@ Transform:
   m_GameObject: {fileID: 495623592}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.007679378, z: 0, w: 0.99997056}
-  m_LocalPosition: {x: 16.72, y: 4, z: -6.69}
+  m_LocalPosition: {x: 16.71, y: 4, z: -6.68}
   m_LocalScale: {x: 30, y: 10, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -98710,7 +98712,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 4, z: 26}
-  m_LocalScale: {x: 55, y: 10, z: 1}
+  m_LocalScale: {x: 60, y: 10, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1167668140}
