@@ -44,6 +44,32 @@ namespace LetsPiu
             m_Machine = stateMachine;
         }
 
+        /// <summary>启动链路复用同一条进度条（资源热更 → 同步/连服 → 进厅），避免中间黑屏或第二次加载页。</summary>
+        public static HotUpdatePanel FindActive()
+        {
+            var root = GameObject.Find("UIRoot/RootCanvas/PanelRoot");
+            if (root == null)
+                return null;
+            var t = root.transform.Find("HotUpdatePanel(Clone)");
+            return t != null ? t.GetComponent<HotUpdatePanel>() : null;
+        }
+
+        public void SetBootProgress(float normalized01, string tip)
+        {
+            if (m_Slider != null)
+                m_Slider.fillAmount = Mathf.Clamp01(normalized01);
+            if (m_ContentTxt != null && tip != null)
+                m_ContentTxt.text = tip;
+            transform.SetAsLastSibling();
+            if (!gameObject.activeSelf)
+                gameObject.SetActive(true);
+        }
+
+        public void CloseBoot()
+        {
+            Destroy(gameObject);
+        }
+
         public void UpdateCallBack(UpdateMsgID msgId, float process, params object[] paramList)
         {
             Debug.Log($"进度打印：：{process}");

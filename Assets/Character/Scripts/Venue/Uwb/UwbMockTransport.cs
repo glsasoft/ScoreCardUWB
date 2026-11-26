@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using LetsPiu.Character;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -23,6 +24,10 @@ namespace LetsPiu.Character.Uwb
         {
             public string uid;
             public string deviceName;
+            /// <summary>与 UwbTagRegistry 自动编号对齐的预期 playerId（MOCK0001→1）。</summary>
+            public int playerId;
+            /// <summary>0=蓝（右上出生），1=红（左下出生）。</summary>
+            public int team;
             public Vector3 pos;
             public Vector3 vel;
             public List<Vector2> path;
@@ -30,6 +35,7 @@ namespace LetsPiu.Character.Uwb
             public float speed;
             public int salt;
             public float pause;
+            public bool returningHome;
 
             // 对外输出点（真值 pos 之上叠加 UWB 故障），不影响寻路
             public Vector3 emit;
@@ -111,24 +117,29 @@ namespace LetsPiu.Character.Uwb
             _agents = new Agent[_tagCount];
             for (int i = 0; i < _tagCount; i++)
             {
-                Vector2 start = PickSpawn(i);
+                int team = i % 2; // 与 TagRegistry 默认 team=(_nextAutoId-1)%2 一致：0蓝 1红
+                Vector2 start = PickTeamSpawn(team);
                 _agents[i] = new Agent
                 {
                     uid = "MOCK" + (i + 1).ToString("D4"),
                     deviceName = "T" + (i + 1),
+                    playerId = i + 1,
+                    team = team,
                     pos = new Vector3(start.x, start.y, 1.2f),
                     vel = Vector3.zero,
                     path = new List<Vector2>(48),
                     pathIndex = 0,
                     speed = _moveSpeed * Random.Range(0.85f, 1.2f),
                     salt = 1000 + i * 97,
-                    pause = Random.Range(0f, StartStaggerMaxSec),
+                    pause = Random.Range(0.2f, StartStaggerMaxSec * 0.5f),
                     emit = new Vector3(start.x, start.y, 1.2f),
                     jumpCd = Random.Range(JumpCdMinSec * 0.5f, JumpCdMaxSec)
                 };
                 PlanNewGoal(ref _agents[i]);
             }
 
+            var modeBehavior = UwbMockModeBehaviors.ApplyActiveMode();
+            BindBattleHooks();
             _acc = 0f;
             _cnt = 0;
             _running = true;
@@ -136,7 +147,8 @@ namespace LetsPiu.Character.Uwb
                 $"[UwbMock] start tags={_tagCount} hz={(1f / _interval):0.#} " +
                 $"mode={(_usePath ? "A*-oneGoal" : "free-fallback")} " +
                 $"walkable={(_grid != null ? _grid.WalkableCount : 0)} " +
-                $"largest={(_grid != null ? _grid.LargestComponentSize : 0)}");
+                $"largest={(_grid != null ? _grid.LargestComponentSize : 0)} " +
+                $"spawn=teamCorners battleMode={modeBehavior.ModeType}");
         }
 
         public void Stop()
@@ -144,6 +156,7 @@ namespace LetsPiu.Character.Uwb
             if (_running && _simulateGlitch)
                 Debug.Log($"[UwbMock] glitch summary cornerCuts={_cornerCuts} wallJumps={_wallJumps}");
             _running = false;
+            ClearBattleHooks();
         }
 
         public void Tick(float deltaTime)
@@ -156,6 +169,7 @@ namespace LetsPiu.Character.Uwb
 
             for (int i = 0; i < _agents.Length; i++)
             {
+                UpdateReturnHomeFlag(ref _agents[i]);
                 Vector3 before = _agents[i].pos;
                 Step(ref _agents[i], deltaTime);
                 float moved = Vector2.Distance(
@@ -347,7 +361,10 @@ namespace LetsPiu.Character.Uwb
 
             if (a.path == null || a.path.Count == 0 || a.pathIndex >= a.path.Count)
             {
-                PlanNewGoal(ref a);
+                if (a.returningHome)
+                    PlanHome(ref a);
+                else
+                    PlanNewGoal(ref a);
                 if (a.path == null || a.path.Count == 0)
                 {
                     a.vel = Vector3.zero;
@@ -366,8 +383,14 @@ namespace LetsPiu.Character.Uwb
                 a.pathIndex++;
                 if (a.pathIndex >= a.path.Count)
                 {
-                    // 到达当前目标 → 停留一会儿，再随机下一个
                     a.vel = Vector3.zero;
+                    if (a.returningHome)
+                    {
+                        // 死透后停在复活点等比分牌 MQTT 发 PLAYER_REVIVE
+                        a.pause = 0.5f;
+                        return;
+                    }
+
                     a.pause = Random.Range(DwellMinSec, DwellMaxSec);
                     PlanNewGoal(ref a);
                     return;
@@ -491,15 +514,103 @@ namespace LetsPiu.Character.Uwb
             return len;
         }
 
-        Vector2 PickSpawn(int index)
+        void UpdateReturnHomeFlag(ref Agent a)
         {
-            // 出生仍按扇区稍作分散，之后目标完全随机
-            if (_usePath &&
-                _grid.TrySpawnInSector(index, Mathf.Max(9, _tagCount), out Vector2 p, 0f, 0f))
+            var behavior = UwbMockModeBehaviors.Current;
+            bool allowHome = behavior == null || behavior.ReturnHomeOnDeath;
+            bool dead = ScoreCardCombatState.TryGet(a.playerId, out var combat) && combat.hp <= 0;
+            if (dead && allowHome && !a.returningHome)
+            {
+                a.returningHome = true;
+                a.pause = 0f;
+                PlanHome(ref a);
+            }
+            else if ((!dead || !allowHome) && a.returningHome)
+            {
+                a.returningHome = false;
+                a.pause = Random.Range(DwellMinSec, DwellMaxSec);
+                PlanNewGoal(ref a);
+            }
+        }
+
+        void PlanHome(ref Agent a)
+        {
+            a.path.Clear();
+            a.pathIndex = 0;
+            Vector2 home = TeamHome(a.team);
+            if (_usePath && _grid.TryFindPath(new Vector2(a.pos.x, a.pos.y), home, a.path, a.salt | 1)
+                && a.path.Count >= 2)
+            {
+                _grid.SimplifyPath(a.path);
+                return;
+            }
+
+            a.path.Clear();
+            a.path.Add(new Vector2(a.pos.x, a.pos.y));
+            a.path.Add(home);
+            a.pathIndex = 0;
+        }
+
+        Vector2 TeamHome(int team)
+        {
+            // team 1 红 → 左下；team 0 蓝 → 右上
+            bool topRight = team == 0;
+            if (_usePath && _grid.TryPickCornerSpawn(topRight, 1.5f, out Vector2 p))
                 return p;
-            if (_usePath && _grid.TryRandomInLargestComponent(out p, 0f, 0f))
-                return p;
-            return RandomRectPoint();
+            float hx = _areaX * 0.5f - 1f;
+            float hy = _areaY * 0.5f - 1f;
+            return topRight ? new Vector2(hx, hy) : new Vector2(-hx, -hy);
+        }
+
+        Vector2 PickTeamSpawn(int team)
+        {
+            return TeamHome(team);
+        }
+
+        void BindBattleHooks()
+        {
+            UwbMockBattleHooks.GetSpawnVenueXz = team => TeamHome(team);
+            UwbMockBattleHooks.GetCannonVenueXz = team =>
+            {
+                if (_usePath)
+                    return _grid.GetCornerAnchor(topRight: team == 0);
+                return TeamHome(team);
+            };
+            UwbMockBattleHooks.GetPlayerVenueXz = playerId =>
+            {
+                if (_agents == null)
+                    return null;
+                for (int i = 0; i < _agents.Length; i++)
+                {
+                    if (_agents[i].playerId == playerId)
+                        return new Vector2(_agents[i].pos.x, _agents[i].pos.y);
+                }
+
+                return null;
+            };
+            UwbMockBattleHooks.IsNearHome = (playerId, radius) =>
+            {
+                if (_agents == null)
+                    return false;
+                for (int i = 0; i < _agents.Length; i++)
+                {
+                    if (_agents[i].playerId != playerId)
+                        continue;
+                    Vector2 home = TeamHome(_agents[i].team);
+                    Vector2 p = new Vector2(_agents[i].pos.x, _agents[i].pos.y);
+                    return Vector2.Distance(p, home) <= Mathf.Max(0.5f, radius);
+                }
+
+                return false;
+            };
+        }
+
+        static void ClearBattleHooks()
+        {
+            UwbMockBattleHooks.GetSpawnVenueXz = null;
+            UwbMockBattleHooks.GetCannonVenueXz = null;
+            UwbMockBattleHooks.GetPlayerVenueXz = null;
+            UwbMockBattleHooks.IsNearHome = null;
         }
 
         Vector2 RandomRectPoint()

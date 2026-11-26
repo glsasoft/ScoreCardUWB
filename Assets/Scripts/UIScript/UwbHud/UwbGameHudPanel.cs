@@ -102,7 +102,10 @@ namespace LetsPiu.UI
             if (!BindSync())
                 return;
 
-            UwbHudData.UseMock = IsMockSource();
+            // 有比分牌场次（真机或任一模式战斗 Mock）时用 MQTT 数据；否则定位 Mock 下用 HUD 演示假数据。
+            bool hasMatch = ScoreCardRuntime.ScoreCardMatchDataHub.Current != null
+                            || ScoreCardRuntime.ScoreCardModeMockHost.IsRunning;
+            UwbHudData.UseMock = !hasMatch && IsMockSource();
             CollectPlayers();
             if (UwbHudData.UseMock)
                 UwbHudMock.Apply(m_Players.Values, Time.time - m_OpenTime);

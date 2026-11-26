@@ -46,6 +46,8 @@ namespace LetsPiu.Character
         string _name = "";
         float _gaitReferenceSpeed = 1.8f;
         float _tracerUntil;
+        float _aimUntil;
+        Quaternion _aimRot = Quaternion.identity;
 
         Vector3 _velocity = Vector3.zero;
         bool _hasPose;
@@ -137,9 +139,11 @@ namespace LetsPiu.Character
                 _velocity = Vector3.Lerp(instant, _velocity, Mathf.Exp(-4f * dt));
             }
 
-            transform.SetPositionAndRotation(worldPos, worldRot);
+            // HIT/KILL 时短暂朝向受害者；覆盖期内不用位移朝向盖掉射击朝向。
+            Quaternion rot = Time.time < _aimUntil ? _aimRot : worldRot;
+            transform.SetPositionAndRotation(worldPos, rot);
 
-            Vector3 localVelocity = Quaternion.Inverse(worldRot) * _velocity;
+            Vector3 localVelocity = Quaternion.Inverse(rot) * _velocity;
             bool dead = hp <= 0;
             ApplyAnimator(localVelocity, dead);
             ApplyStatus(hp, maxHp, dead);
@@ -148,13 +152,37 @@ namespace LetsPiu.Character
                 _tintTarget.transform.localRotation = dead ? Quaternion.Euler(80f, 0f, 0f) : Quaternion.identity;
         }
 
+        /// <summary>按击中目标水平朝向转向（策划：命中消息决定射击朝向）。</summary>
+        public void AimAt(Vector3 worldTarget, float holdSec = 0.28f)
+        {
+            Vector3 dir = worldTarget - transform.position;
+            dir.y = 0f;
+            if (dir.sqrMagnitude < 0.0001f)
+                return;
+            _aimRot = Quaternion.LookRotation(dir.normalized, Vector3.up);
+            _aimUntil = Time.time + Mathf.Max(0.05f, holdSec);
+            transform.rotation = _aimRot;
+        }
+
         public void Fire()
+        {
+            FireToward(transform.position + transform.forward * 18f);
+        }
+
+        /// <summary>曳光朝向目标点（通常为被击中玩家）。</summary>
+        public void FireToward(Vector3 worldTarget)
         {
             if (_tracer == null)
                 return;
             Vector3 origin = transform.TransformPoint(new Vector3(0f, 1.35f, 0.25f));
+            Vector3 dir = worldTarget - origin;
+            dir.y = 0f;
+            if (dir.sqrMagnitude < 0.0001f)
+                dir = transform.forward;
+            else
+                dir.Normalize();
             _tracer.SetPosition(0, origin);
-            _tracer.SetPosition(1, origin + transform.forward * 18f);
+            _tracer.SetPosition(1, origin + dir * 18f);
             _tracer.enabled = true;
             _tracerUntil = Time.time + 0.12f;
         }

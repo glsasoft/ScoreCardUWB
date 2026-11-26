@@ -52,10 +52,53 @@ namespace LetsPiu.Character.Uwb
         public int NearWallCount => _nearWallCells.Count;
         public int ComponentCount => _cellsByComponent.Count;
         public float CellSize => _cell;
+        public float OriginX => _originX;
+        public float OriginZ => _originZ;
+        public float SizeX => _cols * _cell;
+        public float SizeZ => _rows * _cell;
         public int LargestComponentSize =>
             _largestComponent >= 0 && _cellsByComponent.TryGetValue(_largestComponent, out List<int> list)
                 ? list.Count
                 : 0;
+
+        /// <summary>
+        /// 地图角点附近可走点。topRight=false 为左下（红方复活/大炮），true 为右上（蓝方）。
+        /// </summary>
+        public bool TryPickCornerSpawn(bool topRight, float jitterMeters, out Vector2 venueXz)
+        {
+            venueXz = default;
+            if (!Ready)
+                return false;
+
+            float margin = Mathf.Max(_cell * 2f, 1.2f);
+            float cx = topRight ? _originX + SizeX - margin : _originX + margin;
+            float cz = topRight ? _originZ + SizeZ - margin : _originZ + margin;
+            float j = Mathf.Max(0f, jitterMeters);
+            for (int tries = 0; tries < 24; tries++)
+            {
+                float x = cx + (j > 0f ? Random.Range(-j, j) : 0f);
+                float z = cz + (j > 0f ? Random.Range(-j, j) : 0f);
+                if (TryResolveCell(x, z, out int cell) && _walkable[cell] && _component[cell] == _largestComponent)
+                {
+                    CellCenter(cell, out venueXz.x, out venueXz.y);
+                    return true;
+                }
+            }
+
+            // 角点不可走时，在整图最近可走格兜底
+            if (!TryNearestWalkable(cx, cz, out int near) || _component[near] < 0)
+                return TryRandomInLargestComponent(out venueXz, 0f, 0f);
+            CellCenter(near, out venueXz.x, out venueXz.y);
+            return true;
+        }
+
+        public Vector2 GetCornerAnchor(bool topRight)
+        {
+            float margin = Mathf.Max(_cell * 2f, 1.2f);
+            float x = topRight ? _originX + SizeX - margin : _originX + margin;
+            float z = topRight ? _originZ + SizeZ - margin : _originZ + margin;
+            return new Vector2(x, z);
+        }
 
         UwbVenueWalkGrid(float originX, float originZ, float cell, int cols, int rows, bool[] walkable)
         {

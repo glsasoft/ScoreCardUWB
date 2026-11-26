@@ -163,14 +163,22 @@ ShaderVariantCollection:
         passType: 0
       - keywords: 
         passType: 8
-  - first: {fileID: -6465566751694194690, guid: 79538300f04355e4d8b4e55d3003f562,
-      type: 3}
+  - first: {fileID: 4800000, guid: 7184a95c20fc1a441a8815af4c795ccd, type: 3}
     second:
       variants:
-      - keywords: _RAMPENABLED_ON
-        passType: 0
-      - keywords: _RAMPENABLED_ON
+      - keywords: _HOUDINI_VAT_SOFTBODY
         passType: 8
+      - keywords: _HOUDINI_VAT_SOFTBODY _MASKMAP_ON
+        passType: 8
+      - keywords: _ADDITIONAL_LIGHTS _ALPHAPREMULTIPLY_ON _FX_LIGHT_MODE_UNLIT _HOUDINI_VAT_SOFTBODY
+        passType: 13
+      - keywords: _ADDITIONAL_LIGHTS _ALPHAPREMULTIPLY_ON _FX_LIGHT_MODE_UNLIT _HOUDINI_VAT_SOFTBODY
+          _MASKMAP_ON
+        passType: 13
+      - keywords: _ADDITIONAL_LIGHTS _FX_LIGHT_MODE_UNLIT _HOUDINI_VAT_SOFTBODY
+        passType: 13
+      - keywords: _ADDITIONAL_LIGHTS _FX_LIGHT_MODE_UNLIT _HOUDINI_VAT_SOFTBODY _MASKMAP_ON
+        passType: 13
   - first: {fileID: 4800000, guid: 4af179224a0253e429dbed5d26024f1e, type: 3}
     second:
       variants:
@@ -289,6 +297,13 @@ ShaderVariantCollection:
         passType: 8
       - keywords: 
         passType: 13
+  - first: {fileID: 4800000, guid: 4be9481916d90194ebfa8b213fe3eef7, type: 3}
+    second:
+      variants:
+      - keywords: _MASK02_ON_ON
+        passType: 8
+      - keywords: _MASK02_ON_ON
+        passType: 13
   - first: {fileID: 4800000, guid: aba498c5a1619d24e896cf6ae3d256fc, type: 3}
     second:
       variants:
@@ -332,4 +347,50 @@ ShaderVariantCollection:
       - keywords: _AERIALFOG_ON _ALPHATEST_ON
         passType: 13
       - keywords: _ALPHATEST_ON
+        passType: 13
+  - first: {fileID: 4800000, guid: fe393ace9b354375a9cb14cdbbc28be4, type: 3}
+    second:
+      variants:
+      - keywords: OUTLINE_ON
+        passType: 0
+  - first: {fileID: 4800000, guid: c4f5509486ecf1e4cb2d4529e11fa3ad, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 8
+      - keywords: INSTANCING_ON _VAT_PARTICLE_PROGRESS_ON _VAT_POSITION_OFFSET
+        passType: 8
+      - keywords: _VAT_PARTICLE_PROGRESS_ON _VAT_POSITION_OFFSET
+        passType: 8
+      - keywords: _ADDITIONAL_LIGHTS
+        passType: 13
+      - keywords: _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHT_SHADOWS _AERIALFOG_ON
+        passType: 13
+      - keywords: _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHT_SHADOWS _AERIALFOG_ON _MAIN_LIGHT_SHADOWS_CASCADE
+          _SHADOWS_SOFT
+        passType: 13
+      - keywords: _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE
+          _SHADOWS_SOFT _VAT_PARTICLE_PROGRESS_ON _VAT_POSITION_OFFSET
+        passType: 13
+      - keywords: _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHT_SHADOWS _VAT_PARTICLE_PROGRESS_ON
+          _VAT_POSITION_OFFSET
+        passType: 13
+      - keywords: _ADDITIONAL_LIGHTS _MAIN_LIGHT_SHADOWS_CASCADE
+        passType: 13
+      - keywords: _ADDITIONAL_LIGHTS _MAIN_LIGHT_SHADOWS_CASCADE _VAT_PARTICLE_PROGRESS_ON
+          _VAT_POSITION_OFFSET
+        passType: 13
+      - keywords: _ADDITIONAL_LIGHTS _VAT_PARTICLE_PROGRESS_ON _VAT_POSITION_OFFSET
+        passType: 13
+  - first: {fileID: 4800000, guid: ebfbe557ad0ae79429bfcc4e81c2f22f, type: 3}
+    second:
+      variants:
+      - keywords: _ADDITIONAL_LIGHTS
+        passType: 13
+      - keywords: _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHT_SHADOWS _AERIALFOG_ON
+        passType: 13
+      - keywords: _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHT_SHADOWS _AERIALFOG_ON _MAIN_LIGHT_SHADOWS_CASCADE
+          _SHADOWS_SOFT
+        passType: 13
+      - keywords: _ADDITIONAL_LIGHTS _MAIN_LIGHT_SHADOWS_CASCADE
         passType: 13

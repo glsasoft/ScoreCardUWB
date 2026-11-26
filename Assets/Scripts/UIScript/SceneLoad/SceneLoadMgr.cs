@@ -35,8 +35,17 @@ namespace LetsPiu.UI
             SwitchScene(sceneType, gameMode, completeCB).Forget();
         }
 
-        public async UniTask SwitchScene(SceneType sceneType, GameMode gameMode, Action completeCB = null)
+        /// <param name="showLoadingUi">
+        /// false：不再弹第二次加载条（启动 HotUpdate 已加载完资源时，进厅只静默切场景）。
+        /// 调用方需已完成时间同步 / MQTT 等 OnDataReceiveSuccess 里的工作。
+        /// </param>
+        public async UniTask SwitchScene(
+            SceneType sceneType,
+            GameMode gameMode,
+            Action completeCB = null,
+            bool showLoadingUi = true)
         {
+            Init();
             var key = (int)sceneType * 100 + (int)gameMode;
             if (!m_dicScene2StartUID.ContainsKey(key))
             {
@@ -44,7 +53,7 @@ namespace LetsPiu.UI
                 return;
             }
 
-            if (!m_dicScene2Loading.ContainsKey(key))
+            if (showLoadingUi && !m_dicScene2Loading.ContainsKey(key))
             {
                 Debug.LogError($"[{nameof(SceneLoadMgr)}]: sceneType：{sceneType}  gameMode：{gameMode} 该模式进度面板未注册，注册后再来。");
                 return;
@@ -68,14 +77,20 @@ namespace LetsPiu.UI
                 return;
             }
 
-            var loadingUIID = (UIID)m_dicScene2Loading[key];
             m_CompletedUIID = (UIID)m_dicScene2StartUID[key];
-
             m_IsSwitching = true;
+            m_CurrentSceneType = sceneType;
+
+            if (!showLoadingUi)
+            {
+                await SwitchSceneSilent(nextSceneName, sceneType, completeCB);
+                return;
+            }
+
+            var loadingUIID = (UIID)m_dicScene2Loading[key];
 
             await UIModule.S.ReleaseSpriteAtlas();
 
-            m_CurrentSceneType = sceneType;
             m_LoadingPanel = null;
             UIModule.S.OpenPanel(loadingUIID, pnl =>
             {
@@ -107,6 +122,67 @@ namespace LetsPiu.UI
                 return;
             }
 
+            await LoadHallSceneWithProgress(nextSceneName, sceneType, gameMode);
+
+            var isLoadPlayerMode = await m_LoadingPanel.OnPrepareModel();
+            if (!isLoadPlayerMode)
+            {
+                Debug.LogError($"{nameof(SceneLoadMgr)}: sceneType：<color=red>{sceneType}</color>  gameMode：<color=red>{gameMode}></color> 角色模型加载异常！");
+                return;
+            }
+
+            AbstractPanel panel = null;
+            UIModule.S.OpenPanel(m_CompletedUIID, pnl =>
+            {
+                panel = pnl;
+            });
+
+            await UniTask.WaitUntil(() => { return panel != null; });
+            await UniTask.NextFrame();
+            await UniTask.NextFrame();
+
+            // 等待服务器确认加载完成
+            var confirmDataIsLoadSuccess = await m_LoadingPanel.OnWaitServerConfirm();
+            if (!confirmDataIsLoadSuccess)
+            {
+                Debug.LogError($"{nameof(SceneLoadMgr)}: sceneType：<color=red>{sceneType}</color>  gameMode：<color=red>{gameMode}></color> 服务器确认状态异常！");
+                return;
+            }
+
+            m_LoadingPanel.OnComplete(panel);
+
+            completeCB?.Invoke();
+            //延迟1秒关闭Loading面板
+            await UniTask.Delay(1000);
+            UIModule.S.ClosePanel(m_LoadingPanel.uiID);
+            EventManager.Instance.Broadcast(EventMsg.SceneSwitchSuccess, sceneType);
+            m_IsSwitching = false;
+        }
+
+        /// <summary>启动阶段已做过资源加载/连服时，进厅不再开 DefaultLoadingPanel。</summary>
+        async UniTask SwitchSceneSilent(string nextSceneName, SceneType sceneType, Action completeCB)
+        {
+            await UIModule.S.ReleaseSpriteAtlas();
+            await EnsureHallSceneLoaded(nextSceneName, report: null);
+
+            AbstractPanel panel = null;
+            UIModule.S.OpenPanel(m_CompletedUIID, pnl => { panel = pnl; });
+            await UniTask.WaitUntil(() => panel != null);
+            await UniTask.NextFrame();
+            await UniTask.NextFrame();
+
+            // HomePage.OnOpen 会打开 UwbGameHudPanel；保留二者，避免关掉头顶标牌后只剩旧世界血条。
+            UIModule.S.ResetAllPanel(uid =>
+                uid == m_CompletedUIID || uid == UIID.UwbGameHudPanel);
+
+            completeCB?.Invoke();
+            EventManager.Instance.Broadcast(EventMsg.SceneSwitchSuccess, sceneType);
+            m_IsSwitching = false;
+            Debug.Log("[SceneLoadMgr] silent hall enter (no second loading bar)");
+        }
+
+        async UniTask LoadHallSceneWithProgress(string nextSceneName, SceneType sceneType, GameMode gameMode)
+        {
             var scene = SceneManager.GetSceneByName(nextSceneName);
             if (!scene.IsValid())
             {
@@ -146,40 +222,37 @@ namespace LetsPiu.UI
                 m_LoadingPanel.Report(1);
                 await UniTask.NextFrame();
             }
+        }
 
-            var isLoadPlayerMode = await m_LoadingPanel.OnPrepareModel();
-            if (!isLoadPlayerMode)
+        /// <summary>供启动 HotUpdate 阶段预加载大厅场景，进度回调可选。</summary>
+        public async UniTask PreloadHallScene(Action<float> onProgress = null)
+        {
+            Init();
+            string nextSceneName = GetSceneName(SceneType.Hall);
+            await EnsureHallSceneLoaded(nextSceneName, onProgress);
+        }
+
+        async UniTask EnsureHallSceneLoaded(string nextSceneName, Action<float> report)
+        {
+            var scene = SceneManager.GetSceneByName(nextSceneName);
+            if (scene.IsValid())
             {
-                Debug.LogError($"{nameof(SceneLoadMgr)}: sceneType：<color=red>{sceneType}</color>  gameMode：<color=red>{gameMode}></color> 角色模型加载异常！");
+                if (scene.isLoaded)
+                    SceneManager.SetActiveScene(scene);
+                report?.Invoke(1f);
                 return;
             }
 
-            AbstractPanel panel = null;
-            UIModule.S.OpenPanel(m_CompletedUIID, pnl =>
+            var loadHandle = m_DefaultPackage.LoadSceneAsync(nextSceneName, LoadSceneMode.Single);
+            while (!loadHandle.IsDone)
             {
-                panel = pnl;
-            });
-
-            await UniTask.WaitUntil(() => { return panel != null; });
-            await UniTask.NextFrame();
-            await UniTask.NextFrame();
-
-            // 等待服务器确认加载完成
-            var confirmDataIsLoadSuccess = await m_LoadingPanel.OnWaitServerConfirm();
-            if (!confirmDataIsLoadSuccess)
-            {
-                Debug.LogError($"{nameof(SceneLoadMgr)}: sceneType：<color=red>{sceneType}</color>  gameMode：<color=red>{gameMode}></color> 服务器确认状态异常！");
-                return;
+                report?.Invoke(loadHandle.Progress);
+                await UniTask.NextFrame();
             }
 
-            m_LoadingPanel.OnComplete(panel);
-
-            completeCB?.Invoke();
-            //延迟1秒关闭Loading面板
-            await UniTask.Delay(1000);
-            UIModule.S.ClosePanel(m_LoadingPanel.uiID);
-            EventManager.Instance.Broadcast(EventMsg.SceneSwitchSuccess, sceneType);
-            m_IsSwitching = false;
+            report?.Invoke(1f);
+            await ClearRes();
+            loadHandle.Dispose();
         }
 
         public async UniTask AddScene(SceneType sceneType, Action completeCB = null)

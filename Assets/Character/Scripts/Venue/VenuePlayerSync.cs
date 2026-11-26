@@ -343,7 +343,16 @@ namespace LetsPiu.Character
             Quaternion rot = Facing(track, samples, renderTime, world);
 
             Sample newest = samples[last];
-            track.view.Show(world, rot, newest.hp, newest.maxHp);
+            int hp = newest.hp;
+            int maxHp = newest.maxHp;
+            // 比分牌 MQTT 战斗态覆盖定位默认血量（击中/阵亡/复活）。
+            if (ScoreCardCombatState.TryGet(track.view.Id, out var combat))
+            {
+                hp = combat.hp;
+                maxHp = combat.maxHp;
+            }
+
+            track.view.Show(world, rot, hp, maxHp);
 
             if (!track.started)
                 track.presentedTime = renderTime - 0.0001d;

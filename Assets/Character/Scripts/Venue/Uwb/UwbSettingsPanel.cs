@@ -270,6 +270,15 @@ namespace LetsPiu.Character.Uwb
                         _mockCount = LabeledField("Tag 数量", _mockCount);
                         _mockAreaX = LabeledField("Area X(米)", _mockAreaX);
                         _mockAreaY = LabeledField("Area Y(米)", _mockAreaY);
+                        GUILayout.Space(8);
+                        GUILayout.Label("比分牌战斗 Mock（按模式）", _title);
+                        GUILayout.Label("与定位 Mock 绑定：应用本模式即自动开，离开 Mock 即关。", _label);
+                        string modeLabel = string.IsNullOrEmpty(ScoreCardBattleMockToggle.ActiveModeType)
+                            ? "0(积分)"
+                            : ScoreCardBattleMockToggle.ActiveModeType;
+                        GUILayout.Label("当前模式 modeType=" + modeLabel + "（默认积分；其他模式实现后可切换）", _label);
+                        bool scoreMockOn = ScoreCardBattleMockToggle.IsEnabled != null && ScoreCardBattleMockToggle.IsEnabled();
+                        GUILayout.Label(scoreMockOn ? "状态：已随定位 Mock 启动" : "状态：未启动（应用 Mock 后生效）", _label);
                         break;
                     case 3:
                         DrawReplayContent();

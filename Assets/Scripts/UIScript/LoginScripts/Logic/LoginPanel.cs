@@ -110,8 +110,19 @@ namespace LetsPiu.UI.UIScript.LoginScripts.Logic
 
         private void GoToHall()
         {
-            Debug.Log("LoginPanel GoToHall：设备注册/连接成功，切换 Hall 场景（HomePage 将自动打开 S0/Standby）");
+            // 进厅加载条保持原样：DefaultLoadingPanel 内同步时间 + 连接 MQTT
+            Debug.Log("LoginPanel GoToHall：设备注册/连接成功，切换 Hall 场景（DefaultLoading：时间同步+MQTT）");
+            CloseHotUpdateIfAny();
             SceneLoadMgr.S.SwitchScene(SceneType.Hall);
+        }
+
+        static void CloseHotUpdateIfAny()
+        {
+            if (UIRoot.S == null || UIRoot.S.panelRoot == null)
+                return;
+            var loadPanel = UIRoot.S.panelRoot.Find("HotUpdatePanel(Clone)");
+            if (loadPanel != null)
+                UnityEngine.Object.Destroy(loadPanel.gameObject);
         }
         
         private void OnTVRemoteKey(RemoteKey remoteKey)

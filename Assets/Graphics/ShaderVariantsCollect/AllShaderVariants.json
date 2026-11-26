@@ -1,6 +1,6 @@
 {
-    "ShaderTotalCount": 42,
-    "VariantTotalCount": 94,
+    "ShaderTotalCount": 46,
+    "VariantTotalCount": 116,
     "ShaderVariantInfos": [
         {
             "AssetPath": "Assets/Art/Shaders/Character/Dead_Ghost_Dissolve.shader",
@@ -137,6 +137,140 @@
                     "PassType": 13,
                     "Keywords": [
                         ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Art/Shaders/Scene/GLSA_BlenderVAT_URPLit.shader",
+            "ShaderName": "GLSA/Blender VAT URP Lit",
+            "ShaderVariantCount": 11,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHT_SHADOWS",
+                        "_ADDITIONAL_LIGHTS",
+                        "_AERIALFOG_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHT_SHADOWS",
+                        "_ADDITIONAL_LIGHTS",
+                        "_VAT_PARTICLE_PROGRESS_ON",
+                        "_VAT_POSITION_OFFSET"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHT_SHADOWS",
+                        "_ADDITIONAL_LIGHTS",
+                        "_AERIALFOG_ON",
+                        "_MAIN_LIGHT_SHADOWS_CASCADE",
+                        "_SHADOWS_SOFT"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHT_SHADOWS",
+                        "_ADDITIONAL_LIGHTS",
+                        "_MAIN_LIGHT_SHADOWS_CASCADE",
+                        "_SHADOWS_SOFT",
+                        "_VAT_PARTICLE_PROGRESS_ON",
+                        "_VAT_POSITION_OFFSET"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_MAIN_LIGHT_SHADOWS_CASCADE"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_VAT_PARTICLE_PROGRESS_ON",
+                        "_VAT_POSITION_OFFSET"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_MAIN_LIGHT_SHADOWS_CASCADE",
+                        "_VAT_PARTICLE_PROGRESS_ON",
+                        "_VAT_POSITION_OFFSET"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_VAT_PARTICLE_PROGRESS_ON",
+                        "_VAT_POSITION_OFFSET"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_VAT_PARTICLE_PROGRESS_ON",
+                        "_VAT_POSITION_OFFSET",
+                        "INSTANCING_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Art/Shaders/Scene/GLSA_BlenderVAT_VFX.shader",
+            "ShaderName": "GLSA/Blender VAT VFX",
+            "ShaderVariantCount": 4,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHT_SHADOWS",
+                        "_ADDITIONAL_LIGHTS",
+                        "_AERIALFOG_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHT_SHADOWS",
+                        "_ADDITIONAL_LIGHTS",
+                        "_AERIALFOG_ON",
+                        "_MAIN_LIGHT_SHADOWS_CASCADE",
+                        "_SHADOWS_SOFT"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_MAIN_LIGHT_SHADOWS_CASCADE"
                     ]
                 }
             ]
@@ -549,25 +683,6 @@
             ]
         },
         {
-            "AssetPath": "Assets/Effect/shader/ShaderGraph/爆炸序列帧.shadergraph",
-            "ShaderName": "ShaderGrapg/爆炸序列帧",
-            "ShaderVariantCount": 2,
-            "ShaderVariantElements": [
-                {
-                    "PassType": 0,
-                    "Keywords": [
-                        "_RAMPENABLED_ON"
-                    ]
-                },
-                {
-                    "PassType": 8,
-                    "Keywords": [
-                        "_RAMPENABLED_ON"
-                    ]
-                }
-            ]
-        },
-        {
             "AssetPath": "Assets/Effect/shader/ShaderGraph/通用测试.shadergraph",
             "ShaderName": "ShaderGraph/通用测试",
             "ShaderVariantCount": 4,
@@ -598,6 +713,25 @@
                     "Keywords": [
                         "_DISTORTIONENABLED_ON",
                         "_RAMPENABLED_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/Effect/shader/Test/HP.shader",
+            "ShaderName": "URP/Test/HP",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_MASK02_ON_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_MASK02_ON_ON"
                     ]
                 }
             ]
@@ -637,6 +771,19 @@
                     "PassType": 13,
                     "Keywords": [
                         ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/TextMesh Pro/Resources/Fonts & Materials/Shaders/TMP_SDF-Mobile.shader",
+            "ShaderName": "TextMeshPro/Mobile/Distance Field",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "OUTLINE_ON"
                     ]
                 }
             ]
@@ -780,6 +927,62 @@
                     "PassType": 0,
                     "Keywords": [
                         ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Packages/com.xuanxuan.nb.fx/NBShaders/Shader/ParticleBase.shader",
+            "ShaderName": "Effects/NBShader(Legacy)",
+            "ShaderVariantCount": 6,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ALPHAPREMULTIPLY_ON",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_MASKMAP_ON"
+                    ]
+                },
+                {
+                    "PassType": 13,
+                    "Keywords": [
+                        "_ADDITIONAL_LIGHTS",
+                        "_ALPHAPREMULTIPLY_ON",
+                        "_FX_LIGHT_MODE_UNLIT",
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_MASKMAP_ON"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_HOUDINI_VAT_SOFTBODY"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_HOUDINI_VAT_SOFTBODY",
+                        "_MASKMAP_ON"
                     ]
                 }
             ]

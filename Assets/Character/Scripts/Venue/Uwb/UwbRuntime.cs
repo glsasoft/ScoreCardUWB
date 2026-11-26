@@ -326,6 +326,8 @@ namespace LetsPiu.Character.Uwb
 
             _transport.RawMessageReceived += OnRawFromTransport;
             _transport.Start();
+            // 定位 Mock 与当前模式比分牌 Mock 绑定启停（ActiveModeType，默认积分）
+            ScoreCardBattleMockToggle.Apply(sourceMode == UwbSourceMode.Mock);
             Debug.Log($"[UwbRuntime] started mode={sourceMode} record={(live ? _recorder?.FilePath : "off")}");
         }
 
@@ -387,6 +389,7 @@ namespace LetsPiu.Character.Uwb
             _recorder?.Dispose();
             _recorder = null;
             _bridge = null;
+            ScoreCardBattleMockToggle.Apply(false);
         }
 
         void OnRawFromTransport(string raw)

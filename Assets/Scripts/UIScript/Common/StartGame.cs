@@ -2,7 +2,6 @@ using LetsPiu.Main;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using LetsPiu;
-using LetsPiu.UI.UIScript.LoginScripts.Logic;
 using LetsPiu.Base;
 using Cysharp.Threading.Tasks;
 using YooAsset;
@@ -25,12 +24,14 @@ public static class StartGame
 
         UIModule.S.OpenPanel(LetsPiu.UIDefine.UIID.LoginPanel, pnl =>
         {
-            UniTask.Post(async () => 
+            UniTask.Post(async () =>
             {
                 await UniTask.NextFrame();
                 await UniTask.NextFrame();
+                // 资源热更条结束；进厅仍走 DefaultLoading（时间同步 + MQTT），保持原样。
                 var loadPanel = UIRoot.S.panelRoot.Find("HotUpdatePanel(Clone)");
-                Object.Destroy(loadPanel.gameObject);
+                if (loadPanel != null)
+                    Object.Destroy(loadPanel.gameObject);
             });
         });
     }
