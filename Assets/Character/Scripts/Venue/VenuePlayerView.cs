@@ -49,9 +49,32 @@ namespace LetsPiu.Character
 
         Vector3 _velocity = Vector3.zero;
         bool _hasPose;
+        int _hp;
+        int _maxHp;
+
+        public int Id { get; private set; }
+        public int Team => _team;
+        public string DisplayName => _name;
+        public int Hp => _hp;
+        public int MaxHp => _maxHp;
+
+        /// <summary>头顶标牌挂点的世界坐标（脚底上方 statusHeight）。</summary>
+        public Vector3 HeadWorldPosition => _status != null ? _status.position : transform.position;
+
+        /// <summary>世界空间头顶血条是否显示。UI HUD 接管头顶标牌时关掉。</summary>
+        public bool StatusVisible
+        {
+            get => _status != null && _status.gameObject.activeSelf;
+            set
+            {
+                if (_status != null && _status.gameObject.activeSelf != value)
+                    _status.gameObject.SetActive(value);
+            }
+        }
 
         public void Bind(int id, Renderer tintTarget, float gaitReferenceSpeed, float statusHeight, float worldUiScale)
         {
+            Id = id;
             name = "Player_" + id;
             _tintTarget = tintTarget;
             _gaitReferenceSpeed = Mathf.Max(0.1f, gaitReferenceSpeed);
@@ -97,6 +120,8 @@ namespace LetsPiu.Character
 
         public void Show(Vector3 worldPos, Quaternion worldRot, int hp, int maxHp)
         {
+            _hp = hp;
+            _maxHp = maxHp;
             float dt = Time.deltaTime;
             Vector3 delta = worldPos - transform.position;
             delta.y = 0f;

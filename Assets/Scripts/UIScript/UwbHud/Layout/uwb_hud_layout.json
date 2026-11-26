@@ -1,0 +1,750 @@
+{
+ "canvas": [
+  3840,
+  2160
+ ],
+ "sprites": [
+  {
+   "name": "hud_top_band",
+   "x": 0,
+   "y": 0,
+   "w": 3840,
+   "h": 212,
+   "slice": [
+    8,
+    8,
+    0,
+    0
+   ],
+   "file": "hud_top_band.png"
+  },
+  {
+   "name": "hud_bezel",
+   "x": 0,
+   "y": 195,
+   "w": 3840,
+   "h": 1965,
+   "slice": [
+    64,
+    64,
+    64,
+    64
+   ],
+   "file": "hud_bezel.png"
+  },
+  {
+   "name": "hud_center",
+   "x": 1538,
+   "y": 23,
+   "w": 786,
+   "h": 150,
+   "file": "hud_center.png",
+   "slice": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "hud_flag_red",
+   "x": 112,
+   "y": 32,
+   "w": 204,
+   "h": 186,
+   "file": "hud_flag_red.png",
+   "slice": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "hud_flag_blue",
+   "x": 3554,
+   "y": 32,
+   "w": 204,
+   "h": 186,
+   "file": "hud_flag_blue.png",
+   "slice": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "hud_taskbar",
+   "x": 1525,
+   "y": 180,
+   "w": 790,
+   "h": 80,
+   "slice": [
+    60,
+    60,
+    0,
+    0
+   ],
+   "file": "hud_taskbar.png"
+  },
+  {
+   "name": "hud_task_icon",
+   "x": 1552,
+   "y": 189,
+   "w": 48,
+   "h": 49,
+   "file": "hud_task_icon.png",
+   "slice": [
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "hud_bottom_bg",
+   "x": 21,
+   "y": 1860,
+   "w": 3799,
+   "h": 300,
+   "slice": [
+    80,
+    80,
+    80,
+    20
+   ],
+   "file": "hud_bottom_bg.png"
+  },
+  {
+   "name": "hud_bottom_frame",
+   "x": 21,
+   "y": 1860,
+   "w": 3799,
+   "h": 300,
+   "slice": [
+    80,
+    80,
+    80,
+    20
+   ],
+   "file": "hud_bottom_frame.png"
+  },
+  {
+   "name": "hud_card_bg_red",
+   "x": 52,
+   "y": 1908,
+   "w": 315,
+   "h": 210,
+   "slice": [
+    40,
+    40,
+    40,
+    40
+   ],
+   "file": "hud_card_bg_red.png"
+  },
+  {
+   "name": "hud_card_border_red",
+   "x": 52,
+   "y": 1908,
+   "w": 315,
+   "h": 210,
+   "slice": [
+    40,
+    40,
+    40,
+    40
+   ],
+   "file": "hud_card_border_red.png"
+  },
+  {
+   "name": "hud_card_badge_red",
+   "x": 273,
+   "y": 1911,
+   "w": 94,
+   "h": 62,
+   "slice": [
+    40,
+    40,
+    30,
+    30
+   ],
+   "file": "hud_card_badge_red.png"
+  },
+  {
+   "name": "hud_card_bg_blue",
+   "x": 2103,
+   "y": 1908,
+   "w": 315,
+   "h": 210,
+   "slice": [
+    40,
+    40,
+    40,
+    40
+   ],
+   "file": "hud_card_bg_blue.png"
+  },
+  {
+   "name": "hud_card_border_blue",
+   "x": 2103,
+   "y": 1908,
+   "w": 315,
+   "h": 210,
+   "slice": [
+    40,
+    40,
+    40,
+    40
+   ],
+   "file": "hud_card_border_blue.png"
+  },
+  {
+   "name": "hud_card_badge_blue",
+   "x": 2324,
+   "y": 1911,
+   "w": 94,
+   "h": 62,
+   "slice": [
+    40,
+    40,
+    30,
+    30
+   ],
+   "file": "hud_card_badge_blue.png"
+  }
+ ],
+ "texts": [
+  {
+   "key": "score_label",
+   "text": "积分",
+   "fontSize": 48.54,
+   "color": "#FFFFFF",
+   "font": "AlibabaPuHuiTi_3_85_Bold",
+   "align": "center",
+   "tracking": 0,
+   "bbox": [
+    1726,
+    49,
+    1820,
+    95
+   ]
+  },
+  {
+   "key": "timer",
+   "text": "07:07",
+   "fontSize": 58.25,
+   "color": "#FFFFFF",
+   "font": "Impact",
+   "align": "center",
+   "tracking": 0,
+   "bbox": [
+    1872,
+    42,
+    1990,
+    90
+   ]
+  },
+  {
+   "key": "mode_label",
+   "text": "模式",
+   "fontSize": 48.54,
+   "color": "#FFFFFF",
+   "font": "AlibabaPuHuiTi_3_85_Bold",
+   "align": "center",
+   "tracking": 0,
+   "bbox": [
+    2039,
+    49,
+    2132,
+    95
+   ]
+  },
+  {
+   "key": "red_score_label",
+   "text": "红队积分：",
+   "fontSize": 48.54,
+   "color": "#FFFFFF",
+   "font": "AlibabaPuHuiTi_3_85_Bold",
+   "align": "center",
+   "tracking": 0,
+   "bbox": [
+    448,
+    82,
+    654,
+    128
+   ]
+  },
+  {
+   "key": "red_score",
+   "text": "0",
+   "fontSize": 48.54,
+   "color": "#FFFFFF",
+   "font": "AlibabaPuHuiTi_3_85_Bold",
+   "align": "center",
+   "tracking": 0,
+   "bbox": [
+    776,
+    87,
+    801,
+    123
+   ]
+  },
+  {
+   "key": "blue_score_label",
+   "text": "蓝队积分：",
+   "fontSize": 48.54,
+   "color": "#FFFFFF",
+   "font": "AlibabaPuHuiTi_3_85_Bold",
+   "align": "center",
+   "tracking": 0,
+   "bbox": [
+    2971,
+    78,
+    3177,
+    124
+   ]
+  },
+  {
+   "key": "blue_score",
+   "text": "0",
+   "fontSize": 48.54,
+   "color": "#FFFFFF",
+   "font": "AlibabaPuHuiTi_3_85_Bold",
+   "align": "center",
+   "tracking": 0,
+   "bbox": [
+    3299,
+    83,
+    3324,
+    119
+   ]
+  },
+  {
+   "key": "red_flag_number",
+   "text": "9090",
+   "fontSize": 42.71,
+   "color": "#FFFFFF",
+   "font": "Impact",
+   "align": "center",
+   "tracking": 0,
+   "bbox": [
+    169,
+    75,
+    259,
+    111
+   ]
+  },
+  {
+   "key": "red_flag_label",
+   "text": "总淘汰",
+   "fontSize": 21.36,
+   "color": "#FFFFFF",
+   "font": "AlibabaPuHuiTi_3_85_Bold",
+   "align": "center",
+   "tracking": 0,
+   "bbox": [
+    182,
+    147,
+    245,
+    168
+   ]
+  },
+  {
+   "key": "blue_flag_number",
+   "text": "9090",
+   "fontSize": 42.71,
+   "color": "#FFFFFF",
+   "font": "Impact",
+   "align": "center",
+   "tracking": 0,
+   "bbox": [
+    3610,
+    75,
+    3700,
+    111
+   ]
+  },
+  {
+   "key": "blue_flag_label",
+   "text": "总淘汰",
+   "fontSize": 21.36,
+   "color": "#FFFFFF",
+   "font": "AlibabaPuHuiTi_3_85_Bold",
+   "align": "center",
+   "tracking": 0,
+   "bbox": [
+    3623,
+    147,
+    3686,
+    168
+   ]
+  },
+  {
+   "key": "task_title",
+   "text": "任务说明",
+   "fontSize": 34.56,
+   "color": "#080909",
+   "font": "AlibabaPuHuiTi_3_105_Heavy",
+   "align": "left",
+   "tracking": 0,
+   "bbox": [
+    1621,
+    196,
+    1754,
+    229
+   ]
+  },
+  {
+   "key": "task_body",
+   "text": "积分战斗得分，为团队扩大积分优势",
+   "fontSize": 25.0,
+   "color": "#080909",
+   "font": "AlibabaPuHuiTi_3_65_Medium",
+   "align": "left",
+   "tracking": 0,
+   "bbox": [
+    1841,
+    202,
+    2234,
+    227
+   ]
+  },
+  {
+   "key": "task_icon",
+   "text": "!",
+   "fontSize": 34.4,
+   "color": "#FF5D00",
+   "font": "AlibabaPuHuiTi_3_115_Black",
+   "align": "left",
+   "tracking": 0,
+   "bbox": [
+    1573,
+    202,
+    1581,
+    227
+   ]
+  },
+  {
+   "key": "card_kill_label",
+   "text": "击杀",
+   "fontSize": 24.99,
+   "color": "#F5F5F5",
+   "font": "AlibabaPuHuiTi_3_65_Medium",
+   "align": "left",
+   "tracking": 100,
+   "bbox": [
+    76,
+    2051,
+    126,
+    2074
+   ]
+  },
+  {
+   "key": "card_name",
+   "text": "HANGHANG",
+   "fontSize": 30.0,
+   "color": "#F5F5F5",
+   "font": "AlibabaPuHuiTi_3_115_Black",
+   "align": "left",
+   "tracking": 0,
+   "bbox": [
+    159,
+    1976,
+    335,
+    1998
+   ]
+  },
+  {
+   "key": "card_number",
+   "text": "01",
+   "fontSize": 45.0,
+   "color": "#F5F5F5",
+   "font": "Impact",
+   "align": "left",
+   "tracking": 0,
+   "bbox": [
+    301,
+    1923,
+    340,
+    1960
+   ]
+  },
+  {
+   "key": "card_kills",
+   "text": "01",
+   "fontSize": 45.0,
+   "color": "#F5F5F5",
+   "font": "Impact",
+   "align": "left",
+   "tracking": 0,
+   "bbox": [
+    146,
+    2037,
+    185,
+    2074
+   ]
+  },
+  {
+   "key": "card_death_label",
+   "text": "死亡",
+   "fontSize": 24.99,
+   "color": "#F5F5F5",
+   "font": "AlibabaPuHuiTi_3_65_Medium",
+   "align": "left",
+   "tracking": 100,
+   "bbox": [
+    228,
+    2051,
+    279,
+    2074
+   ]
+  },
+  {
+   "key": "card_deaths",
+   "text": "01",
+   "fontSize": 45.0,
+   "color": "#F5F5F5",
+   "font": "Impact",
+   "align": "left",
+   "tracking": 0,
+   "bbox": [
+    299,
+    2037,
+    338,
+    2074
+   ]
+  },
+  {
+   "key": "card_kill_label_blue",
+   "text": "击杀",
+   "fontSize": 24.99,
+   "color": "#F5F5F5",
+   "font": "AlibabaPuHuiTi_3_65_Medium",
+   "align": "left",
+   "tracking": 100,
+   "bbox": [
+    2127,
+    2051,
+    2177,
+    2074
+   ]
+  },
+  {
+   "key": "card_name_blue",
+   "text": "HANGHANG",
+   "fontSize": 30.0,
+   "color": "#F5F5F5",
+   "font": "AlibabaPuHuiTi_3_115_Black",
+   "align": "left",
+   "tracking": 0,
+   "bbox": [
+    2210,
+    1976,
+    2386,
+    1998
+   ]
+  },
+  {
+   "key": "card_number_blue",
+   "text": "999",
+   "fontSize": 45.0,
+   "color": "#F5F5F5",
+   "font": "Impact",
+   "align": "left",
+   "tracking": 0,
+   "bbox": [
+    2336,
+    1923,
+    2407,
+    1960
+   ]
+  },
+  {
+   "key": "card_kills_blue",
+   "text": "99",
+   "fontSize": 45.0,
+   "color": "#F5F5F5",
+   "font": "Impact",
+   "align": "left",
+   "tracking": 0,
+   "bbox": [
+    2197,
+    2037,
+    2244,
+    2074
+   ]
+  },
+  {
+   "key": "card_death_label_blue",
+   "text": "死亡",
+   "fontSize": 24.99,
+   "color": "#F5F5F5",
+   "font": "AlibabaPuHuiTi_3_65_Medium",
+   "align": "left",
+   "tracking": 100,
+   "bbox": [
+    2279,
+    2051,
+    2330,
+    2074
+   ]
+  },
+  {
+   "key": "card_deaths_blue",
+   "text": "99",
+   "fontSize": 45.0,
+   "color": "#F5F5F5",
+   "font": "Impact",
+   "align": "left",
+   "tracking": 0,
+   "bbox": [
+    2350,
+    2037,
+    2397,
+    2074
+   ]
+  }
+ ],
+ "score_bar": {
+  "x": 330,
+  "y": 49,
+  "w": 3203,
+  "h": 111
+ },
+ "tag": {
+  "size": [
+   330,
+   150
+  ],
+  "sprites": [
+   {
+    "name": "hud_tag_bg",
+    "x": 10,
+    "y": 10,
+    "w": 309,
+    "h": 129,
+    "file": "hud_tag_bg.png",
+    "slice": [
+     24,
+     24,
+     24,
+     24
+    ]
+   },
+   {
+    "name": "hud_tag_border",
+    "x": 10,
+    "y": 10,
+    "w": 309,
+    "h": 129,
+    "file": "hud_tag_border.png",
+    "slice": [
+     24,
+     24,
+     24,
+     24
+    ]
+   },
+   {
+    "name": "hud_tag_hp_track",
+    "x": 83,
+    "y": 100,
+    "w": 220,
+    "h": 15,
+    "file": "hud_tag_hp_track.png",
+    "slice": [
+     8,
+     8,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "hud_tag_hp_fill",
+    "x": 76,
+    "y": 100,
+    "w": 117,
+    "h": 23,
+    "file": "hud_tag_hp_fill.png",
+    "slice": [
+     14,
+     8,
+     0,
+     0
+    ]
+   },
+   {
+    "name": "hud_tag_badge",
+    "x": 29,
+    "y": 88,
+    "w": 68,
+    "h": 39,
+    "file": "hud_tag_badge.png",
+    "slice": [
+     24,
+     24,
+     0,
+     0
+    ]
+   }
+  ],
+  "texts": [
+   {
+    "key": "name",
+    "text": "驾校错偏度额那个",
+    "fontSize": 25.0,
+    "color": "#F5F5F5",
+    "font": "AlibabaPuHuiTi_3_115_Black",
+    "align": "left",
+    "tracking": 0,
+    "bbox": [
+     105,
+     45,
+     302,
+     70
+    ]
+   },
+   {
+    "key": "number",
+    "text": "01",
+    "fontSize": 30.0,
+    "color": "#F5F5F5",
+    "font": "Impact",
+    "align": "left",
+    "tracking": 0,
+    "bbox": [
+     50,
+     95,
+     76,
+     120
+    ]
+   }
+  ],
+  "avatar": {
+   "x": 22,
+   "y": 19,
+   "w": 81,
+   "h": 81
+  }
+ },
+ "card": {
+  "red_origin": [
+   53,
+   1910
+  ],
+  "blue_origin": [
+   2104,
+   1910
+  ],
+  "step": 340,
+  "count": 5,
+  "avatar": {
+   "x": 67,
+   "y": 1946,
+   "w": 81,
+   "h": 81
+  }
+ }
+}

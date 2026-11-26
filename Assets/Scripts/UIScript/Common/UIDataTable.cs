@@ -32,6 +32,7 @@ namespace LetsPiu
             #region 游戏大厅页面定义
             AddPanelData(UIID.HomePagePanel, typeof(HomePageLogic), "HomePagePanel");
             AddPanelData(UIID.OfflinePage, typeof(OfflinePageLogic), "OfflinePage");
+            AddPanelData(UIID.UwbGameHudPanel, typeof(LetsPiu.UI.UwbGameHudPanel), "UwbGameHudPanel");
             #endregion
 
             #region loading面板定义

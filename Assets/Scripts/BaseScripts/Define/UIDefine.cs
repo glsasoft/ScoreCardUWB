@@ -184,6 +184,9 @@ namespace LetsPiu.UIDefine
         /// <summary>已废弃：20v20 改为 PlayerItemNoScore20v20 变体，不再用整页副本。保留枚举槽位避免序列化错位。</summary>
         ScoreCardFightPageNoScore20v20,
 
+        /// <summary>UWB 单屏比分牌「游戏中」HUD（顶部比分条、底部队员卡片、人物头顶标牌）；追加在末尾避免序列化错位。</summary>
+        UwbGameHudPanel,
+
         #endregion
 
         // 内置面板起始值

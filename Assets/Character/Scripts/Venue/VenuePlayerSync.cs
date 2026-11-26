@@ -69,6 +69,35 @@ namespace LetsPiu.Character
 
         public bool snapToGround = true;
 
+        [Tooltip("是否显示玩家头顶的世界空间血条。UI HUD 接管头顶标牌后设为 false。")]
+        [SerializeField] bool showWorldStatus = true;
+
+        public bool ShowWorldStatus
+        {
+            get => showWorldStatus;
+            set
+            {
+                showWorldStatus = value;
+                foreach (Track track in _tracks.Values)
+                {
+                    if (track.view != null)
+                        track.view.StatusVisible = value;
+                }
+            }
+        }
+
+        public int PlayerCount => _tracks.Count;
+
+        /// <summary>把当前场上所有玩家视图追加到 buffer（不清空，不分配）。</summary>
+        public void CollectViews(List<VenuePlayerView> buffer)
+        {
+            foreach (Track track in _tracks.Values)
+            {
+                if (track.view != null)
+                    buffer.Add(track.view);
+            }
+        }
+
         readonly Dictionary<int, Track> _tracks = new Dictionary<int, Track>();
         readonly HashSet<int> _seen = new HashSet<int>();
         readonly List<int> _remove = new List<int>(8);
@@ -235,6 +264,7 @@ namespace LetsPiu.Character
                 view = go.AddComponent<VenuePlayerView>();
             Renderer tint = modelPrefab == null ? go.GetComponentInChildren<Renderer>() : null;
             view.Bind(id, tint, gaitReferenceSpeed, statusHeight, worldUiScale);
+            view.StatusVisible = showWorldStatus;
 
             track = new Track { view = view };
             _tracks.Add(id, track);
