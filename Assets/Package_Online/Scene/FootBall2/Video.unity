@@ -624,8 +624,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   driveDayNightCycle: 1
-  cycleLengthSeconds: 240
-  startHour: 8
+  cycleLengthSeconds: 120
+  startHour: 0
   driveIntensity: 1
   dayNightKeys:
   - hour: 0
@@ -642,7 +642,7 @@ MonoBehaviour:
     intensity: 1.2
   - hour: 12
     kelvin: 6300
-    intensity: 1.8
+    intensity: 1.6
   - hour: 15.5
     kelvin: 5600
     intensity: 1.3
