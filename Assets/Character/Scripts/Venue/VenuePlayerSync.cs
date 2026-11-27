@@ -53,7 +53,7 @@ namespace LetsPiu.Character
         public GameObject modelPrefab;
 
         [Tooltip("回放比最新数据包晚多少秒。要大于发送间隔，两包之间才有缓冲可插值。")]
-        public float interpolationDelay = 0.2f;
+        public float interpolationDelay = 0.3f;
 
         [Tooltip("多久没收到这个玩家就从场景里拿走。")]
         public float removeAfterSeconds = 2f;

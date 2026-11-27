@@ -76,6 +76,9 @@ namespace LetsPiu.Character.Uwb
         string _udpPort = "9000";
         string _udpLocal = "";
         string _mockCount = "20";
+        /// <summary>0=固定人数，1=10/20/40 循环。</summary>
+        int _mockRosterMode;
+        readonly string[] _mockRosterModeLabels = { "固定人数", "循环 10/20/40" };
         string _mockAreaX = "18";
         string _mockAreaY = "10";
         string _replayPath = "";
@@ -267,7 +270,13 @@ namespace LetsPiu.Character.Uwb
                     case 2:
                         GUILayout.Label("Mock", _title);
                         GUILayout.Label("应用后将持续使用此模式；不录制。", _label);
-                        _mockCount = LabeledField("Tag 数量", _mockCount);
+                        GUILayout.Label("人数模式", _label);
+                        _mockRosterMode = GUILayout.SelectionGrid(
+                            _mockRosterMode, _mockRosterModeLabels, 2, _btn, GUILayout.Height(40));
+                        if (_mockRosterMode == 0)
+                            _mockCount = LabeledField("固定人数（手动输入）", _mockCount);
+                        else
+                            GUILayout.Label("每场依次：10 → 20 → 40 → 10 …（应用后按此启动）", _label);
                         _mockAreaX = LabeledField("Area X(米)", _mockAreaX);
                         _mockAreaY = LabeledField("Area Y(米)", _mockAreaY);
                         GUILayout.Space(8);
@@ -666,6 +675,7 @@ namespace LetsPiu.Character.Uwb
             _udpPort = d.udpListenPort.ToString();
             _udpLocal = d.udpLocalAddress ?? "";
             _mockCount = d.mockTagCount.ToString();
+            _mockRosterMode = d.mockRosterCycle ? 1 : 0;
             _mockAreaX = d.mockAreaX.ToString("0.##");
             _mockAreaY = d.mockAreaY.ToString("0.##");
             _replayPath = d.replayFilePath ?? "";
@@ -769,6 +779,7 @@ namespace LetsPiu.Character.Uwb
                 udpListenPort = ParseInt(_udpPort, 9000),
                 udpLocalAddress = (_udpLocal ?? "").Trim(),
                 mockTagCount = ParseInt(_mockCount, 20),
+                mockRosterCycle = _mockRosterMode == 1,
                 mockAreaX = ParseFloat(_mockAreaX, 18f),
                 mockAreaY = ParseFloat(_mockAreaY, 10f),
                 mockMoveSpeed = 1.2f,

@@ -1,6 +1,6 @@
 {
     "ShaderTotalCount": 46,
-    "VariantTotalCount": 116,
+    "VariantTotalCount": 91,
     "ShaderVariantInfos": [
         {
             "AssetPath": "Assets/Art/Shaders/Character/Dead_Ghost_Dissolve.shader",
@@ -81,16 +81,10 @@
         {
             "AssetPath": "Assets/Art/Shaders/Character/XHHYCharacterUrp_Eye.shader",
             "ShaderName": "Universal Render Pipeline/NiloToon/XHHY_CharacterURP_Eye",
-            "ShaderVariantCount": 3,
+            "ShaderVariantCount": 2,
             "ShaderVariantElements": [
                 {
                     "PassType": 0,
-                    "Keywords": [
-                        ""
-                    ]
-                },
-                {
-                    "PassType": 13,
                     "Keywords": [
                         ""
                     ]
@@ -144,25 +138,8 @@
         {
             "AssetPath": "Assets/Art/Shaders/Scene/GLSA_BlenderVAT_URPLit.shader",
             "ShaderName": "GLSA/Blender VAT URP Lit",
-            "ShaderVariantCount": 11,
+            "ShaderVariantCount": 5,
             "ShaderVariantElements": [
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        "_ADDITIONAL_LIGHT_SHADOWS",
-                        "_ADDITIONAL_LIGHTS",
-                        "_AERIALFOG_ON"
-                    ]
-                },
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        "_ADDITIONAL_LIGHT_SHADOWS",
-                        "_ADDITIONAL_LIGHTS",
-                        "_VAT_PARTICLE_PROGRESS_ON",
-                        "_VAT_POSITION_OFFSET"
-                    ]
-                },
                 {
                     "PassType": 13,
                     "Keywords": [
@@ -180,36 +157,6 @@
                         "_ADDITIONAL_LIGHTS",
                         "_MAIN_LIGHT_SHADOWS_CASCADE",
                         "_SHADOWS_SOFT",
-                        "_VAT_PARTICLE_PROGRESS_ON",
-                        "_VAT_POSITION_OFFSET"
-                    ]
-                },
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        "_ADDITIONAL_LIGHTS"
-                    ]
-                },
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        "_ADDITIONAL_LIGHTS",
-                        "_MAIN_LIGHT_SHADOWS_CASCADE"
-                    ]
-                },
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        "_ADDITIONAL_LIGHTS",
-                        "_VAT_PARTICLE_PROGRESS_ON",
-                        "_VAT_POSITION_OFFSET"
-                    ]
-                },
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        "_ADDITIONAL_LIGHTS",
-                        "_MAIN_LIGHT_SHADOWS_CASCADE",
                         "_VAT_PARTICLE_PROGRESS_ON",
                         "_VAT_POSITION_OFFSET"
                     ]
@@ -240,16 +187,8 @@
         {
             "AssetPath": "Assets/Art/Shaders/Scene/GLSA_BlenderVAT_VFX.shader",
             "ShaderName": "GLSA/Blender VAT VFX",
-            "ShaderVariantCount": 4,
+            "ShaderVariantCount": 1,
             "ShaderVariantElements": [
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        "_ADDITIONAL_LIGHT_SHADOWS",
-                        "_ADDITIONAL_LIGHTS",
-                        "_AERIALFOG_ON"
-                    ]
-                },
                 {
                     "PassType": 13,
                     "Keywords": [
@@ -259,26 +198,13 @@
                         "_MAIN_LIGHT_SHADOWS_CASCADE",
                         "_SHADOWS_SOFT"
                     ]
-                },
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        "_ADDITIONAL_LIGHTS"
-                    ]
-                },
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        "_ADDITIONAL_LIGHTS",
-                        "_MAIN_LIGHT_SHADOWS_CASCADE"
-                    ]
                 }
             ]
         },
         {
             "AssetPath": "Assets/Art/Shaders/Scene/GLSA_Scene_EnvUnlit.shader",
             "ShaderName": "GLSA/Scene/EnvUnlit",
-            "ShaderVariantCount": 3,
+            "ShaderVariantCount": 2,
             "ShaderVariantElements": [
                 {
                     "PassType": 13,
@@ -290,12 +216,6 @@
                     "PassType": 13,
                     "Keywords": [
                         "_AERIALFOG_ON",
-                        "_ALPHATEST_ON"
-                    ]
-                },
-                {
-                    "PassType": 13,
-                    "Keywords": [
                         "_ALPHATEST_ON"
                     ]
                 }
@@ -317,29 +237,8 @@
         {
             "AssetPath": "Assets/Art/Shaders/Scene/GLSA_ScenePBR_DXT5nm.shader",
             "ShaderName": "GLSA/Scene/PBR_EnvStandard",
-            "ShaderVariantCount": 8,
+            "ShaderVariantCount": 4,
             "ShaderVariantElements": [
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        ""
-                    ]
-                },
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        "_ADDITIONAL_LIGHT_SHADOWS",
-                        "_ADDITIONAL_LIGHTS"
-                    ]
-                },
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        "_ADDITIONAL_LIGHT_SHADOWS",
-                        "_ADDITIONAL_LIGHTS",
-                        "_ALPHATEST_ON"
-                    ]
-                },
                 {
                     "PassType": 13,
                     "Keywords": [
@@ -357,12 +256,6 @@
                         "_ALPHATEST_ON",
                         "_MAIN_LIGHT_SHADOWS_CASCADE",
                         "_SHADOWS_SOFT"
-                    ]
-                },
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        "_ALPHATEST_ON"
                     ]
                 },
                 {
@@ -382,47 +275,13 @@
         {
             "AssetPath": "Assets/Art/Shaders/Scene/Lit_Piu_TEST.shader",
             "ShaderName": "Piu/Lit_Piu_TEST",
-            "ShaderVariantCount": 12,
+            "ShaderVariantCount": 6,
             "ShaderVariantElements": [
                 {
                     "PassType": 13,
                     "Keywords": [
-                        ""
-                    ]
-                },
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        "_ADDITIONAL_LIGHTS"
-                    ]
-                },
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        "_ADDITIONAL_LIGHTS",
-                        "_ALPHATEST_ON"
-                    ]
-                },
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        "_ADDITIONAL_LIGHTS",
-                        "_EMISSION"
-                    ]
-                },
-                {
-                    "PassType": 13,
-                    "Keywords": [
                         "_ADDITIONAL_LIGHTS",
                         "_MAIN_LIGHT_SHADOWS_CASCADE"
-                    ]
-                },
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        "_ADDITIONAL_LIGHTS",
-                        "_ALPHATEST_ON",
-                        "_EMISSION"
                     ]
                 },
                 {
@@ -448,12 +307,6 @@
                         "_ALPHATEST_ON",
                         "_EMISSION",
                         "_MAIN_LIGHT_SHADOWS_CASCADE"
-                    ]
-                },
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        "_ALPHATEST_ON"
                     ]
                 },
                 {
@@ -574,16 +427,8 @@
         {
             "AssetPath": "Assets/Effect/shader/ShaderGraph/Fernel.shadergraph",
             "ShaderName": "ShaderGraph/Fernel",
-            "ShaderVariantCount": 4,
+            "ShaderVariantCount": 2,
             "ShaderVariantElements": [
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        "_ADDITIONAL_LIGHT_SHADOWS",
-                        "_ADDITIONAL_LIGHTS",
-                        "_RIMEMISSIONENABLED_ON"
-                    ]
-                },
                 {
                     "PassType": 13,
                     "Keywords": [
@@ -592,12 +437,6 @@
                         "_MAIN_LIGHT_SHADOWS_CASCADE",
                         "_RIMEMISSIONENABLED_ON",
                         "_SHADOWS_SOFT"
-                    ]
-                },
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        "_RIMEMISSIONENABLED_ON"
                     ]
                 },
                 {
@@ -791,27 +630,12 @@
         {
             "AssetPath": "Packages/com.unity.render-pipelines.universal/Shaders/Lit.shader",
             "ShaderName": "Universal Render Pipeline/Lit",
-            "ShaderVariantCount": 7,
+            "ShaderVariantCount": 5,
             "ShaderVariantElements": [
                 {
                     "PassType": 13,
                     "Keywords": [
                         ""
-                    ]
-                },
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        "_ADDITIONAL_LIGHT_SHADOWS",
-                        "_ADDITIONAL_LIGHTS"
-                    ]
-                },
-                {
-                    "PassType": 13,
-                    "Keywords": [
-                        "_ADDITIONAL_LIGHT_SHADOWS",
-                        "_ADDITIONAL_LIGHTS",
-                        "_EMISSION"
                     ]
                 },
                 {

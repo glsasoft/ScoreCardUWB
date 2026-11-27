@@ -175,7 +175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   space: {fileID: 0}
   modelPrefab: {fileID: 973057003}
-  interpolationDelay: 0.2
+  interpolationDelay: 0.3
   removeAfterSeconds: 2
   gaitReferenceSpeed: 10
   modelYawOffset: 0

@@ -22,17 +22,8 @@ public static class StartGame
 
         await TableManager.S.LoadTable();
 
-        UIModule.S.OpenPanel(LetsPiu.UIDefine.UIID.LoginPanel, pnl =>
-        {
-            UniTask.Post(async () =>
-            {
-                await UniTask.NextFrame();
-                await UniTask.NextFrame();
-                // 资源热更条结束；进厅仍走 DefaultLoading（时间同步 + MQTT），保持原样。
-                var loadPanel = UIRoot.S.panelRoot.Find("HotUpdatePanel(Clone)");
-                if (loadPanel != null)
-                    Object.Destroy(loadPanel.gameObject);
-            });
-        });
+        // 热更条继续留着：进厅由 SceneLoadMgr 在 DefaultLoading 面板打开后再关，避免中间黑屏；
+        // 未注册设备走注册页时由 LoginPanel 关闭。
+        UIModule.S.OpenPanel(LetsPiu.UIDefine.UIID.LoginPanel);
     }
 }

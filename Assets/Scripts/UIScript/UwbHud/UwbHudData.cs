@@ -51,6 +51,18 @@ namespace LetsPiu.UI
         /// <summary>true 时由 HUD 面板生成演示数据（只在 UWB Mock 数据源下打开）。</summary>
         public static bool UseMock;
 
+        /// <summary>Mock 新一场随机人数时自增，底栏据此解锁并按新峰值重新锁档。</summary>
+        public static int RosterLayoutEpoch;
+
+        /// <summary>新一场已知的人数；大于 0 时底栏立刻按它选档，不等玩家真正出现。</summary>
+        public static int ExpectedRoster;
+
+        public static void NotifyNewMatchRoster(int expectedRoster = 0)
+        {
+            ExpectedRoster = expectedRoster;
+            RosterLayoutEpoch++;
+        }
+
         static readonly Dictionary<int, PlayerStats> s_Stats = new Dictionary<int, PlayerStats>();
         static readonly Dictionary<int, Sprite> s_Avatars = new Dictionary<int, Sprite>();
 
@@ -82,6 +94,8 @@ namespace LetsPiu.UI
         {
             RedScore = BlueScore = RedEliminated = BlueEliminated = 0;
             RemainSeconds = -1f;
+            RosterLayoutEpoch = 0;
+            ExpectedRoster = 0;
             s_Stats.Clear();
             s_Avatars.Clear();
         }

@@ -24,6 +24,8 @@ namespace LetsPiu.UI
         UIID m_CompletedUIID;
 
         bool m_IsSwitching = false;
+        /// <summary>已完成一次进厅；再次收到进厅请求会被拦截，避免加载条重复出现。</summary>
+        bool m_HallEntered;
         SceneType m_CurrentSceneType;
 
         public SceneType currentSceneType => m_CurrentSceneType;
@@ -77,6 +79,12 @@ namespace LetsPiu.UI
                 return;
             }
 
+            if (m_HallEntered && sceneType == SceneType.Hall)
+            {
+                Debug.LogWarning("[SceneLoadMgr] 已在大厅，忽略重复进厅请求（会再弹加载条）。调用栈:\n" + Environment.StackTrace);
+                return;
+            }
+
             m_CompletedUIID = (UIID)m_dicScene2StartUID[key];
             m_IsSwitching = true;
             m_CurrentSceneType = sceneType;
@@ -104,6 +112,9 @@ namespace LetsPiu.UI
             await UniTask.WaitUntil(() => { return m_LoadingPanel is not null; });
             await UniTask.NextFrame();
             await UniTask.NextFrame();
+
+            // DefaultLoading 已显示，再收掉启动热更条，中间不留黑屏
+            CloseHotUpdateBoot();
 
             UIModule.S.ResetAllPanel(uid =>
             {
@@ -156,7 +167,24 @@ namespace LetsPiu.UI
             await UniTask.Delay(1000);
             UIModule.S.ClosePanel(m_LoadingPanel.uiID);
             EventManager.Instance.Broadcast(EventMsg.SceneSwitchSuccess, sceneType);
+            m_HallEntered = true;
             m_IsSwitching = false;
+        }
+
+        /// <summary>关闭启动阶段的热更进度条（HotUpdatePanel 在默认程序集，按名字找）。</summary>
+        public static void CloseHotUpdateBoot()
+        {
+            if (UIRoot.S == null || UIRoot.S.panelRoot == null)
+                return;
+            var hot = UIRoot.S.panelRoot.Find("HotUpdatePanel(Clone)");
+            if (hot != null)
+                UnityEngine.Object.Destroy(hot.gameObject);
+        }
+
+        /// <summary>退出登录/清除注册后允许重新进厅。</summary>
+        public void ResetHallEntered()
+        {
+            m_HallEntered = false;
         }
 
         /// <summary>启动阶段已做过资源加载/连服时，进厅不再开 DefaultLoadingPanel。</summary>
@@ -186,6 +214,8 @@ namespace LetsPiu.UI
             var scene = SceneManager.GetSceneByName(nextSceneName);
             if (!scene.IsValid())
             {
+                // 切场景前就让 UICamera 接管 UI，新场景激活的第一帧加载条不会被地图摄像机盖掉
+                UwbGameHudPanel.EnsureUiCamera();
                 var loadHandle = m_DefaultPackage.LoadSceneAsync(nextSceneName, LoadSceneMode.Single);
                 var ratio = GetSceneRatio(sceneType);
 
@@ -195,6 +225,9 @@ namespace LetsPiu.UI
                     await UniTask.NextFrame();
                 }
                 m_LoadingPanel.Report(1 * ratio);
+
+                // 大厅主摄像机不渲染 UI 层，先启用 UICamera，加载条才不会在进图后消失
+                UwbGameHudPanel.EnsureUiCamera();
 
                 SceneHandle loadHandle_1 = null;
                 var addSceneName = GetAdditiveSceneName(sceneType, gameMode);

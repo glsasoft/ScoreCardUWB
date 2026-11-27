@@ -6,15 +6,12 @@ using UnityEngine;
 namespace LetsPiu.UI
 {
     /// <summary>
-    /// UWB 单屏比分牌「游戏中」HUD 面板：顶部比分条、任务说明、底部队员卡片、人物头顶标牌。
-    /// 人物位置、血量取自场上的 VenuePlayerSync；击杀死亡、比分、倒计时取自 UwbHudData。
-    /// 地图和人物是 3D 场景，不属于本面板。
+    /// UWB 单屏比分牌「游戏中」HUD：顶栏、底部队员卡（10/20/40 档）、头顶标牌。
+    /// 底栏按开局参赛人数锁档（策划 P10–12），本局不随存活人数换档。
     /// </summary>
     [DefaultExecutionOrder(100)]
     public class UwbGameHudPanel : AbstractPanel
     {
-        const int SlotsPerTeam = 5;
-
         [SerializeField] UwbHudTopBar topBar;
         [SerializeField] RectTransform tagLayer;
         [SerializeField] UwbPlayerTagItem tagTemplate;
@@ -27,8 +24,8 @@ namespace LetsPiu.UI
         readonly List<VenuePlayerView> m_Views = new List<VenuePlayerView>(32);
         readonly Dictionary<int, UwbHudPlayer> m_Players = new Dictionary<int, UwbHudPlayer>();
         readonly Dictionary<int, UwbPlayerTagItem> m_Tags = new Dictionary<int, UwbPlayerTagItem>();
-        readonly List<UwbHudPlayer> m_Red = new List<UwbHudPlayer>(16);
-        readonly List<UwbHudPlayer> m_Blue = new List<UwbHudPlayer>(16);
+        readonly List<UwbHudPlayer> m_Red = new List<UwbHudPlayer>(32);
+        readonly List<UwbHudPlayer> m_Blue = new List<UwbHudPlayer>(32);
         readonly List<int> m_Gone = new List<int>(8);
         readonly HashSet<int> m_Seen = new HashSet<int>();
 
@@ -38,11 +35,31 @@ namespace LetsPiu.UI
         bool m_TagOrderDirty;
         float m_OpenTime;
 
+        UwbHudRosterMode m_Mode = UwbHudRosterMode.Ten;
+        bool m_ModeLocked;
+        const float CardGap = 3f;
+
+        int m_PeakRoster;
+        int m_SeenRosterEpoch = -1;
+        bool m_BaselineReady;
+        Vector2 m_RedOrigin;
+        Vector2 m_BlueOrigin;
+        float m_BaseCardW;
+        float m_BaseCardH;
+        float m_BaseStep;
+        float m_RedStepSign = 1f;
+        float m_BlueStepSign = 1f;
+        Vector3 m_BaseScale = Vector3.one;
+
         public override void OnOpen(object[] args)
         {
             base.OnOpen(args);
             m_OpenTime = Time.time;
+            m_ModeLocked = false;
+            m_PeakRoster = 0;
+            m_SeenRosterEpoch = UwbHudData.RosterLayoutEpoch;
             EnsureUiCamera();
+            CaptureBaselineIfNeeded();
             if (tagTemplate != null)
                 tagTemplate.gameObject.SetActive(false);
             Refresh();
@@ -60,9 +77,7 @@ namespace LetsPiu.UI
             base.OnDisable();
         }
 
-        // 场景里的 UICamera 默认是关的，Canvas 退回到场景主相机上渲染，会被 3D 地图遮挡。
-        // 打开 UICamera，并把 UIRoot 下的各个根 Canvas 指回它。
-        static void EnsureUiCamera()
+        public static void EnsureUiCamera()
         {
             if (UIRoot.S == null || UIRoot.S.uiCamera == null)
                 return;
@@ -77,10 +92,8 @@ namespace LetsPiu.UI
                     canvas.worldCamera = uiCamera;
             }
 
-            // UICamera 带着 "UICamera" 标签时，分割线的 Wave、Lizi 粒子在 UI 相机下几乎看不清，去掉标签后与原版一致。
             uiCamera.gameObject.tag = "Untagged";
 
-            // 分割线等特效是挂在 UI 层的普通粒子，主相机的 CullingMask 也含 UI 层，会从另一个角度再画一遍，叠成发白的虚影。
             if (Camera.main != null)
                 Camera.main.cullingMask &= ~uiCamera.cullingMask;
         }
@@ -102,7 +115,6 @@ namespace LetsPiu.UI
             if (!BindSync())
                 return;
 
-            // 有比分牌场次（真机或任一模式战斗 Mock）时用 MQTT 数据；否则定位 Mock 下用 HUD 演示假数据。
             bool hasMatch = ScoreCardRuntime.ScoreCardMatchDataHub.Current != null
                             || ScoreCardRuntime.ScoreCardModeMockHost.IsRunning;
             UwbHudData.UseMock = !hasMatch && IsMockSource();
@@ -197,25 +209,230 @@ namespace LetsPiu.UI
             m_Red.Sort(CompareByNumber);
             m_Blue.Sort(CompareByNumber);
 
-            FillCards(redCards, m_Red);
-            FillCards(blueCards, m_Blue);
+            UpdateRosterMode(m_Players.Count);
+            int slots = UwbHudRosterModeUtil.SlotsPerTeam(m_Mode);
+            FillCards(redCards, m_Red, slots);
+            FillCards(blueCards, m_Blue, slots);
         }
 
-        static void FillCards(UwbPlayerCardItem[] cards, List<UwbHudPlayer> players)
+        void UpdateRosterMode(int rosterCount)
         {
+            if (UwbHudData.RosterLayoutEpoch != m_SeenRosterEpoch)
+            {
+                m_SeenRosterEpoch = UwbHudData.RosterLayoutEpoch;
+                m_ModeLocked = false;
+                m_PeakRoster = 0;
+                m_OpenTime = Time.time;
+
+                // 已知新一场人数时立刻按它选档并锁定，不用等玩家重建出来
+                int expected = UwbHudData.ExpectedRoster;
+                if (expected > 0)
+                {
+                    m_PeakRoster = expected;
+                    m_ModeLocked = true;
+                    UwbHudRosterMode expectedMode = UwbHudRosterModeUtil.FromCount(expected);
+                    if (expectedMode != m_Mode || !m_BaselineReady)
+                    {
+                        m_Mode = expectedMode;
+                        ApplyRosterLayout(expectedMode);
+                    }
+
+                    return;
+                }
+            }
+
+            if (rosterCount > m_PeakRoster)
+                m_PeakRoster = rosterCount;
+
+            if (m_ModeLocked)
+                return;
+
+            // 人数还在涨时按峰值选档；达到该档容量或开局数秒后锁定，避免中途跳档。
+            UwbHudRosterMode mode = UwbHudRosterModeUtil.FromCount(Mathf.Max(rosterCount, m_PeakRoster));
+            if (mode != m_Mode || !m_BaselineReady)
+            {
+                m_Mode = mode;
+                ApplyRosterLayout(mode);
+            }
+
+            int need = UwbHudRosterModeUtil.SlotsPerTeam(mode) * 2;
+            if (m_PeakRoster >= need || (rosterCount > 0 && Time.time - m_OpenTime > 3f && m_PeakRoster >= 8))
+                m_ModeLocked = true;
+        }
+
+        void CaptureBaselineIfNeeded()
+        {
+            if (m_BaselineReady)
+                return;
+            if (redCards == null || redCards.Length == 0 || redCards[0] == null)
+                return;
+
+            RectTransform r0 = redCards[0].Rect;
+            m_RedOrigin = r0.anchoredPosition;
+            m_BaseCardW = r0.sizeDelta.x;
+            m_BaseCardH = r0.sizeDelta.y;
+            m_BaseScale = r0.localScale;
+            m_BaseStep = m_BaseCardW + 6f;
+            m_RedStepSign = 1f;
+            if (redCards.Length > 1 && redCards[1] != null)
+            {
+                float dx = redCards[1].Rect.anchoredPosition.x - r0.anchoredPosition.x;
+                if (Mathf.Abs(dx) > 1f)
+                {
+                    m_BaseStep = Mathf.Abs(dx);
+                    m_RedStepSign = Mathf.Sign(dx);
+                }
+            }
+
+            m_BlueStepSign = -1f;
+            if (blueCards != null && blueCards.Length > 0 && blueCards[0] != null)
+            {
+                m_BlueOrigin = blueCards[0].Rect.anchoredPosition;
+                if (blueCards.Length > 1 && blueCards[1] != null)
+                {
+                    float bdx = blueCards[1].Rect.anchoredPosition.x - m_BlueOrigin.x;
+                    if (Mathf.Abs(bdx) > 1f)
+                        m_BlueStepSign = Mathf.Sign(bdx);
+                }
+            }
+            else
+                m_BlueOrigin = m_RedOrigin;
+
+            m_BaselineReady = true;
+        }
+
+        void ApplyRosterLayout(UwbHudRosterMode mode)
+        {
+            CaptureBaselineIfNeeded();
+            if (!m_BaselineReady)
+                return;
+
+            int slots = UwbHudRosterModeUtil.SlotsPerTeam(mode);
+            EnsureTeamCards(ref redCards, slots, true);
+            EnsureTeamCards(ref blueCards, slots, false);
+
+            int cols;
+            int rows;
+            float cardW;
+            float cardH;
+            float step;
+            float rowStep = 0f;
+            float visualW = m_BaseCardW * m_BaseScale.x;
+            float visualH = m_BaseCardH * m_BaseScale.y;
+            if (mode == UwbHudRosterMode.Ten)
+            {
+                cols = 5;
+                rows = 1;
+                cardW = m_BaseCardW;
+                cardH = m_BaseCardH;
+                step = m_BaseStep;
+            }
+            else
+            {
+                // 在 10 人档整行宽度内排满 10 列：9 个列间距 + 一张卡宽 = 整行宽度
+                cols = 10;
+                rows = mode == UwbHudRosterMode.Forty ? 2 : 1;
+                float totalW = m_BaseStep * 4f + visualW;
+                step = (totalW + CardGap) / cols;
+                cardW = (step - CardGap) / m_BaseScale.x;
+                cardH = rows == 1 ? m_BaseCardH : (m_BaseCardH - CardGap / m_BaseScale.y) * 0.5f;
+                rowStep = cardH * m_BaseScale.y + CardGap;
+            }
+
+            LayoutTeam(redCards, slots, cols, rows, m_RedOrigin, step * m_RedStepSign, cardW, cardH, rowStep, mode);
+            LayoutTeam(blueCards, slots, cols, rows, m_BlueOrigin, step * m_BlueStepSign, cardW, cardH, rowStep, mode);
+
+            foreach (UwbPlayerTagItem tag in m_Tags.Values)
+                tag.ApplyRosterDensity(mode);
+        }
+
+        void EnsureTeamCards(ref UwbPlayerCardItem[] cards, int needed, bool isRed)
+        {
+            if (cards == null || cards.Length == 0 || cards[0] == null)
+                return;
+
+            var list = new List<UwbPlayerCardItem>(Mathf.Max(cards.Length, needed));
             for (int i = 0; i < cards.Length; i++)
             {
-                if (i < players.Count && i < SlotsPerTeam)
+                if (cards[i] != null)
+                    list.Add(cards[i]);
+            }
+
+            UwbPlayerCardItem template = list[0];
+            Transform parent = template.transform.parent;
+            while (list.Count < needed)
+            {
+                UwbPlayerCardItem clone = Instantiate(template, parent);
+                clone.name = (isRed ? "RedCard_" : "BlueCard_") + (list.Count + 1);
+                clone.gameObject.SetActive(true);
+                list.Add(clone);
+            }
+
+            for (int i = 0; i < list.Count; i++)
+                list[i].gameObject.SetActive(i < needed);
+
+            cards = list.ToArray();
+        }
+
+        void LayoutTeam(
+            UwbPlayerCardItem[] cards,
+            int slots,
+            int cols,
+            int rows,
+            Vector2 origin,
+            float step,
+            float cardW,
+            float cardH,
+            float rowStep,
+            UwbHudRosterMode mode)
+        {
+            bool keepEmpty = mode == UwbHudRosterMode.Ten;
+            for (int i = 0; i < cards.Length; i++)
+            {
+                UwbPlayerCardItem card = cards[i];
+                if (card == null)
+                    continue;
+
+                if (i >= slots)
+                {
+                    card.gameObject.SetActive(false);
+                    continue;
+                }
+
+                int row = rows <= 1 ? 0 : i / cols;
+                int col = rows <= 1 ? i : i % cols;
+                RectTransform rt = card.Rect;
+                rt.localScale = m_BaseScale;
+                rt.sizeDelta = new Vector2(cardW, cardH);
+                // 锚点按 BottomCenter：y 向上增大，第一行在最上面，origin 是最下面一行
+                rt.anchoredPosition = new Vector2(
+                    origin.x + col * step,
+                    origin.y + (rows - 1 - row) * rowStep);
+                card.ApplyRosterDensity(mode, keepEmpty, cardW, cardH);
+            }
+        }
+
+        static void FillCards(UwbPlayerCardItem[] cards, List<UwbHudPlayer> players, int slots)
+        {
+            if (cards == null)
+                return;
+            for (int i = 0; i < cards.Length; i++)
+            {
+                if (cards[i] == null)
+                    continue;
+                if (i < slots && i < players.Count)
                     cards[i].Apply(players[i]);
-                else
+                else if (i < slots)
                     cards[i].SetEmpty();
+                else
+                    cards[i].gameObject.SetActive(false);
             }
         }
 
         void RefreshTags()
         {
             Camera cam = GetCamera();
-            if (cam == null || tagLayer == null)
+            if (cam == null || tagLayer == null || tagTemplate == null)
                 return;
 
             Camera uiCam = GetUiCamera();
@@ -227,6 +444,7 @@ namespace LetsPiu.UI
                     tag = Instantiate(tagTemplate, tagLayer);
                     tag.name = "Tag_" + pair.Key;
                     tag.gameObject.SetActive(true);
+                    tag.ApplyRosterDensity(m_Mode);
                     m_Tags.Add(pair.Key, tag);
                     m_TagOrderDirty = true;
                 }
@@ -248,7 +466,6 @@ namespace LetsPiu.UI
                 ReorderTags();
         }
 
-        // 装备序号小的标牌画在上层，整张标牌一起排序，不随距离、血量变化，避免闪烁。
         void ReorderTags()
         {
             m_TagOrderDirty = false;
