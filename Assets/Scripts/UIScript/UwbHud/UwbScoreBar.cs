@@ -76,6 +76,31 @@ namespace LetsPiu.UI
             int uiLayer = LayerMask.NameToLayer("UI");
             foreach (Transform t in GetComponentsInChildren<Transform>(true))
                 t.gameObject.layer = uiLayer;
+
+            m_LogScreen = new Vector2Int(Screen.width, Screen.height);
+            LogScaleState("Awake");
+        }
+
+        // 排查 4K 下比分条特效异常：记录各时刻的分辨率、画布缩放、特效缩放
+        Vector2Int m_LogScreen;
+        float m_LogTimer;
+        bool m_LogDelayed;
+
+        void LogScaleState(string reason)
+        {
+            Canvas root = m_PanelCanvas != null ? m_PanelCanvas.rootCanvas : null;
+            var sb = new System.Text.StringBuilder();
+            sb.Append($"[UwbScoreBar] {reason} screen={Screen.width}x{Screen.height} fullscreen={Screen.fullScreen} ");
+            sb.Append($"rootCanvas={(root != null ? root.name : "null")} rootScale={(root != null ? root.transform.localScale.x : 0f):0.#####} ");
+            sb.Append($"rootRect={(root != null ? ((RectTransform)root.transform).rect.size.ToString() : "null")} ");
+            sb.Append($"barLocal={transform.localScale.x:0.#####} barLossy={transform.lossyScale.x:0.#####} ");
+            if (m_Split != null)
+                sb.Append($"splitLocal={m_Split.transform.localScale.x:0.#####} splitLossy={m_Split.transform.lossyScale.x:0.#####} splitActive={m_Split.activeInHierarchy} ");
+            UIParticle[] particles = GetComponentsInChildren<UIParticle>(true);
+            sb.Append($"uiParticles={particles.Length}");
+            for (int i = 0; i < particles.Length && i < 6; i++)
+                sb.Append($" [{particles[i].name} scale3D={particles[i].scale3D.x:0.#####} active={particles[i].gameObject.activeInHierarchy}]");
+            Debug.Log(sb.ToString());
         }
 
         GameObject Find(string path)
@@ -93,6 +118,18 @@ namespace LetsPiu.UI
         void LateUpdate()
         {
             ApplyCanvasOrder();
+
+            m_LogTimer += Time.unscaledDeltaTime;
+            if (!m_LogDelayed && m_LogTimer > 3f)
+            {
+                m_LogDelayed = true;
+                LogScaleState("After3s");
+            }
+            if (Screen.width != m_LogScreen.x || Screen.height != m_LogScreen.y)
+            {
+                m_LogScreen = new Vector2Int(Screen.width, Screen.height);
+                LogScaleState("ScreenChanged");
+            }
         }
 
         // 层级自下而上：红蓝常态/高亮特效 → 进度条 Canvas → 顶部 Canvas → 分割线 → 升级特效。
