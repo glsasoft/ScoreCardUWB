@@ -91,16 +91,8 @@ namespace LetsPiu.Common.Network.Model.ScoreCard
                 return false;
             }
 
-            bool updated = TryMergePartial(match, shooterPartial);
-
-            var shooter = FindPlayer(match, shooterPartial.ResolvePlayerId());
-            if (shooter != null && multiKillEvent.comboCount > 0)
-            {
-                shooter.killNum = multiKillEvent.comboCount;
-                updated = true;
-            }
-
-            return updated;
+            // killNum 是累计击杀数（服务端连杀事件里的 shooter 已带最新值），连杀数只在 comboCount 里，不能写进 killNum。
+            return TryMergePartial(match, shooterPartial);
         }
 
         public static bool TryMergePartial(ScoreCardMatchData match, ScoreCardPlayerPartial partial)

@@ -103,6 +103,11 @@ namespace LetsPiu.UI.ScoreCardRuntime
 
         void Dispatch(ScoreCardCommand cmd)
         {
+            // 服务端对首杀、连杀、BUFF 夺取会先发一条给语音播报用的 NOTICE，再发带完整数据的 EVENT；
+            // 数据与特效只认 EVENT，两条都处理会把同一件事触发两次
+            if (string.Equals(cmd.category, ScoreCardCommandCategory.Notice, StringComparison.OrdinalIgnoreCase))
+                return;
+
             string sub = cmd.subCode;
             if (string.Equals(sub, ScoreCardSubCode.S4, StringComparison.OrdinalIgnoreCase)
                 || string.Equals(sub, ScoreCardSubCode.BeginPlay, StringComparison.OrdinalIgnoreCase)

@@ -21,6 +21,8 @@ namespace LetsPiu.UI.ScoreCardRuntime
         const float ReviveCdSec = 8f;
         const int MatchDurationMin = 5;
         const int MaxHp = 100;
+        const string HeadImgUrl =
+            "https://qmlz-smallprograme-1305354732.cos.ap-shanghai.myqcloud.com/qmlz-customer/游客.png";
         const string LogTag = "ScoreCardScoreModeMock";
 
         public static ScoreCardScoreModeMock Current { get; private set; }
@@ -230,7 +232,7 @@ namespace LetsPiu.UI.ScoreCardRuntime
             for (int i = 0; i < _blue.Count; i++)
                 _blood[_blue[i]] = MaxHp;
 
-            Fire(ScoreCardMockMqtt.BuildPage(ScoreCardSubCode.S4, BuildBaseData(aliveAll: true)));
+            Fire(ScoreCardMockMqtt.BuildPage(ScoreCardSubCode.S4, BuildBaseData(aliveAll: true), withServerTimestamp: true));
             Debug.Log(
                 $"[{LogTag}] match begin {MatchDurationMin}min roster={roster} " +
                 $"players={_red.Count}+{_blue.Count} score=0/0");
@@ -238,7 +240,8 @@ namespace LetsPiu.UI.ScoreCardRuntime
 
         void PushScoreSnapshot()
         {
-            Fire(ScoreCardMockMqtt.BuildPage(ScoreCardSubCode.RefreshData, BuildBaseData(aliveAll: false)));
+            // REFRESH_DATA 在 ScoreCardUnity 里是 EVENT（非切屏），只有 S4 是 PAGE
+            Fire(ScoreCardMockMqtt.BuildEvent(ScoreCardSubCode.RefreshData, BuildBaseData(aliveAll: false)));
         }
 
         void AddTeamScore(bool redTeam, int delta)
@@ -320,9 +323,9 @@ namespace LetsPiu.UI.ScoreCardRuntime
             bool red = _nextBuffRed;
             _nextBuffRed = !_nextBuffRed;
             _buffHolders[id] = red;
-            Fire(ScoreCardMockMqtt.BuildEvent(
-                red ? ScoreCardSubCode.RedBuffCaptured : ScoreCardSubCode.BlueBuffCaptured,
-                "{\"level\":1,\"killer\":{\"id\":" + id + "}}"));
+            string sub = red ? ScoreCardSubCode.RedBuffCaptured : ScoreCardSubCode.BlueBuffCaptured;
+            Fire(ScoreCardMockMqtt.BuildNotice(sub, "{\"level\":1,\"mainPlayer\":" + BuildNoticePlayer(id) + "}"));
+            Fire(ScoreCardMockMqtt.BuildEvent(sub, "{\"level\":1,\"killer\":" + BuildPlayerPartial(id, BloodOf(id)) + "}"));
         }
 
         // 蓝 BUFF（回复）持有者每秒回血，下一次快照里血量上涨
@@ -366,16 +369,23 @@ namespace LetsPiu.UI.ScoreCardRuntime
                 if (!_firstBloodSent)
                 {
                     _firstBloodSent = true;
+                    Fire(ScoreCardMockMqtt.BuildNotice(
+                        ScoreCardSubCode.FirstBlood,
+                        "{\"level\":1,\"mainPlayer\":" + BuildNoticePlayer(killerId) +
+                        ",\"subPlayer\":" + BuildNoticePlayer(victimId) + "}"));
                     Fire(ScoreCardMockMqtt.BuildEvent(
                         ScoreCardSubCode.FirstBlood,
-                        "{\"level\":1,\"killer\":{\"id\":" + killerId + "},\"victim\":{\"id\":" + victimId + "}}"));
+                        "{\"level\":1,\"killer\":" + BuildNoticePlayer(killerId) +
+                        ",\"victim\":" + BuildNoticePlayer(victimId) + "}"));
                 }
                 await UniTask.Delay(TimeSpan.FromSeconds(0.25f), cancellationToken: ct);
                 if (Random.value < 0.4f)
                 {
+                    int combo = Random.Range(2, 5);
+                    Fire(ScoreCardMockMqtt.BuildNotice(
+                        ScoreCardSubCode.MultiKill, BuildMultiKillNotice(killerId, victimId, combo)));
                     Fire(ScoreCardMockMqtt.BuildEvent(
-                        ScoreCardSubCode.MultiKill,
-                        BuildMultiKill(killerId, Random.Range(2, 5))));
+                        ScoreCardSubCode.MultiKill, BuildMultiKillEvent(killerId, combo)));
                 }
 
                 await WaitHomeThenReviveAsync(victimId, ct);
@@ -398,9 +408,10 @@ namespace LetsPiu.UI.ScoreCardRuntime
                 // 炮杀：受害者对侧得分
                 bool victimIsRed = _red.Contains(victimId);
                 AddTeamScore(!victimIsRed, 12);
+                IncStat(_deaths, victimId);
                 Fire(ScoreCardMockMqtt.BuildEvent(
                     ScoreCardSubCode.TowerKill,
-                    "{\"victim\":{\"id\":" + victimId + ",\"blood\":0}}"));
+                    "{\"victim\":" + BuildPlayerPartial(victimId, 0) + "}"));
                 PushScoreSnapshot();
                 await WaitHomeThenReviveAsync(victimId, ct);
             }
@@ -431,7 +442,7 @@ namespace LetsPiu.UI.ScoreCardRuntime
             SetBlood(victimId, MaxHp);
             Fire(ScoreCardMockMqtt.BuildEvent(
                 ScoreCardSubCode.PlayerRevive,
-                "{\"player\":{\"id\":" + victimId + ",\"blood\":100}}"));
+                "{\"player\":" + BuildPlayerPartial(victimId, MaxHp) + "}"));
             await UniTask.Delay(TimeSpan.FromSeconds(0.6f), cancellationToken: ct);
         }
 
@@ -561,23 +572,30 @@ namespace LetsPiu.UI.ScoreCardRuntime
             return true;
         }
 
+        // 字段集合对齐 ScoreCardUnity 的 ScoreCardMatchMockBuilder.BuildBaseDataJson / BuildPlayerJson。
+        // 刻意保留 beginTime：Normalizer 只认 beginTime 字符串，缺了倒计时一直 --:--。
+        // 开始时间必须固定为本场开局时刻，每次快照取 Now 会让倒计时被反复重置回 5:00
         string BuildBaseData(bool aliveAll)
         {
-            // Normalizer 只认 beginTime 字符串，不认 startTime 数字——缺 beginTime 则倒计时一直 --:--。
-            // 开始时间必须固定为本场开局时刻，每次快照取 Now 会让倒计时被反复重置回 5:00
             string begin = DateTimeOffset.FromUnixTimeMilliseconds(_matchStartMs).LocalDateTime
                 .ToString("yyyy-MM-dd HH:mm:ss");
-            var sb = new StringBuilder(2048);
+            var sb = new StringBuilder(4096);
             sb.Append("{\"baseData\":{");
-            sb.Append("\"playId\":\"UWB_SCORE_MOCK\",\"playName\":\"UWB积分Mock\",");
+            sb.Append("\"storeName\":\"6s测试门店\",");
             sb.Append("\"modeType\":\"").Append(ScoreCardGameMode.Score).Append("\",");
             sb.Append("\"modeName\":\"积分模式\",");
-            sb.Append("\"matchDuration\":").Append(MatchDurationMin).Append(',');
             sb.Append("\"reviveCd\":8,");
+            sb.Append("\"playId\":\"UWB_SCORE_MOCK\",");
+            sb.Append("\"placeCode\":\"1\",");
+            sb.Append("\"playName\":\"UWB积分Mock\",");
+            sb.Append("\"playStatus\":0,");
             sb.Append("\"beginTime\":\"").Append(begin).Append("\",");
-            sb.Append("\"team1\":{\"name\":\"红队\",\"score\":").Append(_redScore).Append(",\"players\":[");
+            sb.Append("\"matchDuration\":").Append(MatchDurationMin).Append(',');
+            sb.Append("\"team1\":{\"teamType\":0,\"name\":\"红队\",\"score\":").Append(_redScore)
+              .Append(",\"resultStatus\":0,\"players\":[");
             AppendPlayers(sb, _red, "0", aliveAll);
-            sb.Append("]},\"team2\":{\"name\":\"蓝队\",\"score\":").Append(_blueScore).Append(",\"players\":[");
+            sb.Append("]},\"team2\":{\"teamType\":1,\"name\":\"蓝队\",\"score\":").Append(_blueScore)
+              .Append(",\"resultStatus\":0,\"players\":[");
             AppendPlayers(sb, _blue, "1", aliveAll);
             sb.Append("]}}}");
             return sb.ToString();
@@ -590,16 +608,51 @@ namespace LetsPiu.UI.ScoreCardRuntime
                 if (i > 0) sb.Append(',');
                 int id = ids[i];
                 int blood = aliveAll ? MaxHp : BloodOf(id);
-                sb.Append("{\"id\":").Append(id);
-                sb.Append(",\"vestId\":").Append(id);
-                sb.Append(",\"customerName\":\"P").Append(id).Append('"');
-                sb.Append(",\"teamType\":\"").Append(teamType).Append('"');
-                int kills = _kills.TryGetValue(id, out int k) ? k : 0;
-                int deaths = _deaths.TryGetValue(id, out int d) ? d : 0;
-                sb.Append(",\"blood\":").Append(blood).Append(",\"initBlood\":").Append(MaxHp).Append(',');
-                sb.Append("\"killNum\":").Append(kills);
-                sb.Append(",\"beKillNum\":").Append(deaths).Append(",\"hitNum\":0}");
+                int kills = StatOf(_kills, id);
+                int deaths = StatOf(_deaths, id);
+                sb.Append('{');
+                sb.Append("\"id\":").Append(id).Append(',');
+                sb.Append("\"customerName\":\"P").Append(id).Append("\",");
+                sb.Append("\"vestId\":").Append(id).Append(',');
+                sb.Append("\"killNum\":").Append(kills).Append(',');
+                sb.Append("\"hitNum\":0,");
+                sb.Append("\"beKillNum\":").Append(deaths).Append(',');
+                sb.Append("\"assistNum\":0,");
+                sb.Append("\"topKillNum\":").Append(kills).Append(',');
+                sb.Append("\"initBullet\":15,");
+                sb.Append("\"type\":\"0\",");
+                sb.Append("\"blood\":").Append(blood).Append(',');
+                sb.Append("\"matchScore\":").Append(kills * 10).Append(',');
+                sb.Append("\"killFriendNum\":0,");
+                sb.Append("\"teamType\":\"").Append(teamType).Append("\",");
+                sb.Append("\"bullet\":15,");
+                sb.Append("\"mvpType\":0,");
+                sb.Append("\"gmtCreate\":\"").Append(JoinTimeOf(id)).Append("\",");
+                sb.Append("\"wxHeadImgUrl\":\"").Append(HeadImgUrl).Append("\"");
+                sb.Append('}');
             }
+        }
+
+        static string JoinTimeOf(int id)
+        {
+            return new DateTime(2026, 5, 20, 12, 0, 0).AddSeconds(id).ToString("yyyy-MM-dd HH:mm:ss");
+        }
+
+        static int StatOf(Dictionary<int, int> map, int id) => map.TryGetValue(id, out int v) ? v : 0;
+
+        // TOWER_KILL.victim / PLAYER_REVIVE.player / BUFF_CAPTURED.killer：字段与 ScoreCardUnity 的 BuildReviveVictimJson（对齐真服）一致，真服用 name 而不是 customerName
+        string BuildPlayerPartial(int id, int blood)
+        {
+            int kills = StatOf(_kills, id);
+            return "{\"matchScore\":" + kills * 10 + ",\"killNum\":" + kills + ",\"assistNum\":0" +
+                   ",\"name\":\"P" + id + "\",\"beKillNum\":" + StatOf(_deaths, id) +
+                   ",\"vestId\":" + id + ",\"id\":" + id + ",\"blood\":" + blood + "}";
+        }
+
+        // NOTICE 里的玩家只带 name / vestId / id（见 ScoreCardBuffCapturedEventData 的注释）
+        static string BuildNoticePlayer(int id)
+        {
+            return "{\"name\":\"P" + id + "\",\"vestId\":" + id + ",\"id\":" + id + "}";
         }
 
         static string BuildShoot(
@@ -623,9 +676,20 @@ namespace LetsPiu.UI.ScoreCardRuntime
             return sb.ToString();
         }
 
-        static string BuildMultiKill(int shooterId, int combo)
+        // 额外加分数值取 ScoreCardUnity 按服务端实测写的：2 连 3 分、3 连 5 分、4 连 7 分、5 连及以上 10 分
+        static int ExtraScoreOf(int combo) => combo >= 5 ? 10 : combo * 2 - 1;
+
+        static string BuildMultiKillNotice(int shooterId, int victimId, int combo)
         {
-            return "{\"comboCount\":" + combo + ",\"shooter\":{\"id\":" + shooterId + "}}";
+            return "{\"comboCount\":" + combo + ",\"extraScore\":" + ExtraScoreOf(combo) +
+                   ",\"mainPlayer\":" + BuildNoticePlayer(shooterId) +
+                   ",\"subPlayer\":" + BuildNoticePlayer(victimId) + "}";
+        }
+
+        static string BuildMultiKillEvent(int shooterId, int combo)
+        {
+            return "{\"comboCount\":" + combo + ",\"extraScore\":" + ExtraScoreOf(combo) +
+                   ",\"shooter\":" + BuildNoticePlayer(shooterId) + "}";
         }
 
         static void Fire(string json) => ScoreCardMockMqtt.Fire(json, LogTag);

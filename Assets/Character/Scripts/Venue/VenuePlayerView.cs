@@ -20,6 +20,7 @@ namespace LetsPiu.Character
         // Move 状态的播放倍率。跑步片段一圈 0.667 秒，混合树里又乘了 0.5，倍率 1 时每秒只有 0.75 圈，看起来像贴地滑行；
         // 取 3 约每秒 2.25 圈，接近正常跑步步频，也是改动前 Mock 平均移速下的实际效果
         const float RunPlaybackSpeed = 3f;
+        const float ShootHoldSec = 0.3f;
         const float RunStartRatio = 0.15f;
         const float RunStopRatio = 0.08f;
         static readonly Color TeamBlue = new Color(0.25f, 0.55f, 1f);
@@ -41,6 +42,10 @@ namespace LetsPiu.Character
         float _lastMoveSpeed;
         int _dieState;
         int _idleState;
+        int _shootState;
+        int _shootRunState;
+        int _reviveState;
+        float _shootUntil;
         bool _dead;
         bool _moving;
         int _team = int.MinValue;
@@ -92,6 +97,9 @@ namespace LetsPiu.Character
                 _hasMoveSpeed = HasParameter("MoveSpeed");
                 _dieState = FindState("Die");
                 _idleState = FindState("Idle");
+                _shootState = FindState("Shoot");
+                _shootRunState = FindState("ShootRun");
+                _reviveState = FindState("Revive");
             }
 
             if (_tintTarget != null)
@@ -174,6 +182,7 @@ namespace LetsPiu.Character
         /// <summary>曳光朝向目标点（通常为被击中玩家）。</summary>
         public void FireToward(Vector3 worldTarget)
         {
+            PlayShootAnimation();
             if (_tracer == null)
                 return;
             Vector3 origin = transform.TransformPoint(new Vector3(0f, 1.35f, 0.25f));
@@ -187,6 +196,18 @@ namespace LetsPiu.Character
             _tracer.SetPosition(1, origin + dir * 18f);
             _tracer.enabled = true;
             _tracerUntil = Time.time + 0.12f;
+        }
+
+        // 射击动作是全身动作：在跑用小跑射击，否则用站立射击；到时间由 ApplyAnimator 切回 Idle，再由 MoveSpeed 转进 Move。
+        void PlayShootAnimation()
+        {
+            if (_animator == null || _dead)
+                return;
+            int state = _moving && _shootRunState != 0 ? _shootRunState : _shootState;
+            if (state == 0)
+                return;
+            _animator.CrossFade(state, 0.05f, 0);
+            _shootUntil = Time.time + ShootHoldSec;
         }
 
         void LateUpdate()
@@ -227,14 +248,25 @@ namespace LetsPiu.Character
                 if (!_dead && _dieState != 0)
                     _animator.CrossFade(_dieState, 0.1f, 0);
                 _dead = true;
+                _shootUntil = 0f;
                 if (_hasMoveSpeed && !Mathf.Approximately(0, _lastMoveSpeed))
                     _animator.SetFloat(MoveSpeedId, 0f);
                 _lastMoveSpeed = 0f;
                 return;
             }
 
-            if (_dead && _idleState != 0)
-                _animator.CrossFade(_idleState, 0.1f, 0);
+            if (_dead)
+            {
+                int reviveTarget = _reviveState != 0 ? _reviveState : _idleState;
+                if (reviveTarget != 0)
+                    _animator.CrossFade(reviveTarget, 0.1f, 0);
+            }
+            else if (_shootUntil > 0f && Time.time >= _shootUntil)
+            {
+                _shootUntil = 0f;
+                if (_idleState != 0)
+                    _animator.CrossFade(_idleState, 0.1f, 0);
+            }
             _dead = false;
 
             // 只播一种跑步，不随速度改变步频：用门槛判断「在跑/不在跑」，在跑时参数固定。
