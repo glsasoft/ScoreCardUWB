@@ -105,7 +105,7 @@ namespace LetsPiu.Character
             }
 
             BuildStatus(statusHeight, worldUiScale);
-            BuildTracer();
+            //BuildTracer();
         }
 
         public void SetIdentity(string playerName, int team)
@@ -117,7 +117,7 @@ namespace LetsPiu.Character
                 Color color = team == 0 ? TeamBlue : TeamRed;
                 SetColor(_bodyMaterial, color);
                 SetColor(_tracerMaterial, color);
-                _fillImage.color = color;
+                if (_fillImage) _fillImage.color = color;
             }
             _shownHp = int.MinValue;
         }
@@ -189,20 +189,20 @@ namespace LetsPiu.Character
             _tracerUntil = Time.time + 0.12f;
         }
 
-        void LateUpdate()
-        {
-            Camera cam = Camera.main;
-            if (cam != null && _status != null)
-            {
-                //Vector3 toCam = cam.transform.position - _status.position;
-                //if (toCam.sqrMagnitude > 0.001f)
-                //    _status.rotation = Quaternion.LookRotation(-toCam, Vector3.up);
-                _status.transform.forward = cam.transform.forward;
-            }
+        //void LateUpdate()
+        //{
+        //    Camera cam = Camera.main;
+        //    if (cam != null && _status != null)
+        //    {
+        //        //Vector3 toCam = cam.transform.position - _status.position;
+        //        //if (toCam.sqrMagnitude > 0.001f)
+        //        //    _status.rotation = Quaternion.LookRotation(-toCam, Vector3.up);
+        //        _status.transform.forward = cam.transform.forward;
+        //    }
 
-            if (_tracer != null && _tracer.enabled && Time.time >= _tracerUntil)
-                _tracer.enabled = false;
-        }
+        //    if (_tracer != null && _tracer.enabled && Time.time >= _tracerUntil)
+        //        _tracer.enabled = false;
+        //}
 
         void OnDestroy()
         {
@@ -274,6 +274,7 @@ namespace LetsPiu.Character
             _status.SetParent(transform, false);
             _status.localPosition = new Vector3(0f, height, 0f);
             _status.localScale = Vector3.one * worldUiScale / transform.lossyScale.x;
+            return;
 
             var back = new GameObject("HpBack", typeof(RectTransform));
             back.AddComponent<Image>().color = Color.gray;
