@@ -26,6 +26,23 @@ namespace LetsPiu.UI
         public RectTransform Rect => (RectTransform)transform;
         public int Number { get; private set; } = int.MinValue;
 
+        struct Snap
+        {
+            public RectTransform rt;
+            public Vector2 pos;
+            public Vector2 size;
+            public TMP_Text text;
+            public TextAlignmentOptions align;
+        }
+
+        const float CompactW = 112f;
+        const float CompactH = 34f;
+
+        Snap[] m_Base;
+        Vector2 m_RootSize;
+        float m_FullWidth;
+        float m_LeftMargin;
+
         int m_Hp = int.MinValue;
         int m_MaxHp;
         string m_Name;
@@ -77,8 +94,88 @@ namespace LetsPiu.UI
                 return;
 
             Vector2 size = hpFill.sizeDelta;
-            size.x = hpLeftMargin + hpFullWidth * ratio;
+            size.x = (m_Base == null ? hpLeftMargin : m_LeftMargin) + (m_Base == null ? hpFullWidth : m_FullWidth) * ratio;
             hpFill.sizeDelta = size;
+        }
+
+        static readonly string[] ChildNames = { "Bg", "Border", "Name", "HpTrack", "HpFill", "Avatar", "Badge", "Number" };
+
+        /// <summary>10/20 人档用完整标牌（头像、编号压头像下缘、姓名、血条）；40 人档只留姓名与血条。</summary>
+        public void ApplyRosterDensity(UwbHudRosterMode mode)
+        {
+            if (m_Base == null)
+            {
+                m_Base = new Snap[ChildNames.Length];
+                for (int i = 0; i < ChildNames.Length; i++)
+                {
+                    Transform t = transform.Find(ChildNames[i]);
+                    if (t == null)
+                        continue;
+                    var rt = (RectTransform)t;
+                    m_Base[i] = new Snap
+                    {
+                        rt = rt,
+                        pos = rt.anchoredPosition,
+                        size = rt.sizeDelta,
+                        text = t.GetComponent<TMP_Text>(),
+                    };
+                    if (m_Base[i].text != null)
+                        m_Base[i].align = m_Base[i].text.alignment;
+                }
+
+                m_RootSize = Rect.sizeDelta;
+                m_FullWidth = hpFullWidth;
+                m_LeftMargin = hpLeftMargin;
+            }
+
+            bool compact = mode == UwbHudRosterMode.Forty;
+            for (int i = 0; i < m_Base.Length; i++)
+            {
+                Snap s = m_Base[i];
+                if (s.rt == null)
+                    continue;
+                s.rt.anchoredPosition = s.pos;
+                s.rt.sizeDelta = s.size;
+                if (s.text != null)
+                    s.text.alignment = s.align;
+            }
+
+            Rect.sizeDelta = m_RootSize;
+            m_FullWidth = hpFullWidth;
+            SetShown(5, !compact);
+            SetShown(6, !compact);
+            SetShown(7, !compact);
+
+            if (compact)
+            {
+                Rect.sizeDelta = new Vector2(CompactW, CompactH);
+                Place(0, 0f, 0f, CompactW, CompactH);
+                Place(1, 0f, 0f, CompactW, CompactH);
+                Place(2, 6f, 0f, CompactW - 12f, 22f);
+                if (m_Base[2].text != null)
+                    m_Base[2].text.alignment = TextAlignmentOptions.Center;
+                float trackW = CompactW - 16f;
+                Place(3, 8f, 22f, trackW, m_Base[3].size.y);
+                Place(4, 8f - hpLeftMargin, 22f, m_Base[4].size.x, m_Base[4].size.y);
+                m_FullWidth = trackW + (hpFullWidth - m_Base[3].size.x);
+            }
+
+            m_Hp = int.MinValue;
+        }
+
+        void SetShown(int i, bool shown)
+        {
+            if (m_Base[i].rt != null)
+                m_Base[i].rt.gameObject.SetActive(shown);
+        }
+
+        // 局部坐标：左上角为原点，y 向下为正
+        void Place(int i, float x, float y, float w, float h)
+        {
+            if (m_Base[i].rt == null)
+                return;
+            m_Base[i].rt.anchoredPosition = new Vector2(x, -y);
+            m_Base[i].rt.sizeDelta = new Vector2(w, h);
         }
     }
 }

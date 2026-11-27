@@ -5,6 +5,7 @@ using LetsPiu.Main.Common.Scripts;
 using LetsPiu.UI.UIScript.GameScripts.Common.UI;
 using UnityEngine;
 using LetsPiu.Base.BaseScripts.Define.ModelDefine.Http.Device;
+using LetsPiu;
 
 namespace LetsPiu.UI.UIScript.LoginScripts.Logic
 {
@@ -42,7 +43,7 @@ namespace LetsPiu.UI.UIScript.LoginScripts.Logic
             ScoreCardTestDevicePresets.ClearRegisterRequested -= ClearRegisterInfoAndReturnToLogin;
             ScoreCardTestDevicePresets.ClearRegisterRequested += ClearRegisterInfoAndReturnToLogin;
         }
-        
+
         /// <summary>
         /// 检查当前本地缓存的注册设备信息是否有效
         /// </summary>
@@ -71,11 +72,13 @@ namespace LetsPiu.UI.UIScript.LoginScripts.Logic
                     deviceInfo.PrintDeviceInfo("LoginPanel CheckLocalDeviceInfo 无效对象详情");
                 }
 
+                // 注册页需要可点，先收起启动进度条
+                CloseHotUpdateIfAny();
                 Debug.LogWarning("LoginPanel 将打开注册设备面板...");
                 OpenRegisterDevicePanel();
             }
         }
-        
+
         private void OpenRegisterDevicePanel()
         {
             Debug.Log("LoginPanel 打开注册设备面板...");
@@ -100,6 +103,7 @@ namespace LetsPiu.UI.UIScript.LoginScripts.Logic
         /// </summary>
         public static void ClearRegisterInfoAndReturnToLogin()
         {
+            SceneLoadMgr.S.ResetHallEntered();
             AppStateManager.Instance.DeviceInfo5S = null;
             MqttConnector.Instance.Disconnect();
             UIModule.S.OpenPanel(UIDefine.UIID.LoginPanel, _ =>
@@ -110,25 +114,20 @@ namespace LetsPiu.UI.UIScript.LoginScripts.Logic
 
         private void GoToHall()
         {
-            // 进厅加载条保持原样：DefaultLoadingPanel 内同步时间 + 连接 MQTT
-            Debug.Log("LoginPanel GoToHall：设备注册/连接成功，切换 Hall 场景（DefaultLoading：时间同步+MQTT）");
-            CloseHotUpdateIfAny();
+            // 进厅加载条保持原样：DefaultLoadingPanel 内同步时间 + 连接 MQTT + 加载场景
+            Debug.Log("LoginPanel GoToHall：切换 Hall 场景（DefaultLoading：时间同步+MQTT）");
+            // 热更条由 SceneLoadMgr 在 DefaultLoading 打开后关闭，这里不提前关
             SceneLoadMgr.S.SwitchScene(SceneType.Hall);
         }
 
         static void CloseHotUpdateIfAny()
         {
-            if (UIRoot.S == null || UIRoot.S.panelRoot == null)
-                return;
-            var loadPanel = UIRoot.S.panelRoot.Find("HotUpdatePanel(Clone)");
-            if (loadPanel != null)
-                UnityEngine.Object.Destroy(loadPanel.gameObject);
+            SceneLoadMgr.CloseHotUpdateBoot();
         }
-        
+
         private void OnTVRemoteKey(RemoteKey remoteKey)
         {
             Debug.Log("LoginPanel 收到遥控器按键事件: " + remoteKey);
-            //在这里处理遥控器按键事件
         }
 
         protected override void OnEnable()

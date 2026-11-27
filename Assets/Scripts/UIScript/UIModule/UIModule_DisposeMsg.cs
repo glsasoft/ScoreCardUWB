@@ -18,6 +18,7 @@ namespace LetsPiu
             Debug.Log("UIModule RequestLoginOut 断开MQTT连接....");
             MqttConnector.Instance.Disconnect();
             Debug.Log("UIModule RequestLoginOut 清除登录数据....");
+            LetsPiu.UI.SceneLoadMgr.S.ResetHallEntered();
             this.OpenPanel(UIID.LoginPanel, a =>
             {
                 this.ResetAllPanel(uid => uid == UIID.LoginPanel);

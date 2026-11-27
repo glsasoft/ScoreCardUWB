@@ -13,11 +13,15 @@ namespace LetsPiu.Character
     [DisallowMultipleComponent]
     public class VenuePlayerView : MonoBehaviour
     {
-        static readonly int MoveXId = Animator.StringToHash("MoveX");
         static readonly int MoveZId = Animator.StringToHash("MoveZ");
         static readonly int MoveSpeedId = Animator.StringToHash("MoveSpeed");
-        static readonly float AnimationWalkSpeed = 1f;
-        static readonly float AnimationRunSpeed = 2f;
+        // 混合树里 (0,2) 是跑步，(0,1) 是走路；固定取跑步
+        const float RunBlendZ = 2f;
+        // Move 状态的播放倍率。跑步片段一圈 0.667 秒，混合树里又乘了 0.5，倍率 1 时每秒只有 0.75 圈，看起来像贴地滑行；
+        // 取 3 约每秒 2.25 圈，接近正常跑步步频，也是改动前 Mock 平均移速下的实际效果
+        const float RunPlaybackSpeed = 3f;
+        const float RunStartRatio = 0.15f;
+        const float RunStopRatio = 0.08f;
         static readonly Color TeamBlue = new Color(0.25f, 0.55f, 1f);
         static readonly Color TeamRed = new Color(1f, 0.35f, 0.3f);
 
@@ -31,15 +35,14 @@ namespace LetsPiu.Character
         Material _tracerMaterial;
         readonly List<Material> _owned = new List<Material>(4);
 
-        bool _hasMoveX;
         bool _hasMoveZ;
         bool _hasMoveSpeed;
-        float _lastMoveX;
         float _lastMoveZ;
         float _lastMoveSpeed;
         int _dieState;
         int _idleState;
         bool _dead;
+        bool _moving;
         int _team = int.MinValue;
         int _shownHp = int.MinValue;
         int _shownMax = int.MinValue;
@@ -85,7 +88,6 @@ namespace LetsPiu.Character
             {
                 _animator.applyRootMotion = false;
                 _animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
-                _hasMoveX = HasParameter("MoveX");
                 _hasMoveZ = HasParameter("MoveZ");
                 _hasMoveSpeed = HasParameter("MoveSpeed");
                 _dieState = FindState("Die");
@@ -235,27 +237,17 @@ namespace LetsPiu.Character
                 _animator.CrossFade(_idleState, 0.1f, 0);
             _dead = false;
 
+            // 只播一种跑步，不随速度改变步频：用门槛判断「在跑/不在跑」，在跑时参数固定。
+            // 起跑门槛高于停下门槛，避免定位抖动让角色在原地忽跑忽停。
             float speed = localVelocity.magnitude;
-            Vector3 aniVelocity = Vector3.zero;
-            if (speed < 0.01f)
-                speed = 0f;
-            else
-                aniVelocity = localVelocity / _gaitReferenceSpeed;
+            _moving = speed > _gaitReferenceSpeed * (_moving ? RunStopRatio : RunStartRatio);
 
-            //float t = Mathf.Exp(-4 * Time.deltaTime);
-            //float moveX = Mathf.Lerp(Mathf.Clamp(aniVelocity.x, -AnimationRunSpeed, AnimationRunSpeed), _lastMoveX, t);
-            //float moveZ = Mathf.Lerp(Mathf.Clamp(aniVelocity.z, -AnimationWalkSpeed, AnimationRunSpeed), _lastMoveZ, t);
-            //float moveSpeed = Mathf.Lerp(speed / _animator.transform.lossyScale.x, _lastMoveSpeed, t);
+            float moveZ = _moving ? RunBlendZ : 0f;
+            float moveSpeed = _moving ? RunPlaybackSpeed : 0f;
 
-            float moveX = Mathf.Clamp(aniVelocity.x, -AnimationRunSpeed, AnimationRunSpeed);
-            float moveZ = Mathf.Clamp(aniVelocity.z, -AnimationWalkSpeed, AnimationRunSpeed);
-            float moveSpeed = speed / _animator.transform.lossyScale.x;
-
-            //if (_hasMoveX && !Mathf.Approximately(moveX, _lastMoveX)) _animator.SetFloat(MoveXId, moveX);
             if (_hasMoveZ && !Mathf.Approximately(moveZ, _lastMoveZ)) _animator.SetFloat(MoveZId, moveZ);
             if (_hasMoveSpeed && !Mathf.Approximately(moveSpeed, _lastMoveSpeed)) _animator.SetFloat(MoveSpeedId, moveSpeed);
 
-            _lastMoveX = moveX;
             _lastMoveZ = moveZ;
             _lastMoveSpeed = moveSpeed;
         }

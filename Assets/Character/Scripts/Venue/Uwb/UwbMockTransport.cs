@@ -564,7 +564,35 @@ namespace LetsPiu.Character.Uwb
 
         Vector2 PickTeamSpawn(int team)
         {
-            return TeamHome(team);
+            // 出生点附近随机散开，避免全叠在同一格
+            bool topRight = team == 0;
+            if (_usePath && _grid.TryPickCornerSpawn(topRight, 2.8f, out Vector2 p))
+                return p;
+            Vector2 home = TeamHome(team);
+            return home + new Vector2(Random.Range(-2f, 2f), Random.Range(-2f, 2f));
+        }
+
+        /// <summary>新一场开始：全体立刻回到己方出生点附近并重新寻路。</summary>
+        public void ResetAllToTeamSpawns()
+        {
+            if (_agents == null)
+                return;
+            for (int i = 0; i < _agents.Length; i++)
+            {
+                int team = _agents[i].team;
+                Vector2 start = PickTeamSpawn(team);
+                _agents[i].pos = new Vector3(start.x, start.y, 1.2f);
+                _agents[i].emit = _agents[i].pos;
+                _agents[i].vel = Vector3.zero;
+                _agents[i].returningHome = false;
+                _agents[i].cutActive = false;
+                _agents[i].jumpTimer = 0f;
+                _agents[i].jumpOffset = Vector2.zero;
+                _agents[i].path.Clear();
+                _agents[i].pathIndex = 0;
+                _agents[i].pause = Random.Range(0.15f, 1.2f);
+                PlanNewGoal(ref _agents[i]);
+            }
         }
 
         void BindBattleHooks()
@@ -603,6 +631,7 @@ namespace LetsPiu.Character.Uwb
 
                 return false;
             };
+            UwbMockBattleHooks.ResetAllToTeamSpawns = ResetAllToTeamSpawns;
         }
 
         static void ClearBattleHooks()
@@ -611,6 +640,7 @@ namespace LetsPiu.Character.Uwb
             UwbMockBattleHooks.GetCannonVenueXz = null;
             UwbMockBattleHooks.GetPlayerVenueXz = null;
             UwbMockBattleHooks.IsNearHome = null;
+            UwbMockBattleHooks.ResetAllToTeamSpawns = null;
         }
 
         Vector2 RandomRectPoint()

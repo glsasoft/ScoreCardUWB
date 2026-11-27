@@ -28,11 +28,17 @@ namespace LetsPiu.Character.Uwb
 
         [Header("Mock")]
         [SerializeField] int mockTagCount = 20;
+        [SerializeField] bool mockRosterCycle;
         [SerializeField] float mockAreaX = 18f;
         [SerializeField] float mockAreaY = 10f;
         [SerializeField] float mockMoveSpeed = 1.2f;
         [SerializeField] float mockIntervalSec = 0.1f;
         [SerializeField] bool mockSimulateGlitch = true;
+
+        static readonly int[] MockRosterCycleSizes = { 10, 20, 40 };
+        int _mockRosterCycleIndex;
+        /// <summary>固定人数偏好（循环模式换档时不改，便于切回固定）。</summary>
+        int _mockFixedTagCount = 20;
 
         [Header("Replay")]
         [SerializeField] string replayFilePath = "";
@@ -179,7 +185,8 @@ namespace LetsPiu.Character.Uwb
                 mqttClientId = mqttClientId,
                 udpListenPort = udpListenPort,
                 udpLocalAddress = udpLocalAddress,
-                mockTagCount = mockTagCount,
+                mockTagCount = _mockFixedTagCount > 0 ? _mockFixedTagCount : mockTagCount,
+                mockRosterCycle = mockRosterCycle,
                 mockAreaX = mockAreaX,
                 mockAreaY = mockAreaY,
                 mockMoveSpeed = mockMoveSpeed,
@@ -231,7 +238,18 @@ namespace LetsPiu.Character.Uwb
             mqttClientId = data.mqttClientId ?? "";
             udpListenPort = data.udpListenPort;
             udpLocalAddress = data.udpLocalAddress ?? "";
-            mockTagCount = Mathf.Max(1, data.mockTagCount);
+            _mockFixedTagCount = Mathf.Max(1, data.mockTagCount);
+            mockRosterCycle = data.mockRosterCycle;
+            if (mockRosterCycle)
+            {
+                _mockRosterCycleIndex = 0;
+                mockTagCount = MockRosterCycleSizes[0];
+            }
+            else
+            {
+                mockTagCount = _mockFixedTagCount;
+            }
+
             mockAreaX = data.mockAreaX;
             mockAreaY = data.mockAreaY;
             mockMoveSpeed = data.mockMoveSpeed > 0f ? data.mockMoveSpeed : mockMoveSpeed;
@@ -326,9 +344,89 @@ namespace LetsPiu.Character.Uwb
 
             _transport.RawMessageReceived += OnRawFromTransport;
             _transport.Start();
+            // 钩子必须先于比分牌 Mock 启动：它一启动就会同步读取本场人数，晚了会拿到默认的 20 人
+            if (sourceMode == UwbSourceMode.Mock)
+            {
+                UwbMockBattleHooks.SetMockPlayerCount = ApplyMockTagCount;
+                UwbMockBattleHooks.TakeMatchPlayerCount = TakeMatchPlayerCount;
+            }
+            else
+            {
+                UwbMockBattleHooks.SetMockPlayerCount = null;
+                UwbMockBattleHooks.TakeMatchPlayerCount = null;
+            }
+
             // 定位 Mock 与当前模式比分牌 Mock 绑定启停（ActiveModeType，默认积分）
             ScoreCardBattleMockToggle.Apply(sourceMode == UwbSourceMode.Mock);
+
             Debug.Log($"[UwbRuntime] started mode={sourceMode} record={(live ? _recorder?.FilePath : "off")}");
+        }
+
+        /// <summary>本场人数：固定=手填；循环=10→20→40 并推进。</summary>
+        int TakeMatchPlayerCount()
+        {
+            if (!mockRosterCycle)
+                return Mathf.Max(2, _mockFixedTagCount > 0 ? _mockFixedTagCount : mockTagCount);
+
+            int n = MockRosterCycleSizes[_mockRosterCycleIndex % MockRosterCycleSizes.Length];
+            _mockRosterCycleIndex = (_mockRosterCycleIndex + 1) % MockRosterCycleSizes.Length;
+            return n;
+        }
+
+        /// <summary>
+        /// 仅重建定位 Mock 人数；不开关比分牌 Mock（避免循环换档时把积分循环杀掉）。
+        /// </summary>
+        void ApplyMockTagCount(int count)
+        {
+            count = Mathf.Clamp(count, 2, 40);
+            if ((count & 1) != 0)
+                count++;
+            bool same = count == mockTagCount && _transport is UwbMockTransport;
+            mockTagCount = count;
+            if (!mockRosterCycle)
+                _mockFixedTagCount = count;
+            if (!enableUwb || !isActiveAndEnabled || sourceMode != UwbSourceMode.Mock)
+                return;
+            if (same)
+                return;
+            RestartMockTransportOnly();
+        }
+
+        void RestartMockTransportOnly()
+        {
+            if (_transport != null)
+            {
+                _transport.RawMessageReceived -= OnRawFromTransport;
+                _transport.Dispose();
+                _transport = null;
+            }
+
+            _bridge = null;
+            _corrector = null;
+            _physGrid = null;
+            _recorder?.Dispose();
+            _recorder = null;
+
+            if (sync != null)
+                sync.ClearAllPlayers();
+            if (tagRegistry != null)
+            {
+                tagRegistry.bindings.Clear();
+                tagRegistry.Rebuild();
+            }
+
+            bool rosterMode = usePushAll ||
+                              sourceMode == UwbSourceMode.Mock ||
+                              sourceMode == UwbSourceMode.Replay;
+            _bridge = new UwbVenueBridge(sync, mapper, tagRegistry, rosterMode, pushAllInterval);
+            SetupCorrection();
+            _transport = CreateTransport();
+            if (_transport == null)
+                return;
+
+            _transport.RawMessageReceived += OnRawFromTransport;
+            _transport.Start();
+            Debug.Log($"[UwbRuntime] mock roster resized tags={mockTagCount} (score mock kept)");
         }
 
         /// <summary>
@@ -389,6 +487,8 @@ namespace LetsPiu.Character.Uwb
             _recorder?.Dispose();
             _recorder = null;
             _bridge = null;
+            UwbMockBattleHooks.SetMockPlayerCount = null;
+            UwbMockBattleHooks.TakeMatchPlayerCount = null;
             ScoreCardBattleMockToggle.Apply(false);
         }
 

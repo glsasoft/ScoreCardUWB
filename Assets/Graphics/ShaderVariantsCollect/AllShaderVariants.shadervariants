@@ -99,10 +99,6 @@ ShaderVariantCollection:
         passType: 8
       - keywords: 
         passType: 13
-      - keywords: _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHT_SHADOWS
-        passType: 13
-      - keywords: _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHT_SHADOWS _EMISSION
-        passType: 13
       - keywords: _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHT_SHADOWS _EMISSION _MAIN_LIGHT_SHADOWS_CASCADE
           _SHADOWS_SOFT
         passType: 13
@@ -124,19 +120,11 @@ ShaderVariantCollection:
         passType: 8
       - keywords: _ALPHATEST_ON
         passType: 8
-      - keywords: 
-        passType: 13
-      - keywords: _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHT_SHADOWS
-        passType: 13
-      - keywords: _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHT_SHADOWS _ALPHATEST_ON
-        passType: 13
       - keywords: _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHT_SHADOWS _ALPHATEST_ON _MAIN_LIGHT_SHADOWS_CASCADE
           _SHADOWS_SOFT
         passType: 13
       - keywords: _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE
           _SHADOWS_SOFT
-        passType: 13
-      - keywords: _ALPHATEST_ON
         passType: 13
   - first: {fileID: 4800000, guid: 650dd9526735d5b46b79224bc6e94025, type: 3}
     second:
@@ -186,25 +174,13 @@ ShaderVariantCollection:
         passType: 8
       - keywords: _ALPHATEST_ON
         passType: 8
-      - keywords: 
-        passType: 13
-      - keywords: _ADDITIONAL_LIGHTS
-        passType: 13
-      - keywords: _ADDITIONAL_LIGHTS _ALPHATEST_ON
-        passType: 13
-      - keywords: _ADDITIONAL_LIGHTS _ALPHATEST_ON _EMISSION
-        passType: 13
       - keywords: _ADDITIONAL_LIGHTS _ALPHATEST_ON _EMISSION _MAIN_LIGHT_SHADOWS_CASCADE
         passType: 13
       - keywords: _ADDITIONAL_LIGHTS _ALPHATEST_ON _MAIN_LIGHT_SHADOWS_CASCADE
         passType: 13
-      - keywords: _ADDITIONAL_LIGHTS _EMISSION
-        passType: 13
       - keywords: _ADDITIONAL_LIGHTS _EMISSION _MAIN_LIGHT_SHADOWS_CASCADE
         passType: 13
       - keywords: _ADDITIONAL_LIGHTS _MAIN_LIGHT_SHADOWS_CASCADE
-        passType: 13
-      - keywords: _ALPHATEST_ON
         passType: 13
   - first: {fileID: 4800000, guid: f45207aa8f9b2f349a63470c9b6ecf0c, type: 3}
     second:
@@ -253,8 +229,6 @@ ShaderVariantCollection:
         passType: 0
       - keywords: 
         passType: 8
-      - keywords: 
-        passType: 13
   - first: {fileID: -6465566751694194690, guid: f11b1293c66e20f48ac339d73963cd94,
       type: 3}
     second:
@@ -335,18 +309,12 @@ ShaderVariantCollection:
       - keywords: _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE
           _RIMEMISSIONENABLED_ON _SHADOWS_SOFT
         passType: 13
-      - keywords: _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHT_SHADOWS _RIMEMISSIONENABLED_ON
-        passType: 13
-      - keywords: _RIMEMISSIONENABLED_ON
-        passType: 13
   - first: {fileID: 4800000, guid: fee7443962ff48758fc3279a69891896, type: 3}
     second:
       variants:
       - keywords: _AERIALFOG_ON
         passType: 13
       - keywords: _AERIALFOG_ON _ALPHATEST_ON
-        passType: 13
-      - keywords: _ALPHATEST_ON
         passType: 13
   - first: {fileID: 4800000, guid: fe393ace9b354375a9cb14cdbbc28be4, type: 3}
     second:
@@ -362,35 +330,15 @@ ShaderVariantCollection:
         passType: 8
       - keywords: _VAT_PARTICLE_PROGRESS_ON _VAT_POSITION_OFFSET
         passType: 8
-      - keywords: _ADDITIONAL_LIGHTS
-        passType: 13
-      - keywords: _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHT_SHADOWS _AERIALFOG_ON
-        passType: 13
       - keywords: _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHT_SHADOWS _AERIALFOG_ON _MAIN_LIGHT_SHADOWS_CASCADE
           _SHADOWS_SOFT
         passType: 13
       - keywords: _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE
           _SHADOWS_SOFT _VAT_PARTICLE_PROGRESS_ON _VAT_POSITION_OFFSET
         passType: 13
-      - keywords: _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHT_SHADOWS _VAT_PARTICLE_PROGRESS_ON
-          _VAT_POSITION_OFFSET
-        passType: 13
-      - keywords: _ADDITIONAL_LIGHTS _MAIN_LIGHT_SHADOWS_CASCADE
-        passType: 13
-      - keywords: _ADDITIONAL_LIGHTS _MAIN_LIGHT_SHADOWS_CASCADE _VAT_PARTICLE_PROGRESS_ON
-          _VAT_POSITION_OFFSET
-        passType: 13
-      - keywords: _ADDITIONAL_LIGHTS _VAT_PARTICLE_PROGRESS_ON _VAT_POSITION_OFFSET
-        passType: 13
   - first: {fileID: 4800000, guid: ebfbe557ad0ae79429bfcc4e81c2f22f, type: 3}
     second:
       variants:
-      - keywords: _ADDITIONAL_LIGHTS
-        passType: 13
-      - keywords: _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHT_SHADOWS _AERIALFOG_ON
-        passType: 13
       - keywords: _ADDITIONAL_LIGHTS _ADDITIONAL_LIGHT_SHADOWS _AERIALFOG_ON _MAIN_LIGHT_SHADOWS_CASCADE
           _SHADOWS_SOFT
-        passType: 13
-      - keywords: _ADDITIONAL_LIGHTS _MAIN_LIGHT_SHADOWS_CASCADE
         passType: 13

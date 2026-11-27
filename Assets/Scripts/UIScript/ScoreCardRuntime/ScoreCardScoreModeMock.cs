@@ -36,6 +36,9 @@ namespace LetsPiu.UI.ScoreCardRuntime
         [SerializeField] float killIntervalSec = 50f;
         [SerializeField] int killsPerWave = 1;
         [SerializeField] float towerIntervalSec = 100f;
+        [SerializeField] float buffFirstDelaySec = 15f;
+        [SerializeField] float buffIntervalSec = 25f;
+        [SerializeField] int buffHealPerSec = 5;
         [SerializeField] int hitDamageMin = 6;
         [SerializeField] int hitDamageMax = 14;
         /// <summary>低血量权重倍率：残血越容易被集火，避免全员均匀掉血后一起死。</summary>
@@ -48,10 +51,15 @@ namespace LetsPiu.UI.ScoreCardRuntime
         readonly Dictionary<int, int> _kills = new Dictionary<int, int>(32);
         readonly Dictionary<int, int> _deaths = new Dictionary<int, int>(32);
         readonly HashSet<int> _busy = new HashSet<int>();
+        // 玩家 → 持有的 BUFF（true 红 / false 蓝），死亡与新一局清空
+        readonly Dictionary<int, bool> _buffHolders = new Dictionary<int, bool>(8);
+        readonly List<int> _healScratch = new List<int>(8);
+        bool _firstBloodSent;
+        bool _nextBuffRed = true;
         readonly List<int> _red = new List<int>(16);
         readonly List<int> _blue = new List<int>(16);
-        int _redScore = 100;
-        int _blueScore = 100;
+        int _redScore;
+        int _blueScore;
         int _hitCursor;
         long _matchStartMs;
         CancellationTokenSource _loopCts;
@@ -100,14 +108,14 @@ namespace LetsPiu.UI.ScoreCardRuntime
         {
             try
             {
-                while (!ct.IsCancellationRequested && !CollectLiveTeams())
-                    await UniTask.Delay(500, cancellationToken: ct);
-
-                BeginMatch();
+                await BeginMatchAsync(ct);
                 float nextHit = 0f;
                 // 先让人走出出生点进场，再开始击杀波
                 float nextKill = firstKillDelaySec;
                 float nextTower = firstKillDelaySec + 25f;
+                float nextScorePush = 1.5f;
+                float nextBuff = buffFirstDelaySec;
+                float nextHeal = 1f;
                 float t = 0f;
 
                 while (!ct.IsCancellationRequested)
@@ -123,11 +131,14 @@ namespace LetsPiu.UI.ScoreCardRuntime
                     long elapsedMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - _matchStartMs;
                     if (elapsedMs >= MatchDurationMin * 60L * 1000L)
                     {
-                        BeginMatch();
+                        await BeginMatchAsync(ct);
                         t = 0f;
                         nextHit = 0f;
                         nextKill = firstKillDelaySec;
                         nextTower = firstKillDelaySec + 25f;
+                        nextScorePush = 1.5f;
+                        nextBuff = buffFirstDelaySec;
+                        nextHeal = 1f;
                         continue;
                     }
 
@@ -153,6 +164,25 @@ namespace LetsPiu.UI.ScoreCardRuntime
                         TryStartTowerKill(ct);
                         nextTower = t + towerIntervalSec;
                     }
+
+                    if (t >= nextBuff)
+                    {
+                        TryCaptureBuff();
+                        nextBuff = t + buffIntervalSec;
+                    }
+
+                    if (t >= nextHeal)
+                    {
+                        HealBlueBuffHolders();
+                        nextHeal = t + 1f;
+                    }
+
+                    // HIT 不改 match 总分，需定期 RefreshData 才能驱动顶栏/比分条
+                    if (t >= nextScorePush)
+                    {
+                        PushScoreSnapshot();
+                        nextScorePush = t + 1.5f;
+                    }
                 }
             }
             catch (OperationCanceledException)
@@ -164,15 +194,36 @@ namespace LetsPiu.UI.ScoreCardRuntime
             }
         }
 
-        void BeginMatch()
+        async UniTask BeginMatchAsync(CancellationToken ct)
         {
+            // 人数由设置面板决定：固定手填，或 10→20→40 循环
+            int roster = UwbMockBattleHooks.TakeMatchPlayerCount != null
+                ? UwbMockBattleHooks.TakeMatchPlayerCount()
+                : 20;
+            // 人数一确定就让 HUD 切到对应档位，不等定位 Mock 重建玩家
+            UwbHudData.NotifyNewMatchRoster(roster);
+            UwbMockBattleHooks.SetMockPlayerCount?.Invoke(roster);
+
+            // 等定位 Mock 重建出双方真人（CollectLiveTeams 在空场时会灌假名单并返回 false）
+            for (int i = 0; i < 50 && !ct.IsCancellationRequested; i++)
+            {
+                if (CollectLiveTeams() && Mathf.Abs(_red.Count + _blue.Count - roster) <= 2)
+                    break;
+                await UniTask.Delay(100, cancellationToken: ct);
+            }
+
+            UwbMockBattleHooks.ResetAllToTeamSpawns?.Invoke();
+            await UniTask.Delay(150, cancellationToken: ct);
+
             _matchStartMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            _redScore = 100;
-            _blueScore = 100;
+            _redScore = 0;
+            _blueScore = 0;
             _blood.Clear();
             _kills.Clear();
             _deaths.Clear();
             _busy.Clear();
+            _buffHolders.Clear();
+            _firstBloodSent = false;
             CollectLiveTeams();
             for (int i = 0; i < _red.Count; i++)
                 _blood[_red[i]] = MaxHp;
@@ -180,7 +231,24 @@ namespace LetsPiu.UI.ScoreCardRuntime
                 _blood[_blue[i]] = MaxHp;
 
             Fire(ScoreCardMockMqtt.BuildPage(ScoreCardSubCode.S4, BuildBaseData(aliveAll: true)));
-            Debug.Log($"[{LogTag}] match begin {MatchDurationMin}min players={_red.Count}+{_blue.Count}");
+            Debug.Log(
+                $"[{LogTag}] match begin {MatchDurationMin}min roster={roster} " +
+                $"players={_red.Count}+{_blue.Count} score=0/0");
+        }
+
+        void PushScoreSnapshot()
+        {
+            Fire(ScoreCardMockMqtt.BuildPage(ScoreCardSubCode.RefreshData, BuildBaseData(aliveAll: false)));
+        }
+
+        void AddTeamScore(bool redTeam, int delta)
+        {
+            if (delta == 0)
+                return;
+            if (redTeam)
+                _redScore = Mathf.Max(0, _redScore + delta);
+            else
+                _blueScore = Mathf.Max(0, _blueScore + delta);
         }
 
         void FireScatteredHits()
@@ -215,9 +283,7 @@ namespace LetsPiu.UI.ScoreCardRuntime
                     ScoreCardSubCode.Shoot,
                     BuildShoot("HIT", shooter, victim, next)));
 
-                if (shooterIsRed) _redScore += 1;
-                else _blueScore += 1;
-
+                AddTeamScore(shooterIsRed, 2);
                 _hitCursor++;
             }
         }
@@ -243,11 +309,47 @@ namespace LetsPiu.UI.ScoreCardRuntime
             TowerKillThenReviveAsync(victim, ct).Forget();
         }
 
+        // 夺取者随机取一方的存活玩家，红蓝 BUFF 交替出现
+        void TryCaptureBuff()
+        {
+            var list = Random.value < 0.5f ? _red : _blue;
+            int id = PickAlive(list);
+            if (id <= 0)
+                return;
+
+            bool red = _nextBuffRed;
+            _nextBuffRed = !_nextBuffRed;
+            _buffHolders[id] = red;
+            Fire(ScoreCardMockMqtt.BuildEvent(
+                red ? ScoreCardSubCode.RedBuffCaptured : ScoreCardSubCode.BlueBuffCaptured,
+                "{\"level\":1,\"killer\":{\"id\":" + id + "}}"));
+        }
+
+        // 蓝 BUFF（回复）持有者每秒回血，下一次快照里血量上涨
+        void HealBlueBuffHolders()
+        {
+            _healScratch.Clear();
+            foreach (var pair in _buffHolders)
+            {
+                if (!pair.Value)
+                    _healScratch.Add(pair.Key);
+            }
+
+            for (int i = 0; i < _healScratch.Count; i++)
+            {
+                int id = _healScratch[i];
+                int hp = BloodOf(id);
+                if (hp > 0 && hp < MaxHp)
+                    SetBlood(id, hp + buffHealPerSec);
+            }
+        }
+
         async UniTaskVoid KillThenReviveAsync(int killerId, int victimId, bool killerIsRed, CancellationToken ct)
         {
             try
             {
                 SetBlood(victimId, 0);
+                _buffHolders.Remove(victimId);
                 int killerKills = IncStat(_kills, killerId);
                 int victimDeaths = IncStat(_deaths, victimId);
                 Fire(ScoreCardMockMqtt.BuildEvent(
@@ -259,8 +361,15 @@ namespace LetsPiu.UI.ScoreCardRuntime
                         0,
                         killerKills,
                         victimDeaths)));
-                if (killerIsRed) _redScore += 10;
-                else _blueScore += 10;
+                AddTeamScore(killerIsRed, 15);
+                PushScoreSnapshot();
+                if (!_firstBloodSent)
+                {
+                    _firstBloodSent = true;
+                    Fire(ScoreCardMockMqtt.BuildEvent(
+                        ScoreCardSubCode.FirstBlood,
+                        "{\"level\":1,\"killer\":{\"id\":" + killerId + "},\"victim\":{\"id\":" + victimId + "}}"));
+                }
                 await UniTask.Delay(TimeSpan.FromSeconds(0.25f), cancellationToken: ct);
                 if (Random.value < 0.4f)
                 {
@@ -285,9 +394,14 @@ namespace LetsPiu.UI.ScoreCardRuntime
             try
             {
                 SetBlood(victimId, 0);
+                _buffHolders.Remove(victimId);
+                // 炮杀：受害者对侧得分
+                bool victimIsRed = _red.Contains(victimId);
+                AddTeamScore(!victimIsRed, 12);
                 Fire(ScoreCardMockMqtt.BuildEvent(
                     ScoreCardSubCode.TowerKill,
                     "{\"victim\":{\"id\":" + victimId + ",\"blood\":0}}"));
+                PushScoreSnapshot();
                 await WaitHomeThenReviveAsync(victimId, ct);
             }
             catch (OperationCanceledException)
@@ -450,7 +564,9 @@ namespace LetsPiu.UI.ScoreCardRuntime
         string BuildBaseData(bool aliveAll)
         {
             // Normalizer 只认 beginTime 字符串，不认 startTime 数字——缺 beginTime 则倒计时一直 --:--。
-            string begin = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            // 开始时间必须固定为本场开局时刻，每次快照取 Now 会让倒计时被反复重置回 5:00
+            string begin = DateTimeOffset.FromUnixTimeMilliseconds(_matchStartMs).LocalDateTime
+                .ToString("yyyy-MM-dd HH:mm:ss");
             var sb = new StringBuilder(2048);
             sb.Append("{\"baseData\":{");
             sb.Append("\"playId\":\"UWB_SCORE_MOCK\",\"playName\":\"UWB积分Mock\",");

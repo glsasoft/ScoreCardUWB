@@ -19,6 +19,8 @@ namespace LetsPiu.Character.Uwb
         public int udpListenPort = 9000;
         public string udpLocalAddress = "";
         public int mockTagCount = 20;
+        /// <summary>false=固定人数（mockTagCount）；true=每场按 10→20→40 循环。</summary>
+        public bool mockRosterCycle = false;
         public float mockAreaX = 18f;
         public float mockAreaY = 10f;
         public float mockMoveSpeed = 1.2f;

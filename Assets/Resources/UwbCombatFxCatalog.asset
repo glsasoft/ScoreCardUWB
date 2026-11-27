@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f151ec08095b4cd2a94d8e1c43f48ea, type: 3}
+  m_Name: UwbCombatFxCatalog
+  m_EditorClassIdentifier: 
+  manAttackRed: {fileID: 1244523020851118829, guid: 56627b8d93083204298fb1128c1c322c,
+    type: 3}
+  manAttackBlue: {fileID: 3837972084478453069, guid: 724aa50b054967c41912fb0618fb1d49,
+    type: 3}
+  attackBehit01: {fileID: 3111148843850330359, guid: 7c23f6f0aa4641c4e9ba3a55d01bfe95,
+    type: 3}
+  attackBehit02: {fileID: 7252403260460970546, guid: 6d92ac915eb2a29408878113483c6c84,
+    type: 3}
+  attackBehit02Red: {fileID: 4035596168432638031, guid: 2376ea75682985347a4b0c7d15879fe2,
+    type: 3}
+  attackDead: {fileID: 7960262878324945186, guid: 29245800a9587774e8b6544199b7879e,
+    type: 3}
+  attackReborn: {fileID: 3269495602424555881, guid: df0f95117917a86438b9119cd197e51e,
+    type: 3}
+  townBulletRed: {fileID: 2409141359622827133, guid: 123f397d24da38c429d8b527c4a7b4f3,
+    type: 3}
+  townBulletBlue: {fileID: 6840403971189777296, guid: 71bccbed0bc1b3340899f7c92a7afbdd,
+    type: 3}
+  buffRed: {fileID: 224361524806833200, guid: 5c39ea758838e0a4a859e91c8e5af142, type: 3}
+  buffBlue: {fileID: 2253456892468429014, guid: 7f1d4b63e7f7371449789befb81ff10f,
+    type: 3}
+  buffHeling: {fileID: 3750629692748755974, guid: 3a19bc8c7c65db842a63ac213dcef550,
+    type: 3}
