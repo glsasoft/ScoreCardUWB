@@ -117,7 +117,7 @@ namespace LetsPiu.Character
 
             if (UIRoot.S && UIRoot.S.worldCanvas)
             {
-                this.transform.SetParent(UIRoot.S.worldCanvas.transform);
+                //this.transform.SetParent(UIRoot.S.worldCanvas.transform);
                 var virtualCamera = GameObject.Find("/SceneBase/Virtual Camera");
                 Canvas rootCanvas = UIRoot.S.rootCanvas;
                 if (virtualCamera != null && rootCanvas != null)
@@ -356,18 +356,18 @@ namespace LetsPiu.Character
 
             if (!track.started)
                 track.presentedTime = renderTime - 0.0001d;
-            if (newest.hp > 0)
-            {
-                for (int i = 0; i < samples.Count; i++)
-                {
-                    Sample sample = samples[i];
-                    if (sample.firing && sample.time > track.presentedTime && sample.time <= renderTime)
-                    {
-                        track.view.Fire();
-                        break;
-                    }
-                }
-            }
+            //if (newest.hp > 0)
+            //{
+            //    for (int i = 0; i < samples.Count; i++)
+            //    {
+            //        Sample sample = samples[i];
+            //        if (sample.firing && sample.time > track.presentedTime && sample.time <= renderTime)
+            //        {
+            //            track.view.Fire();
+            //            break;
+            //        }
+            //    }
+            //}
 
             track.presentedTime = renderTime;
             track.started = true;
