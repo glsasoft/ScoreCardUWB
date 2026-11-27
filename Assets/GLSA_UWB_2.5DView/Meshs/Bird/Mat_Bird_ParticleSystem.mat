@@ -52,7 +52,7 @@ Material:
     - _UseAerialFog: 0
     - _VATOffsetScale: 4
     - _VATParticleProgress: 1
-    - _VATPlaySpeed: 1
+    - _VATPlaySpeed: 1.5
     - _VATPositionIsOffset: 1
     - _VATProgress: 0
     - _VATProgressBias: 0

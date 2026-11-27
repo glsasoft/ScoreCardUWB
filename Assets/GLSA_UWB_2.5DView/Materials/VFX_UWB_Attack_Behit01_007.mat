@@ -12,9 +12,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _ALPHAPREMULTIPLY_ON
   - _FX_LIGHT_MODE_UNLIT
-  - _HOUDINI_VAT_SOFTBODY
   - _MASKMAP_ON
   m_InvalidKeywords:
   - _CUSTOMDATA
@@ -187,7 +185,7 @@ Material:
     - _W9ParticleCustomDataFlag3: 0
     - _W9ParticleShaderColorChannelFlag: 3
     - _W9ParticleShaderFlags: 8194
-    - _W9ParticleShaderFlags1: 8650752
+    - _W9ParticleShaderFlags1: 8388608
     - _W9ParticleShaderGUIFoldToggle: 47
     - _W9ParticleShaderGUIFoldToggle1: 8388608
     - _W9ParticleShaderGUIFoldToggle2: 255
@@ -222,7 +220,7 @@ Material:
     - _BaseMapColorRefine_Toggle: 0
     - _BaseMapUVRotation: 0
     - _BaseMapUVRotationSpeed: 0
-    - _Blend: 2
+    - _Blend: 0
     - _BlendMode: 0
     - _BlinnPhongSpecularToggle: 0
     - _BumpMapMaskMode: 0
@@ -450,7 +448,7 @@ Material:
     - _SkinBoneCount: 2
     - _SoftParticlesEnabled: 0
     - _SpecialUVChannelMode: 0
-    - _SrcBlend: 1
+    - _SrcBlend: 5
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilKeyIndex: 0

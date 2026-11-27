@@ -25,7 +25,6 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _NILOTOON_DISSOLVE
   - _NORMALMAP
   m_InvalidKeywords:
   - OFF
@@ -144,8 +143,8 @@ Material:
     - _DissolveBorderRange: 0.04
     - _DissolveEdgeDitherStrength: 0
     - _DissolveGroup: 0
-    - _DissolveMaxY: 1.5528498
-    - _DissolveMinY: -0.1002931
+    - _DissolveMaxY: 3.15
+    - _DissolveMinY: -0.71
     - _DissolveRootY: 0
     - _DissolveTopBorderRange: 0.02
     - _DitherFadeoutAmount: 0
@@ -153,7 +152,7 @@ Material:
     - _DstBlendAlpha: 0
     - _EmissionIntensity: 1
     - _EmissionMapUseSingleChannelOnly: 0
-    - _EnableDissolve: 1
+    - _EnableDissolve: 0
     - _EnableDitherFadeout: 0
     - _EnableRendering: 1
     - _EnvironmentReflections: 1

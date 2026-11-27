@@ -55,7 +55,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 458a7e6b279ca79469b077dc9ed0f6f8, type: 3}
   m_Name: AerialFogRenderFeature
   m_EditorClassIdentifier: 
-  m_Active: 0
+  m_Active: 1
   material: {fileID: 2100000, guid: 17dc52f65e5066845920f9806cb002da, type: 2}
   parameters:
     fogStart: 18
