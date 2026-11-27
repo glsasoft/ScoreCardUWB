@@ -410,6 +410,9 @@ namespace LetsPiu.Character.Uwb
             }
 
             _bridge = null;
+            // 先还原回放延迟，否则 SetupCorrection 会把「基础延迟+纠偏滞后」当成新的基础延迟，每换一次人数就多加一次滞后
+            if (_corrector != null && sync != null)
+                sync.interpolationDelay = _baseInterpolationDelay;
             _corrector = null;
             _physGrid = null;
             _recorder?.Dispose();

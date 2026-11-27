@@ -306,7 +306,8 @@ namespace LetsPiu.Character
             else
                 list.Add(sample);
 
-            double keep = sample.time - 1d;
+            // 缓冲要比回放延迟长，否则回放时间落到最旧的点之前，玩家会被钉在最旧点上走一截停一截
+            double keep = sample.time - Math.Max(1d, interpolationDelay + 0.5d);
             int drop = 0;
             while (drop < list.Count - 2 && list[drop + 1].time < keep)
                 drop++;
