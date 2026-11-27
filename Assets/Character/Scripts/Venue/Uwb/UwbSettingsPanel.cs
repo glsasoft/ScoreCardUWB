@@ -7,7 +7,7 @@ namespace LetsPiu.Character.Uwb
 {
     /// <summary>
     /// UWB 设置面板。连点 2 次弹出。
-    /// 顶栏 Tab：0~3 为数据源模式（点「应用」才生效），4 为系统设置（预注册/清注册/退出）。
+    /// 顶栏 Tab：0~3 为数据源模式（点「应用」才生效），4 为系统设置（预注册/清注册/帧率显示/退出）。
     /// </summary>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(200)]
@@ -22,6 +22,8 @@ namespace LetsPiu.Character.Uwb
         const float TabHeight = 46f;
         const int SystemTabIndex = 4;
         const float WindowMaxWidth = 1320f;
+        const string ShowFpsPrefKey = "UwbSettings_ShowFps";
+        const float FpsRefreshSec = 0.5f;
 
         public static UwbSettingsPanel Current { get; private set; }
 
@@ -53,6 +55,13 @@ namespace LetsPiu.Character.Uwb
         {
             EnsureExists();
         }
+
+        bool _showFps;
+        float _fpsValue;
+        float _fpsElapsed;
+        int _fpsFrames;
+        GUIStyle _fpsStyle;
+        GUIStyle _fpsShadowStyle;
 
         bool _visible;
         int _tapCount;
@@ -147,6 +156,7 @@ namespace LetsPiu.Character.Uwb
             }
 
             Current = this;
+            _showFps = PlayerPrefs.GetInt(ShowFpsPrefKey, 0) == 1;
         }
 
         void OnDestroy()
@@ -174,10 +184,52 @@ namespace LetsPiu.Character.Uwb
         {
             // 用 Update 收点击，避免注册页 uGUI 吃掉 OnGUI 的 MouseDown
             HandleTapFromInput();
+            SampleFps();
+        }
+
+        void SampleFps()
+        {
+            if (!_showFps)
+                return;
+            _fpsFrames++;
+            _fpsElapsed += Time.unscaledDeltaTime;
+            if (_fpsElapsed < FpsRefreshSec)
+                return;
+            _fpsValue = _fpsFrames / _fpsElapsed;
+            _fpsFrames = 0;
+            _fpsElapsed = 0f;
+        }
+
+        void DrawFps()
+        {
+            if (!_showFps)
+                return;
+            if (_fpsStyle == null)
+            {
+                _fpsStyle = new GUIStyle(GUI.skin.label) { fontSize = 28, fontStyle = FontStyle.Bold };
+                _fpsStyle.normal.textColor = Color.green;
+                _fpsShadowStyle = new GUIStyle(_fpsStyle);
+                _fpsShadowStyle.normal.textColor = Color.black;
+            }
+
+            string text = "FPS: " + _fpsValue.ToString("0");
+            GUI.Label(new Rect(13f, 9f, 260f, 44f), text, _fpsShadowStyle);
+            GUI.Label(new Rect(12f, 8f, 260f, 44f), text, _fpsStyle);
+        }
+
+        void SetShowFps(bool value)
+        {
+            _showFps = value;
+            _fpsValue = 0f;
+            _fpsFrames = 0;
+            _fpsElapsed = 0f;
+            PlayerPrefs.SetInt(ShowFpsPrefKey, value ? 1 : 0);
+            PlayerPrefs.Save();
         }
 
         void OnGUI()
         {
+            DrawFps();
             DrawAlertIfNeeded();
             if (!_visible)
                 return;
@@ -336,7 +388,7 @@ namespace LetsPiu.Character.Uwb
         void DrawSystemSettingsContent()
         {
             GUILayout.Label("系统设置", _title);
-            GUILayout.Label("预注册、清除注册、退出程序。与 UWB 数据源「应用」无关。", _label);
+            GUILayout.Label("预注册、清除注册、帧率显示、退出程序。与 UWB 数据源「应用」无关。", _label);
 
             GUILayout.Space(14);
             GUILayout.Label("1~4号预注册比分牌", _title);
@@ -371,6 +423,13 @@ namespace LetsPiu.Character.Uwb
             {
                 _confirmClearRegister = true;
             }
+
+            GUILayout.Space(18);
+            GUILayout.Label("帧率显示", _title);
+            GUILayout.Label("在屏幕左上角显示当前帧率。", _label);
+            GUILayout.Space(6);
+            if (GUILayout.Button(_showFps ? "帧率显示：开（点击关闭）" : "帧率显示：关（点击开启）", _btn, GUILayout.Height(48)))
+                SetShowFps(!_showFps);
 
             GUILayout.Space(18);
             GUILayout.Label("程序", _title);
