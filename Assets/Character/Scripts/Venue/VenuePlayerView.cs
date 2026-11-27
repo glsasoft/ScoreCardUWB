@@ -21,6 +21,7 @@ namespace LetsPiu.Character
         // 取 3 约每秒 2.25 圈，接近正常跑步步频，也是改动前 Mock 平均移速下的实际效果
         const float RunPlaybackSpeed = 3f;
         const float ShootHoldSec = 0.3f;
+        const float DieMinSec = 1f;
         const float RunStartRatio = 0.15f;
         const float RunStopRatio = 0.08f;
         static readonly Color TeamBlue = new Color(0.25f, 0.55f, 1f);
@@ -47,6 +48,8 @@ namespace LetsPiu.Character
         int _reviveState;
         float _shootUntil;
         bool _dead;
+        bool _dieShown;
+        float _dieLockUntil;
         bool _moving;
         int _team = int.MinValue;
         int _shownHp = int.MinValue;
@@ -245,16 +248,43 @@ namespace LetsPiu.Character
 
             if (dead)
             {
-                if (!_dead && _dieState != 0)
-                    _animator.CrossFade(_dieState, 0.1f, 0);
+                if (!_dead)
+                {
+                    _dieLockUntil = Time.time + DieMinSec;
+                    if (_dieState != 0)
+                    {
+                        _animator.CrossFade(_dieState, 0.1f, 0);
+                        _dieShown = true;
+                    }
+                }
                 _dead = true;
                 _shootUntil = 0f;
-                if (_hasMoveSpeed && !Mathf.Approximately(0, _lastMoveSpeed))
-                    _animator.SetFloat(MoveSpeedId, 0f);
-                _lastMoveSpeed = 0f;
+
+                // 阵亡后走回复活点：倒地动作播完后，在走就切回走路，停下再回到倒地
+                float deadSpeed = localVelocity.magnitude;
+                _moving = deadSpeed > _gaitReferenceSpeed * (_moving ? RunStopRatio : RunStartRatio);
+                bool walk = _moving && Time.time >= _dieLockUntil;
+                if (walk && _dieShown && _idleState != 0)
+                {
+                    _animator.CrossFade(_idleState, 0.1f, 0);
+                    _dieShown = false;
+                }
+                else if (!_moving && !_dieShown && _dieState != 0)
+                {
+                    _animator.CrossFade(_dieState, 0.1f, 0);
+                    _dieShown = true;
+                }
+
+                float deadMoveZ = walk ? RunBlendZ : 0f;
+                float deadMoveSpeed = walk ? RunPlaybackSpeed : 0f;
+                if (_hasMoveZ && !Mathf.Approximately(deadMoveZ, _lastMoveZ)) _animator.SetFloat(MoveZId, deadMoveZ);
+                if (_hasMoveSpeed && !Mathf.Approximately(deadMoveSpeed, _lastMoveSpeed)) _animator.SetFloat(MoveSpeedId, deadMoveSpeed);
+                _lastMoveZ = deadMoveZ;
+                _lastMoveSpeed = deadMoveSpeed;
                 return;
             }
 
+            _dieShown = false;
             if (_dead)
             {
                 int reviveTarget = _reviveState != 0 ? _reviveState : _idleState;

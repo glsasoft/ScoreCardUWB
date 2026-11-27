@@ -33,6 +33,10 @@ namespace LetsPiu.Character
             public bool started;
             public Quaternion facing;
             public bool hasFacing;
+            public Vector3 lastWorld;
+            public bool hasLastWorld;
+            public float stepEma;
+            public double lastArrival;
         }
 
         public static VenuePlayerSync Current { get; private set; }
@@ -40,10 +44,32 @@ namespace LetsPiu.Character
         public int BackSteps { get; private set; }
         public float MaxBackStepSec { get; private set; }
 
+        public int ClampedFrames { get; private set; }
+        public int PresentFrames { get; private set; }
+        public int StallFrames { get; private set; }
+        public int SpikeFrames { get; private set; }
+        public float MaxStepM { get; private set; }
+        public float MaxArrivalGapSec { get; private set; }
+        public float SumArrivalGapSec { get; private set; }
+        public int ArrivalCount { get; private set; }
+        public int DataJumps { get; private set; }
+        public float MaxDataJumpM { get; private set; }
+        const float DataJumpM = 1f;
+
         public void ResetBackStats()
         {
+            DataJumps = 0;
+            MaxDataJumpM = 0f;
             BackSteps = 0;
             MaxBackStepSec = 0f;
+            ClampedFrames = 0;
+            PresentFrames = 0;
+            StallFrames = 0;
+            SpikeFrames = 0;
+            MaxStepM = 0f;
+            MaxArrivalGapSec = 0f;
+            SumArrivalGapSec = 0f;
+            ArrivalCount = 0;
         }
 
         [Tooltip("场馆坐标锚点。留空则用同一个物体上的 VenueSpace，再没有就按场景坐标直接摆。")]
@@ -104,9 +130,6 @@ namespace LetsPiu.Character
         readonly RaycastHit[] _hits = new RaycastHit[16];
 
         Transform _root;
-        bool _hasClock;
-        double _serverToLocal;
-        bool _clockJump;
 
         float worldUiScale = 1;
 
@@ -150,12 +173,6 @@ namespace LetsPiu.Character
         {
             if (snapshot == null)
                 return;
-            _clockJump = false;
-            Accept(snapshot);
-            if (!_clockJump)
-                return;
-            _clockJump = false;
-            ClearBuffers();
             Accept(snapshot);
         }
 
@@ -165,7 +182,6 @@ namespace LetsPiu.Character
                 return;
 
             _seen.Clear();
-            _clockJump = false;
             for (int i = 0; i < snapshots.Count; i++)
             {
                 VenuePlayerSnapshot snapshot = snapshots[i];
@@ -173,17 +189,6 @@ namespace LetsPiu.Character
                     continue;
                 _seen.Add(snapshot.id);
                 Accept(snapshot);
-            }
-
-            if (_clockJump)
-            {
-                _clockJump = false;
-                ClearBuffers();
-                for (int i = 0; i < snapshots.Count; i++)
-                {
-                    if (snapshots[i] != null)
-                        Accept(snapshots[i]);
-                }
             }
 
             _remove.Clear();
@@ -213,16 +218,23 @@ namespace LetsPiu.Character
 
         void Accept(VenuePlayerSnapshot snapshot)
         {
-            double localTime = ToLocal(snapshot.time);
-            if (_clockJump)
-                return;
-
             Track track = GetOrCreate(snapshot.id);
-            track.lastPush = Time.timeAsDouble;
+            // UWB 数据只用来摆位置，时间直接用本地收到的时刻，不对齐服务器时钟
+            double arrival = Time.timeAsDouble;
+            if (track.lastArrival > 0d)
+            {
+                float gap = (float)(arrival - track.lastArrival);
+                ArrivalCount++;
+                SumArrivalGapSec += gap;
+                if (gap > MaxArrivalGapSec)
+                    MaxArrivalGapSec = gap;
+            }
+            track.lastArrival = arrival;
+            track.lastPush = arrival;
             track.view.SetIdentity(snapshot.name, snapshot.team);
             AddSample(track, new Sample
             {
-                time = localTime,
+                time = arrival,
                 pos = new Vector3(snapshot.x, snapshot.y, snapshot.z),
                 hp = snapshot.hp,
                 maxHp = snapshot.maxHp,
@@ -230,26 +242,6 @@ namespace LetsPiu.Character
                 name = snapshot.name,
                 firing = snapshot.firing
             });
-        }
-
-        double ToLocal(double serverTime)
-        {
-            double now = Time.timeAsDouble;
-            if (serverTime <= 0d)
-                return now;
-
-            double observed = now - serverTime;
-            if (!_hasClock)
-            {
-                _hasClock = true;
-                _serverToLocal = observed;
-            }
-            else if (Math.Abs(observed - _serverToLocal) > 2d)
-            {
-                _serverToLocal = observed;
-                _clockJump = true;
-            }
-            return serverTime + _serverToLocal;
         }
 
         Track GetOrCreate(int id)
@@ -297,6 +289,18 @@ namespace LetsPiu.Character
                 world = SnapGround(world, track.view.transform);
             sample.pos = world;
 
+            // 相邻两个输入点之间的水平距离：大了说明是数据本身在跳（Mock 故障或纠偏输出），不是渲染的问题
+            if (count > 0)
+            {
+                Vector3 jump = world - list[count - 1].pos;
+                jump.y = 0f;
+                float dist = jump.magnitude;
+                if (dist > DataJumpM)
+                    DataJumps++;
+                if (dist > MaxDataJumpM)
+                    MaxDataJumpM = dist;
+            }
+
             if (count > 0 && sample.time - list[count - 1].time < 0.0001d)
                 list[count - 1] = sample;
             else
@@ -324,7 +328,11 @@ namespace LetsPiu.Character
                 ? samples[0].time
                 : Time.timeAsDouble - Math.Max(0d, interpolationDelay);
             if (renderTime > samples[last].time)
+            {
                 renderTime = samples[last].time;
+                if (samples.Count > 1)
+                    ClampedFrames++;
+            }
             if (renderTime < samples[0].time)
                 renderTime = samples[0].time;
             // 回放延迟变大时只是停一会儿，不能让回放时间倒退，否则走动的人会一起往回缩
@@ -353,6 +361,7 @@ namespace LetsPiu.Character
             }
 
             track.view.Show(world, rot, hp, maxHp);
+            RecordStep(track, world);
 
             if (!track.started)
                 track.presentedTime = renderTime - 0.0001d;
@@ -371,6 +380,30 @@ namespace LetsPiu.Character
 
             track.presentedTime = renderTime;
             track.started = true;
+        }
+
+        void RecordStep(Track track, Vector3 world)
+        {
+            if (track.hasLastWorld)
+            {
+                Vector3 d = world - track.lastWorld;
+                d.y = 0f;
+                float step = d.magnitude;
+                PresentFrames++;
+                if (step > MaxStepM)
+                    MaxStepM = step;
+                // 走动中的玩家，某一帧几乎不动或突然跨出几倍的步子，就算一次不均匀
+                if (track.stepEma > 0.01f)
+                {
+                    if (step < track.stepEma * 0.1f)
+                        StallFrames++;
+                    else if (step > track.stepEma * 3f)
+                        SpikeFrames++;
+                }
+                track.stepEma += (step - track.stepEma) * 0.1f;
+            }
+            track.lastWorld = world;
+            track.hasLastWorld = true;
         }
 
         static Vector3 Evaluate(List<Sample> samples, double time)
@@ -453,15 +486,6 @@ namespace LetsPiu.Character
             return space != null ? space.ToWorld(venue) : venue;
         }
 
-        void ClearBuffers()
-        {
-            foreach (Track track in _tracks.Values)
-            {
-                track.samples.Clear();
-                track.started = false;
-            }
-        }
-
         void Despawn(int id)
         {
             if (!_tracks.TryGetValue(id, out Track track))
@@ -477,9 +501,6 @@ namespace LetsPiu.Character
         public void ClearAllPlayers()
         {
             DespawnAll();
-            _hasClock = false;
-            _serverToLocal = 0;
-            _clockJump = false;
         }
 
         void DespawnAll()

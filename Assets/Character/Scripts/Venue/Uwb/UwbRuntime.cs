@@ -156,7 +156,15 @@ namespace LetsPiu.Character.Uwb
                 $"backSteps={(sync != null ? sync.BackSteps : 0)} maxBack={(sync != null ? sync.MaxBackStepSec : 0f):0.###}s");
             _maxFrameDt = 0f;
             if (sync != null)
+            {
+                float avgGap = sync.ArrivalCount > 0 ? sync.SumArrivalGapSec / sync.ArrivalCount : 0f;
+                Debug.Log(
+                    $"[UwbSmooth] players={sync.PlayerCount} frames={sync.PresentFrames} " +
+                    $"stall={sync.StallFrames} spike={sync.SpikeFrames} maxStep={sync.MaxStepM:0.###}m " +
+                    $"clamped={sync.ClampedFrames} arrivalAvg={avgGap * 1000f:0}ms arrivalMax={sync.MaxArrivalGapSec * 1000f:0}ms " +
+                    $"dataJump>1m={sync.DataJumps} maxDataJump={sync.MaxDataJumpM:0.##}m");
                 sync.ResetBackStats();
+            }
             Debug.Log(
                 $"[UwbRuntime] mode={sourceMode} accepted={_bridge.Accepted} fail={_bridge.ParseFail} " +
                 $"tags={_bridge.TrackedTags} mqtt={(IsMqttConnected ? "up" : "down")}");
