@@ -38,6 +38,7 @@ Transform:
   - {fileID: 6011003650333605148}
   - {fileID: 3720532807154869098}
   - {fileID: 1461147404788922548}
+  - {fileID: 1994651147974194609}
   m_Father: {fileID: 2439442249057046563}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &899489603829323792
@@ -8646,7 +8647,7 @@ ParticleSystem:
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
     m_Planes:
-    - {fileID: 0}
+    - {fileID: 1994651147974194609}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -13658,7 +13659,7 @@ ParticleSystem:
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
     m_Planes:
-    - {fileID: 0}
+    - {fileID: 1994651147974194609}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -18702,7 +18703,7 @@ ParticleSystem:
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
     m_Planes:
-    - {fileID: 0}
+    - {fileID: 1994651147974194609}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -19988,3 +19989,34 @@ MonoBehaviour:
     m_RotationOrder: 4
   scaleType: 0
   useShape: 0
+--- !u!1 &8297543656272395049
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1994651147974194609}
+  m_Layer: 6
+  m_Name: VFX_Ground_Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1994651147974194609
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8297543656272395049}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0.708}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 653967152452465568}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
